@@ -1,20 +1,20 @@
 package dam2.jetpack.proyectofinal.di
 
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dam2.jetpack.proyectofinal.user.data.local.dao.UserDao
 import dam2.jetpack.proyectofinal.user.data.repository.UserRepositoryImpl
 import dam2.jetpack.proyectofinal.user.domain.repository.UserRepository
-import jakarta.inject.Singleton
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+abstract class RepositoryModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideUserRepository(userDao: UserDao): UserRepository =
-        UserRepositoryImpl(userDao)
+    abstract fun bindUserRepository(
+        impl: UserRepositoryImpl
+    ): UserRepository
 }

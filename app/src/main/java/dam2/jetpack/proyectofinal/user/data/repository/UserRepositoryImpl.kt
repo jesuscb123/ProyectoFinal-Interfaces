@@ -2,6 +2,7 @@ package dam2.jetpack.proyectofinal.user.data.repository
 
 import dam2.jetpack.proyectofinal.user.data.local.dao.UserDao
 import dam2.jetpack.proyectofinal.user.data.mapper.toDomain
+import dam2.jetpack.proyectofinal.user.data.mapper.toEntity
 import dam2.jetpack.proyectofinal.user.domain.model.User
 import dam2.jetpack.proyectofinal.user.domain.repository.UserRepository
 import javax.inject.Inject
@@ -14,5 +15,9 @@ class UserRepositoryImpl @Inject constructor(
             ?: error("User no encontrado")
 
         return userEntity.toDomain()
+    }
+
+    override suspend fun saveUser(user: User) {
+        userDao.insertOrReplaceUser(user.toEntity())
     }
 }
