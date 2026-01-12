@@ -4,8 +4,9 @@ import dam2.jetpack.proyectofinal.auth.domain.model.AuthResult
 import dam2.jetpack.proyectofinal.auth.domain.repository.AuthRepository
 import dam2.jetpack.proyectofinal.user.domain.model.User
 import dam2.jetpack.proyectofinal.user.domain.repository.UserRepository
+import javax.inject.Inject
 
-class LoginUseCase(
+class LoginUseCase @Inject constructor(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository
 ) {

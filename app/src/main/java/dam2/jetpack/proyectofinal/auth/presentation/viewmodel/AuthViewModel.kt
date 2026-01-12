@@ -28,10 +28,10 @@ class AuthViewModel @Inject constructor(
 
             _uiState.value = result.fold(
                 onSuccess = {
-                    AuthUiState(isAuthenticated = true)
+                    _uiState.value.copy(isLoading = false, isAuthenticated = true, error = null)
                 },
                 onFailure = {
-                    AuthUiState(error = it.message)
+                    _uiState.value.copy(isLoading = false, error = it.message ?: "Error al iniciar sesión.")
                 }
             )
         }
@@ -45,10 +45,10 @@ class AuthViewModel @Inject constructor(
 
             _uiState.value = result.fold(
                 onSuccess = {
-                    AuthUiState(isAuthenticated = true)
+                    _uiState.value.copy(isLoading = false, isAuthenticated = true, error = null)
                 },
-                onFailure = {
-                    AuthUiState(error = it.message)
+                onFailure = { e ->
+                    _uiState.value.copy(isLoading = false, error = e.message ?: "Error al registrase.")
                 }
             )
         }
@@ -62,10 +62,10 @@ class AuthViewModel @Inject constructor(
 
             _uiState.value = result.fold(
                 onSuccess = {
-                    AuthUiState(isAuthenticated = false)
+                    _uiState.value.copy(isLoading = false, isAuthenticated = false, error = null)
                 },
                 onFailure = {
-                    AuthUiState(error = it.message)
+                    _uiState.value.copy(isLoading = false,  error = it.message ?: "Error al cerrar sesión.")
                 }
             )
         }
