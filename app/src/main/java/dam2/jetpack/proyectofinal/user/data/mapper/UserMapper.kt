@@ -8,12 +8,10 @@ fun UserEntity.toDomain() = User(
     firebaseUid = firebaseUid,
     email = email,
     rol = Rol.valueOf(rol),
-    nombreUsuario = nombreUsuario
 )
 
 fun User.toEntity() = UserEntity(
     firebaseUid = firebaseUid,
     email = email,
-    rol = rol.name,
-    nombreUsuario = nombreUsuario
+    rol = rol.name
 )
