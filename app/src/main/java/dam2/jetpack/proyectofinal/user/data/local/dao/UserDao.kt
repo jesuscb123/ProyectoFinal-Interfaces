@@ -1,9 +1,9 @@
-package dam2.jetpack.proyectofinal.user.data.dao
+package dam2.jetpack.proyectofinal.user.data.local.dao
 
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import dam2.jetpack.proyectofinal.user.data.entity.UserEntity
+import dam2.jetpack.proyectofinal.user.data.local.entity.UserEntity
 
 interface UserDao {
 

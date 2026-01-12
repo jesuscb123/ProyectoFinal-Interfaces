@@ -1,4 +1,4 @@
-package dam2.jetpack.proyectofinal.user.data.entity
+package dam2.jetpack.proyectofinal.user.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
