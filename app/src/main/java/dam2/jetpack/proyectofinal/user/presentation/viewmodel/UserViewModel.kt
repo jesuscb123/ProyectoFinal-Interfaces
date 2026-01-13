@@ -2,6 +2,7 @@ package dam2.jetpack.proyectofinal.user.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dam2.jetpack.proyectofinal.user.domain.usecase.GetUserByFirebaseUidUseCase
 import dam2.jetpack.proyectofinal.user.presentation.state.UserStateUi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class UserViewModel @Inject constructor(
     val getUserByFirebaseUidUseCase: GetUserByFirebaseUidUseCase,
 ): ViewModel() {

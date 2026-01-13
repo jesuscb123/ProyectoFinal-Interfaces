@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetUserByFirebaseUidUseCase @Inject constructor(
     val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(firebaseUid: String): Result<User> {
+    suspend operator fun invoke(firebaseUid: String): Result<User?> {
         return try{
             val user = userRepository.getUserByFirebaseUid(firebaseUid)
             Result.success(user)

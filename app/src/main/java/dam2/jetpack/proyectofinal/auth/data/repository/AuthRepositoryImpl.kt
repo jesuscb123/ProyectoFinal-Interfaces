@@ -1,5 +1,6 @@
 package dam2.jetpack.proyectofinal.auth.data.repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.auth.domain.model.AuthResult
 import dam2.jetpack.proyectofinal.auth.domain.repository.AuthRepository
@@ -16,6 +17,7 @@ class AuthRepositoryImpl @Inject constructor(
         val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
 
         val user = result.user ?: error("User no encontrado")
+
 
         return AuthResult(
             uid = user.uid,
