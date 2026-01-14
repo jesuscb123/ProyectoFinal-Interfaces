@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dam2.jetpack.proyectofinal.events.data.local.dao.EventDao
 import dam2.jetpack.proyectofinal.user.data.local.dao.UserDao
 import javax.inject.Singleton
 
@@ -23,4 +24,7 @@ object DatabaseModule {
 
     @Provides
     fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
+
+    @Provides
+    fun provideEventDao(db: AppDatabase): EventDao = db.eventDao()
 }

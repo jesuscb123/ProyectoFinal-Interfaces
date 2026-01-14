@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dam2.jetpack.proyectofinal.auth.data.repository.AuthRepositoryImpl
 import dam2.jetpack.proyectofinal.auth.domain.repository.AuthRepository
+import dam2.jetpack.proyectofinal.events.data.repository.EventRepositoryImpl
+import dam2.jetpack.proyectofinal.events.domain.repository.EventRepository
 import dam2.jetpack.proyectofinal.user.data.repository.UserRepositoryImpl
 import dam2.jetpack.proyectofinal.user.domain.repository.UserRepository
 import javax.inject.Singleton
@@ -26,4 +28,11 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         impl: UserRepositoryImpl
     ): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindEventRepository(
+        impl: EventRepositoryImpl
+    ): EventRepository
+
 }
