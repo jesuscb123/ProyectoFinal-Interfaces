@@ -75,4 +75,15 @@ class EventViewModel @Inject constructor(
         }
     }
 
+    fun createEvent(event: Event){
+        viewModelScope.launch {
+            _uiState.value = EventUiState(isLoading = true)
+
+            createEventUseCase(event)
+
+            _uiState.value.copy(isLoading = false)
+        }
+    }
+
+
 }

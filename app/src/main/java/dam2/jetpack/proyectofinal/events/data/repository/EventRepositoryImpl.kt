@@ -15,9 +15,9 @@ class EventRepositoryImpl @Inject constructor(
         return eventEntity.map { it.toDomain() }
     }
 
-    override suspend fun getById(eventId: Long): Event? {
-        val eventEntity = eventDao.getEventById(eventId)
-        return eventEntity?.toDomain()
+    override suspend fun getById(eventId: Long): Event {
+        val eventEntity = eventDao.getEventById(eventId) ?: error("Evento no encontrado")
+        return eventEntity.toDomain()
     }
 
     override suspend fun createEvent(event: Event) {

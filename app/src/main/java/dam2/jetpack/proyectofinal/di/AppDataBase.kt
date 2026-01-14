@@ -8,9 +8,11 @@ import dam2.jetpack.proyectofinal.user.data.local.entity.UserEntity
 import dam2.jetpack.proyectofinal.user.data.local.converter.RolConverter
 import dam2.jetpack.proyectofinal.events.data.local.Converter.DateConverter
 import dam2.jetpack.proyectofinal.events.data.local.dao.EventDao
+import dam2.jetpack.proyectofinal.events.data.local.Converter.CategoryConverter
+import dam2.jetpack.proyectofinal.events.data.local.entity.EventEntity
 
-@Database(entities = [UserEntity::class], version = 1, exportSchema = false)
-@TypeConverters(RolConverter::class, DateConverter::class)
+@Database(entities = [UserEntity::class, EventEntity::class], version = 1, exportSchema = false)
+@TypeConverters(RolConverter::class, DateConverter::class, CategoryConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun eventDao(): EventDao

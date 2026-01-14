@@ -8,7 +8,7 @@ import java.util.Date
 @Entity(tableName = "events")
 data class EventEntity(
     @PrimaryKey(autoGenerate = true)
-    val eventId: Long,
+    val eventId: Long? = null,
     val userId: String,
     val tituloEvento: String,
     val descripcionEvento: String,

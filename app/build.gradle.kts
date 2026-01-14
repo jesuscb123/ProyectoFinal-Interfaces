@@ -76,6 +76,8 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.foundation)
     kapt(libs.room.compiler)
 
     // --- HILT ---
