@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import dam2.jetpack.proyectofinal.events.data.local.entity.EventEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EventDao {
@@ -18,7 +19,7 @@ interface EventDao {
     suspend fun deleteEventById(eventId: Long): Int
 
     @Query("SELECT * FROM events")
-    suspend fun getAllEvents(): List<EventEntity>
+    fun getAllEvents(): Flow<List<EventEntity>>
 
 
 }

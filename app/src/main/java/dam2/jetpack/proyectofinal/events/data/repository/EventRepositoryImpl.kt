@@ -5,14 +5,18 @@ import dam2.jetpack.proyectofinal.events.data.mapper.toDomain
 import dam2.jetpack.proyectofinal.events.data.mapper.toEntity
 import dam2.jetpack.proyectofinal.events.domain.model.Event
 import dam2.jetpack.proyectofinal.events.domain.repository.EventRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class EventRepositoryImpl @Inject constructor(
     private val eventDao: EventDao,
 ) : EventRepository {
-    override suspend fun getAllEvents(): List<Event> {
-        val eventEntity = eventDao.getAllEvents()
-        return eventEntity.map { it.toDomain() }
+    override suspend fun getAllEvents(): Flow<List<Event>> {
+        val eventList = eventDao.getAllEvents()
+        return eventList.map {list ->
+            list.map { it.toDomain() }
+        }
     }
 
     override suspend fun getById(eventId: Long): Event {
