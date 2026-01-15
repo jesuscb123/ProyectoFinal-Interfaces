@@ -20,9 +20,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.events.domain.model.Event
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -36,12 +38,19 @@ fun HomeScreen(
     val userState by userViewModel.uiState.collectAsState()
     val eventState by eventViewModel.uiState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        val firebaseUid = FirebaseAuth.getInstance().currentUser?.uid
+        firebaseUid?.let {
+            userViewModel.getUserByFirebaseUid(it)
+        }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Text("Bienvenido ${userState.user?.email ?: "usuario"}")
+        Text("Bienvenido ${userState.user?.email ?: "usuario"} con rol ${userState.user?.rol}")
         Spacer(modifier = Modifier.padding(10.dp))
 
         if (eventState.events.isEmpty()){

@@ -2,12 +2,16 @@ package dam2.jetpack.proyectofinal.auth.presentation.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -54,5 +58,22 @@ fun RegisterScreen(authViewModel: AuthViewModel = hiltViewModel(), navController
            CircularProgressIndicator()
        }
 
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RadioButton(
+                selected = rol == Rol.USER,
+                onClick = {rol = Rol.USER}
+            )
+            Text("Usuario")
+
+            RadioButton(
+                selected = rol == Rol.ADMIN,
+                onClick = {rol = Rol.ADMIN}
+            )
+            Text("Admin")
+        }
     }
 }
