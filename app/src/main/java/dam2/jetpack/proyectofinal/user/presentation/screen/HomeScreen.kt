@@ -1,5 +1,6 @@
 package dam2.jetpack.proyectofinal.user.presentation.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.events.domain.model.Event
@@ -50,7 +52,8 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Text("Bienvenido ${userState.user?.email ?: "usuario"} con rol ${userState.user?.rol}")
+        Image(painterResource(id = dam2.jetpack.proyectofinal.R.drawable.logoapp), contentDescription = "Logo")
+        Text("Bienvenido ${userState.user?.email ?: "usuario"}")
         Spacer(modifier = Modifier.padding(10.dp))
 
         if (eventState.events.isEmpty()){
