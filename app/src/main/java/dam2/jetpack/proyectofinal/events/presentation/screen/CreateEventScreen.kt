@@ -22,7 +22,7 @@ import dam2.jetpack.proyectofinal.events.presentation.viewModel.EventViewModel
 
 @Composable
 fun CreateEvent(
-    userId: String,
+    userId: String?,
     eventViewModel: EventViewModel = hiltViewModel(),
     navController: NavController
 ){

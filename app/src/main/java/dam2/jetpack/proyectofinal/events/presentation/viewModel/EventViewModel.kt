@@ -67,7 +67,7 @@ class EventViewModel @Inject constructor(
     }
 
 fun createEvent(
-    userId: String,
+    userId: String?,
     tituloEvento: String,
     descripcionEvento: String,
     categoria: Category,
@@ -75,18 +75,19 @@ fun createEvent(
     viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
-        val event = Event(
-            userId = userId,
-            tituloEvento = tituloEvento,
-            descripcionEvento = descripcionEvento,
-            fechaCreacion = Date(),
-            categoria = categoria,
-            resuelto = resuelto
-        )
+      if (userId != null){
+          val event = Event(
+              userId = userId,
+              tituloEvento = tituloEvento,
+              descripcionEvento = descripcionEvento,
+              fechaCreacion = Date(),
+              categoria = categoria,
+              resuelto = resuelto
+          )
+          createEventUseCase(event)
+      }
 
-        createEventUseCase(event)
-
-        _uiState.value = _uiState.value.copy(isLoading = false)
+    _uiState.value = _uiState.value.copy(isLoading = false)
     }
 }
 

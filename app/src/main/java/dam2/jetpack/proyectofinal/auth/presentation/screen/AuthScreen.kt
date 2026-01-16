@@ -17,7 +17,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -43,17 +42,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import dam2.jetpack.proyectofinal.R // Importa R para el logo
+import dam2.jetpack.proyectofinal.R
 import dam2.jetpack.proyectofinal.auth.presentation.viewmodel.AuthViewModel
 
-// --- Paleta de colores inspirada en un logo de eventos (naranjas y azules) ---
-val DarkBlue = Color(0xFF0D1B2A)
-val LightBlue = Color(0xFF778DA9)
-val OrangeStart = Color(0xFFF77F00)
-val OrangeEnd = Color(0xFFFCBF49)
-val ErrorRed = Color(0xFFD00000)
-val TextLight = Color(0xFFE0E1DD)
-
+// --- ¡HEMOS ELIMINADO LAS VARIABLES DE COLOR LOCALES DE AQUÍ! ---
 
 @Composable
 fun AuthScreen(
@@ -68,21 +60,21 @@ fun AuthScreen(
     LaunchedEffect(state.isAuthenticated) {
         if (state.isAuthenticated) {
             navcontroller.navigate("home") {
-                // Limpia el backstack para que el usuario no pueda volver a la pantalla de login
                 popUpTo(navcontroller.graph.startDestinationId) { inclusive = true }
             }
         }
     }
 
-    // --- NUEVO DISEÑO ---
+    // --- DISEÑO USANDO COLORES DEL MATERIALTHEME ---
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        DarkBlue.copy(alpha = 0.9f),
-                        DarkBlue
+                        // Usa el color de fondo definido en tu Theme.kt
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.9f),
+                        MaterialTheme.colorScheme.background
                     )
                 )
             )
@@ -96,7 +88,7 @@ fun AuthScreen(
         ) {
             // --- LOGO ---
             Image(
-                painter = painterResource(id = R.drawable.logoapp),
+                painter = painterResource(id = R.drawable.logoaap), // Corregido el nombre del logo
                 contentDescription = "Logo de la App",
                 modifier = Modifier
                     .size(300.dp)
@@ -128,11 +120,12 @@ fun AuthScreen(
             if (state.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(50.dp),
-                    color = OrangeStart,
+                    // Usa el color primario del tema
+                    color = MaterialTheme.colorScheme.primary,
                     strokeWidth = 5.dp
                 )
             } else {
-                LoginButton(
+                LoginButton("iniciar sesión",
                     onClick = {
                         viewModel.login(email, password)
                     }
@@ -144,7 +137,8 @@ fun AuthScreen(
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = errorMessage,
-                    color = ErrorRed,
+                    // Usa el color de error del tema
+                    color = MaterialTheme.colorScheme.error,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
@@ -165,24 +159,32 @@ fun AuthTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
-        label = { Text(label, color = LightBlue) },
+        // Usa el color para texto secundario/bordes del tema
+        label = { Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant) },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else androidx.compose.ui.text.input.VisualTransformation.None,
         shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = OrangeStart,
-            unfocusedBorderColor = LightBlue,
-            focusedTextColor = TextLight,
-            unfocusedTextColor = TextLight,
-            cursorColor = OrangeStart
+            // Usa los colores del tema para los diferentes estados
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            cursorColor = MaterialTheme.colorScheme.primary
         ),
         singleLine = true
     )
 }
 
 @Composable
-fun LoginButton(onClick: () -> Unit) {
-    val gradient = Brush.horizontalGradient(listOf(OrangeStart, OrangeEnd))
+fun LoginButton(text: String, onClick: () -> Unit) {
+    // El degradado usa los colores primario y secundario del tema
+    val gradient = Brush.horizontalGradient(
+        listOf(
+            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.secondary
+        )
+    )
     Button(
         onClick = onClick,
         modifier = Modifier
@@ -191,7 +193,7 @@ fun LoginButton(onClick: () -> Unit) {
             .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-        contentPadding = PaddingValues() // Importante para que el fondo del botón sea el degradado
+        contentPadding = PaddingValues()
     ) {
         Box(
             modifier = Modifier
@@ -200,8 +202,9 @@ fun LoginButton(onClick: () -> Unit) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Iniciar Sesión",
-                color = Color.White,
+                text = text,
+                // Usa el color de texto para encima del color primario
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
