@@ -52,7 +52,6 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Image(painterResource(id = dam2.jetpack.proyectofinal.R.drawable.logoapp), contentDescription = "Logo")
         Text("Bienvenido ${userState.user?.email ?: "usuario"}")
         Spacer(modifier = Modifier.padding(10.dp))
 
