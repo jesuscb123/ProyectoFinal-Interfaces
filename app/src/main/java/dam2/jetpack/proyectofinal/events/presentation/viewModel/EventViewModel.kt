@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dam2.jetpack.proyectofinal.events.domain.model.Category
 import dam2.jetpack.proyectofinal.events.domain.model.Event
+import dam2.jetpack.proyectofinal.events.domain.usecase.AcceptEventUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.CreateEventUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.DeleteEventUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetAllEventsUseCase
@@ -24,7 +25,8 @@ class EventViewModel @Inject constructor(
     private val getAllEventsUseCase: GetAllEventsUseCase,
     private val getEventByIdUseCase: GetEventByIdUseCase,
     private val createEventUseCase: CreateEventUseCase,
-    private val deleteEventUseCase: DeleteEventUseCase
+    private val deleteEventUseCase: DeleteEventUseCase,
+    private val acceptEventUseCase: AcceptEventUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EventUiState())
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
@@ -82,7 +84,8 @@ class EventViewModel @Inject constructor(
               descripcionEvento = descripcionEvento,
               fechaCreacion = Date(),
               categoria = categoria,
-              resuelto = resuelto
+              resuelto = resuelto,
+              userAccept = null
           )
           createEventUseCase(event)
       }
@@ -110,4 +113,16 @@ class EventViewModel @Inject constructor(
         }
     }
 
+    fun acceptEvent(event: Event, userEmail: String) {
+        viewModelScope.launch {
+            try {
+                acceptEventUseCase(event, userEmail)
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    errorMessage = "Error al aceptar el evento: ${e.message}"
+                )
+            }
+        }
+    }
 }
+

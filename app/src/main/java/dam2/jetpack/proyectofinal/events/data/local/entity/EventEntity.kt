@@ -14,5 +14,6 @@ data class EventEntity(
     val descripcionEvento: String,
     val categoria: Category,
     val fechaCreacion: Date,
-    val resuelto: Boolean
+    val resuelto: Boolean,
+    val userAccept: String?
 )

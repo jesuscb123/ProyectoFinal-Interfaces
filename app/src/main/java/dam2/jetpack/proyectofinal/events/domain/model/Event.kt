@@ -10,5 +10,6 @@ data class Event(
     val descripcionEvento: String,
     val categoria: Category,
     val fechaCreacion: Date,
-    val resuelto: Boolean = false
+    val resuelto: Boolean = false,
+    val userAccept: String?
 )

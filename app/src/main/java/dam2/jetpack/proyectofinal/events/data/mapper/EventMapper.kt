@@ -11,7 +11,8 @@ fun EventEntity.toDomain(): Event{
         descripcionEvento = descripcionEvento,
         categoria = categoria,
         fechaCreacion = fechaCreacion,
-        resuelto = resuelto
+        resuelto = resuelto,
+        userAccept = userAccept
     )
 }
 
@@ -23,6 +24,7 @@ fun Event.toEntity(): EventEntity{
         descripcionEvento = descripcionEvento,
         categoria = categoria,
         fechaCreacion = fechaCreacion,
-        resuelto = resuelto
+        resuelto = resuelto,
+        userAccept = userAccept
     )
 }

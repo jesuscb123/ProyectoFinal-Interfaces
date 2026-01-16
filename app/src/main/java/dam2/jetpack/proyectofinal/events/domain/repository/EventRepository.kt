@@ -8,4 +8,7 @@ interface EventRepository {
     suspend fun getById(eventId: Long): Event
     suspend fun createEvent (event: Event)
     suspend fun deleteEvent (eventId: Long): Int
+
+    suspend fun acceptEvent(event: Event, userEmail: String)
+
 }
