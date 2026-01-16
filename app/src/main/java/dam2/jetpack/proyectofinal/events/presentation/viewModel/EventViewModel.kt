@@ -66,7 +66,7 @@ class EventViewModel @Inject constructor(
         }
     }
 
-fun createEvent(
+    fun createEvent(
     userId: String?,
     tituloEvento: String,
     descripcionEvento: String,
@@ -90,5 +90,24 @@ fun createEvent(
     _uiState.value = _uiState.value.copy(isLoading = false)
     }
 }
+    fun deleteEvent(eventId: Long) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+
+            val result = deleteEventUseCase(eventId)
+
+            result.fold(
+                onSuccess = {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
+                },
+                onFailure = { exception ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = exception.message ?: "Error al eliminar el evento"
+                    )
+                }
+            )
+        }
+    }
 
 }
