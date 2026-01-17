@@ -37,4 +37,10 @@ class EventRepositoryImpl @Inject constructor(
         eventDao.insertOrReplaceEvent(updatedEvent.toEntity())
     }
 
+    override suspend fun getEventsUser(userAccept: String): Flow<List<Event>> {
+        val eventList = eventDao.getAllEvents()
+        return eventList.map {list ->
+            list.map { it.toDomain() }
+        }
+    }
 }

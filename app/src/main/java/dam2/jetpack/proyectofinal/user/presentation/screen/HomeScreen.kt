@@ -35,10 +35,10 @@ import java.util.*
 
 @Composable
 fun HomeScreen(
+    onMyEventsClick: () -> Unit,
     userViewModel: UserViewModel = hiltViewModel(),
     eventViewModel: EventViewModel = hiltViewModel()
 ) {
-    // --- NO SE TOCA NADA DE LA LÓGICA ---
     val userState by userViewModel.uiState.collectAsState()
     val eventState by eventViewModel.uiState.collectAsState()
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
@@ -47,9 +47,9 @@ fun HomeScreen(
         FirebaseAuth.getInstance().currentUser?.uid?.let {
             userViewModel.getUserByFirebaseUid(it)
         }
+        eventViewModel.loadEvents()
     }
 
-    // --- EL DISEÑO EMPIEZA AQUÍ ---
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -59,23 +59,8 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp)
         ) {
-            // Header
-            Text(
-                text = "Hola,",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = userState.user?.email ?: "Bienvenido",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-
-
             if (eventState.events.isEmpty()) {
-                EmptyState() // Composable para el estado vacío
+                EmptyState()
             } else {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -109,7 +94,6 @@ fun HomeScreen(
             }
         }
 
-        // --- LA LÓGICA DEL DIÁLOGO SIGUE EXACTAMENTE IGUAL ---
         selectedEvent?.let { event ->
             val currentUserEmail = userState.user?.email
             val isAcceptedByCurrentUser = event.userAccept == currentUserEmail
@@ -144,7 +128,6 @@ fun HomeScreen(
     }
 }
 
-// COMPOSABLE PARA EL ITEM DEL EVENTO (ADAPTADO)
 @Composable
 fun EventItem(
     event: Event,

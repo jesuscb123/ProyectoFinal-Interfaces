@@ -11,6 +11,7 @@ import dam2.jetpack.proyectofinal.events.domain.usecase.CreateEventUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.DeleteEventUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetAllEventsUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventByIdUseCase
+import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventsUserUseCase
 import dam2.jetpack.proyectofinal.events.presentation.state.EventUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,15 +27,13 @@ class EventViewModel @Inject constructor(
     private val getEventByIdUseCase: GetEventByIdUseCase,
     private val createEventUseCase: CreateEventUseCase,
     private val deleteEventUseCase: DeleteEventUseCase,
-    private val acceptEventUseCase: AcceptEventUseCase
+    private val acceptEventUseCase: AcceptEventUseCase,
+    private val getEventsUserUseCase: GetEventsUserUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EventUiState())
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
-    init{
-        observeEvents()
-    }
-    private fun observeEvents() {
+    fun loadEvents() {
         viewModelScope.launch {
             getAllEventsUseCase().collect { events ->
                 _uiState.value = _uiState.value.copy(
@@ -128,6 +127,19 @@ class EventViewModel @Inject constructor(
     fun cancelAcceptance(event: Event) {
         viewModelScope.launch {
             acceptEventUseCase(event, null)
+        }
+    }
+
+     fun getEventsUser(userAccept: String){
+        viewModelScope.launch {
+            getEventsUserUseCase(userAccept).collect { events ->
+                _uiState.value = _uiState.value.copy(
+                    events = events,
+                    isEmpty = events.isEmpty(),
+                    isLoading = false,
+                    errorMessage = null
+                )
+            }
         }
     }
 }

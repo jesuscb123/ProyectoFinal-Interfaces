@@ -11,4 +11,6 @@ interface EventRepository {
 
     suspend fun acceptEvent(event: Event, userEmail: String?)
 
+    suspend fun getEventsUser(userAccept: String): Flow<List<Event>>
 }
+
