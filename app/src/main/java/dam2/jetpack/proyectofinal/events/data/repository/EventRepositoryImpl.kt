@@ -32,12 +32,11 @@ class EventRepositoryImpl @Inject constructor(
         return eventDao.deleteEventById(eventId)
     }
 
-    override suspend fun acceptEvent(event: Event, userEmail: String?){
-        val updatedEvent = event.copy(userAccept = userEmail)
-        eventDao.insertOrReplaceEvent(updatedEvent.toEntity())
+    override suspend fun acceptEvent(event: Event){
+        eventDao.insertOrReplaceEvent(event.toEntity())
     }
 
-    override suspend fun getEventsUser(userAccept: String): Flow<List<Event>> {
+    override fun getEventsUser(userAccept: String): Flow<List<Event>> {
         val eventList = eventDao.getAllEvents()
         return eventList.map {list ->
             list.map { it.toDomain() }

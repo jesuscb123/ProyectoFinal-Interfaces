@@ -59,6 +59,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp)
         ) {
+
             if (eventState.events.isEmpty()) {
                 EmptyState()
             } else {

@@ -8,8 +8,7 @@ import javax.inject.Inject
 class AcceptEventUseCase @Inject constructor(
     private val repository: EventRepository
 ) {
-    suspend operator fun invoke(event: Event, userEmail: String?) {
-        val updatedEvent = event.copy(userAccept = userEmail)
-        repository.acceptEvent(updatedEvent, userEmail)
+    suspend operator fun invoke(event: Event) {
+        repository.acceptEvent(event)
     }
 }

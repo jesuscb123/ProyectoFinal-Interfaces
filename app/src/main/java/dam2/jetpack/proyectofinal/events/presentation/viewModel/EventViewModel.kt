@@ -1,8 +1,11 @@
 package dam2.jetpack.proyectofinal.events.presentation.viewModel
 
+import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dam2.jetpack.proyectofinal.events.domain.model.Category
 import dam2.jetpack.proyectofinal.events.domain.model.Event
@@ -13,6 +16,8 @@ import dam2.jetpack.proyectofinal.events.domain.usecase.GetAllEventsUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventByIdUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventsUserUseCase
 import dam2.jetpack.proyectofinal.events.presentation.state.EventUiState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,8 +38,11 @@ class EventViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(EventUiState())
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
+    private var eventsJob: Job? = null
+
     fun loadEvents() {
         viewModelScope.launch {
+            eventsJob?.cancel()
             getAllEventsUseCase().collect { events ->
                 _uiState.value = _uiState.value.copy(
                     events = events,
@@ -112,35 +120,26 @@ class EventViewModel @Inject constructor(
         }
     }
 
-    fun acceptEvent(event: Event, userEmail: String) {
+    @OptIn(UnstableApi::class)
+    fun acceptEvent(event: Event, userEmail: String) { // Asegúrate de que recibes el email del usuario
+        Log.d("ACCEPT_EVENT_DEBUG", "Se va a aceptar el evento '${event.tituloEvento}' para el usuario '$userEmail'")
         viewModelScope.launch {
-            try {
-                acceptEventUseCase(event, userEmail)
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    errorMessage = "Error al aceptar el evento: ${e.message}"
-                )
-            }
+            // Creamos una copia del evento, pero actualizando el campo 'userAccept'
+            val updatedEvent = event.copy(
+                userAccept = userEmail // <-- ESTO ES CLAVE
+            )
+            acceptEventUseCase(updatedEvent)
         }
     }
 
     fun cancelAcceptance(event: Event) {
         viewModelScope.launch {
-            acceptEventUseCase(event, null)
+            acceptEventUseCase(event)
         }
     }
 
-     fun getEventsUser(userAccept: String){
-        viewModelScope.launch {
-            getEventsUserUseCase(userAccept).collect { events ->
-                _uiState.value = _uiState.value.copy(
-                    events = events,
-                    isEmpty = events.isEmpty(),
-                    isLoading = false,
-                    errorMessage = null
-                )
-            }
-        }
+    fun getEventsUser(userAccept: String): Flow<List<Event>> {
+        return getEventsUserUseCase(userAccept)
     }
 }
 

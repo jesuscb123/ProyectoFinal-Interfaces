@@ -9,8 +9,8 @@ interface EventRepository {
     suspend fun createEvent (event: Event)
     suspend fun deleteEvent (eventId: Long): Int
 
-    suspend fun acceptEvent(event: Event, userEmail: String?)
+    suspend fun acceptEvent(event: Event)
 
-    suspend fun getEventsUser(userAccept: String): Flow<List<Event>>
+    fun getEventsUser(userAccept: String): Flow<List<Event>>
 }
 
