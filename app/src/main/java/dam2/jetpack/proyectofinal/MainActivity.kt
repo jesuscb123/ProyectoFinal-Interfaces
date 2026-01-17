@@ -64,6 +64,7 @@ fun IniciarApp(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val userState by userViewModel.uiState.collectAsState()
+    val canNavigateBack = navController.previousBackStackEntry != null
 
     LaunchedEffect(FirebaseAuth.getInstance().currentUser?.uid) {
         FirebaseAuth.getInstance().currentUser?.uid?.let {
@@ -105,8 +106,8 @@ fun IniciarApp(
                     actionIconContentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     navigationIcon = {
-                        if (currentRoute != "home"){
-                            IconButton(onClick = { navController.popBackStack() }) {
+                        if (canNavigateBack){
+                            IconButton(onClick = { navController.navigateUp() }) {
                                 Icon(
                                     imageVector = Icons.Default.ArrowBack,
                                     contentDescription = "Volver"

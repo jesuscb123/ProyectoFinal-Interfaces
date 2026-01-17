@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
-import dam2.jetpack.proyectofinal.events.domain.model.Category // Asegúrate que el import es correcto
+import dam2.jetpack.proyectofinal.events.domain.model.Category
 import dam2.jetpack.proyectofinal.events.domain.model.Event
 import dam2.jetpack.proyectofinal.events.presentation.viewModel.EventViewModel
 import dam2.jetpack.proyectofinal.user.presentation.viewmodel.UserViewModel
@@ -96,37 +96,99 @@ fun HomeScreen(
         }
 
         selectedEvent?.let { event ->
-            val currentUserEmail = userState.user?.email
-            val isAcceptedByCurrentUser = event.userAccept == currentUserEmail
 
-            AlertDialog(
-                onDismissRequest = { selectedEvent = null },
-                title = { Text(if (isAcceptedByCurrentUser) "Cancelar Asistencia" else "Aceptar Evento") },
-                text = { Text("¿Qué deseas hacer con el evento \"${event.tituloEvento}\"?") },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            if (isAcceptedByCurrentUser) {
-                                eventViewModel.cancelAcceptance(event)
-                            } else {
-                                currentUserEmail?.let { email ->
-                                    eventViewModel.acceptEvent(event, email)
-                                }
-                            }
-                            selectedEvent = null
-                        }
-                    ) {
-                        Text(if (isAcceptedByCurrentUser) "Confirmar Cancelación" else "Aceptar")
+            selectedEvent?.let { event ->
+                EventActionDialog(
+                    event = event,
+                    currentUserEmail = userState.user?.email,
+                    onDismiss = { selectedEvent = null },
+                    onAccept = { event, email ->
+                        eventViewModel.acceptEvent(event, email)
+                    },
+                    onCancelAcceptance = { evt ->
+                        eventViewModel.cancelAcceptance(evt)
                     }
-                },
-                dismissButton = {
-                    TextButton(onClick = { selectedEvent = null }) {
-                        Text("Cerrar")
-                    }
-                }
-            )
+                )
+            }
         }
     }
+}
+
+@Composable
+fun EventActionDialog(
+    event: Event,
+    currentUserEmail: String?,
+    onDismiss: () -> Unit,
+    onAccept: (Event, String) -> Unit,
+    onCancelAcceptance: (Event) -> Unit
+) {
+    val isAcceptedByCurrentUser = event.userAccept == currentUserEmail
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(if (isAcceptedByCurrentUser) "Cancelar Asistencia" else "Aceptar Evento")
+        },
+        text = {
+            Text("¿Qué deseas hacer con el evento \"${event.tituloEvento}\"?")
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    if (isAcceptedByCurrentUser) {
+                        onCancelAcceptance(event)
+                    } else if (currentUserEmail != null) {
+
+                        onAccept(event, currentUserEmail)
+                    }
+                    onDismiss()
+                }
+            ) {
+                Text(if (isAcceptedByCurrentUser) "Confirmar Cancelación" else "Aceptar")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cerrar")
+            }
+        }
+    )
+}
+
+@Composable
+fun ResolveEventDialog(
+    event: Event,
+    onDismiss: () -> Unit,
+    onMarkAsResolved: (Event) -> Unit
+) {
+    if (event.resuelto) {
+        LaunchedEffect(Unit) {
+            onDismiss()
+        }
+        return
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Default.TaskAlt, contentDescription = "Resolver") },
+        title = { Text("Gestionar Evento") },
+        text = { Text("¿Deseas marcar el evento \"${event.tituloEvento}\" como solucionado?") },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onMarkAsResolved(event)
+                    onDismiss()
+                }
+            ) {
+                Text("Sí, Solucionado")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancelar")
+            }
+        }
+    )
 }
 
 @Composable

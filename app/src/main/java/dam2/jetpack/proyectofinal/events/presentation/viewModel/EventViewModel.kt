@@ -165,5 +165,24 @@ class EventViewModel @Inject constructor(
             }
         }
     }
+
+    fun markEventAsResolved(event: Event) {
+        viewModelScope.launch {
+            val updatedEvent = event.copy(
+                resuelto = true
+            )
+            acceptEventUseCase(updatedEvent)
+
+            _uiState.value = _uiState.value.copy(
+                events = _uiState.value.events.map {
+                    if (it.eventId == updatedEvent.eventId) {
+                        updatedEvent
+                    } else {
+                        it
+                    }
+                }
+            )
+        }
+    }
 }
 
