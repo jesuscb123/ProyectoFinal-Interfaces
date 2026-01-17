@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,7 +33,6 @@ fun HomeScreen(
     val eventState by eventViewModel.uiState.collectAsState()
 
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
-
 
     LaunchedEffect(Unit) {
         FirebaseAuth.getInstance().currentUser?.uid?.let {
@@ -69,6 +67,19 @@ fun HomeScreen(
             )
 
             if (eventState.events.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 80.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "No hay eventos disponibles",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             } else {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -89,23 +100,35 @@ fun HomeScreen(
         }
 
         selectedEvent?.let { event ->
+            val currentUserEmail = userState.user?.email
+            val isAcceptedByCurrentUser = event.userAccept == currentUserEmail
+
             AlertDialog(
                 onDismissRequest = { selectedEvent = null },
-                title = { Text(event.tituloEvento) },
-                text = { Text(event.descripcionEvento) },
+                // El título y el texto cambian según el estado
+                title = { Text(if (isAcceptedByCurrentUser) "Cancelar Asistencia" else "Aceptar Evento") },
+                text = { Text("¿Qué deseas hacer con el evento \"${event.tituloEvento}\"?") },
                 confirmButton = {
-                    TextButton(onClick = {
-                        userState.user?.email?.let { email ->
-                            eventViewModel.acceptEvent(event, email)
+                    TextButton(
+                        onClick = {
+                            if (isAcceptedByCurrentUser) {
+
+                                eventViewModel.cancelAcceptance(event)
+                            } else {
+                                currentUserEmail?.let { email ->
+                                    eventViewModel.acceptEvent(event, email)
+                                }
+                            }
+                            selectedEvent = null // Cerramos el diálogo en ambos casos
                         }
-                        selectedEvent = null
-                    }) {
-                        Text("Aceptar")
+                    ) {
+
+                        Text(if (isAcceptedByCurrentUser) "Confirmar Cancelación" else "Aceptar")
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { selectedEvent = null }) {
-                        Text("Cancelar")
+                        Text("Cerrar") // Un texto más genérico para el botón de cerrar
                     }
                 }
             )
@@ -121,7 +144,7 @@ fun EventItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(enabled = event.userAccept == null) { onClick() },
+            .clickable(enabled = event.userAccept == null || event.userAccept == FirebaseAuth.getInstance().currentUser?.email) { onClick() },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)

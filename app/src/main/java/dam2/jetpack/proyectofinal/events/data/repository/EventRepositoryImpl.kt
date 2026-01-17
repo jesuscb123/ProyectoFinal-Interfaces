@@ -32,8 +32,9 @@ class EventRepositoryImpl @Inject constructor(
         return eventDao.deleteEventById(eventId)
     }
 
-    override suspend fun acceptEvent(event: Event, userEmail: String){
+    override suspend fun acceptEvent(event: Event, userEmail: String?){
         val updatedEvent = event.copy(userAccept = userEmail)
         eventDao.insertOrReplaceEvent(updatedEvent.toEntity())
     }
+
 }

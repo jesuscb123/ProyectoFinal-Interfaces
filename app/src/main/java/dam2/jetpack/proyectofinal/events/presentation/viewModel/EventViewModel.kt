@@ -124,5 +124,11 @@ class EventViewModel @Inject constructor(
             }
         }
     }
+
+    fun cancelAcceptance(event: Event) {
+        viewModelScope.launch {
+            acceptEventUseCase(event, null)
+        }
+    }
 }
 
