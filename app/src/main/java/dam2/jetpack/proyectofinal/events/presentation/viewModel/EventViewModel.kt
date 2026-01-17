@@ -76,30 +76,41 @@ class EventViewModel @Inject constructor(
     }
 
     fun createEvent(
-    userId: String?,
-    tituloEvento: String,
-    descripcionEvento: String,
-    categoria: Category,
-    resuelto: Boolean) {
-    viewModelScope.launch {
-        _uiState.value = _uiState.value.copy(isLoading = true)
+        userId: String?,
+        tituloEvento: String,
+        descripcionEvento: String,
+        categoria: Category,
+        resuelto: Boolean
+    ) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
 
-      if (userId != null){
-          val event = Event(
-              userId = userId,
-              tituloEvento = tituloEvento,
-              descripcionEvento = descripcionEvento,
-              fechaCreacion = Date(),
-              categoria = categoria,
-              resuelto = resuelto,
-              userAccept = null
-          )
-          createEventUseCase(event)
-      }
+            if (userId != null) {
+                val event = Event(
+                    userId = userId,
+                    tituloEvento = tituloEvento,
+                    descripcionEvento = descripcionEvento,
+                    fechaCreacion = Date(),
+                    categoria = categoria,
+                    resuelto = resuelto,
+                    userAccept = null
+                )
+                createEventUseCase(event)
 
-    _uiState.value = _uiState.value.copy(isLoading = false)
+                getAllEventsUseCase().collect { events ->
+                    _uiState.value = _uiState.value.copy(
+                        events = events,
+                        isEmpty = events.isEmpty(),
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
+            } else {
+                // Si el userId es null, al menos para de cargar
+                _uiState.value = _uiState.value.copy(isLoading = false)
+            }
+        }
     }
-}
     fun deleteEvent(eventId: Long) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
@@ -138,8 +149,18 @@ class EventViewModel @Inject constructor(
         }
     }
 
-    fun getEventsUser(userAccept: String): Flow<List<Event>> {
-        return getEventsUserUseCase(userAccept)
+    fun getEventsUser(userAccept: String) {
+        viewModelScope.launch {
+            eventsJob?.cancel()
+            getEventsUserUseCase(userAccept).collect { events ->
+                _uiState.value = _uiState.value.copy(
+                    events = events,
+                    isEmpty = events.isEmpty(),
+                    isLoading = false,
+                    errorMessage = null
+                )
+            }
+        }
     }
 }
 
