@@ -144,7 +144,10 @@ class EventViewModel @Inject constructor(
 
     fun cancelAcceptance(event: Event) {
         viewModelScope.launch {
-            acceptEventUseCase(event)
+            val updatedEvent = event.copy(
+                userAccept = null
+            )
+            acceptEventUseCase(updatedEvent)
         }
     }
 

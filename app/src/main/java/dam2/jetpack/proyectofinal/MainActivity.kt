@@ -84,7 +84,7 @@ fun IniciarApp(
             },
             topBar = {
                 TopAppBar(title = {
-                    if (currentRoute != "home"  && currentRoute != "register") {
+                    if (currentRoute != "auth"  && currentRoute != "register" ) {
                         Column{
                             Text(
                                 text = "Hola,",
