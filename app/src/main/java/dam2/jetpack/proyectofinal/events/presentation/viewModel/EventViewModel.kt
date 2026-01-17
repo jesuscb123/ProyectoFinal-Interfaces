@@ -38,11 +38,8 @@ class EventViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(EventUiState())
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
-    private var eventsJob: Job? = null
-
     fun loadEvents() {
         viewModelScope.launch {
-            eventsJob?.cancel()
             getAllEventsUseCase().collect { events ->
                 _uiState.value = _uiState.value.copy(
                     events = events,
@@ -111,6 +108,7 @@ class EventViewModel @Inject constructor(
             }
         }
     }
+
     fun deleteEvent(eventId: Long) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
@@ -132,12 +130,13 @@ class EventViewModel @Inject constructor(
     }
 
     @OptIn(UnstableApi::class)
-    fun acceptEvent(event: Event, userEmail: String) { // Asegúrate de que recibes el email del usuario
-        Log.d("ACCEPT_EVENT_DEBUG", "Se va a aceptar el evento '${event.tituloEvento}' para el usuario '$userEmail'")
+    fun acceptEvent(
+        event: Event,
+        userEmail: String
+    ) {
         viewModelScope.launch {
-            // Creamos una copia del evento, pero actualizando el campo 'userAccept'
             val updatedEvent = event.copy(
-                userAccept = userEmail // <-- ESTO ES CLAVE
+                userAccept = userEmail
             )
             acceptEventUseCase(updatedEvent)
         }
@@ -149,9 +148,10 @@ class EventViewModel @Inject constructor(
         }
     }
 
+    @OptIn(UnstableApi::class)
     fun getEventsUser(userAccept: String) {
         viewModelScope.launch {
-            eventsJob?.cancel()
+            _uiState.value = _uiState.value.copy(isLoading = true)
             getEventsUserUseCase(userAccept).collect { events ->
                 _uiState.value = _uiState.value.copy(
                     events = events,

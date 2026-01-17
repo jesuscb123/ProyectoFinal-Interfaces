@@ -149,7 +149,6 @@ fun EventItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Icono de categoría
             Icon(
                 imageVector = event.categoria.toIcon(),
                 contentDescription = "Categoría",
@@ -162,7 +161,6 @@ fun EventItem(
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Contenido del evento
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = event.tituloEvento,
@@ -178,7 +176,6 @@ fun EventItem(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // 1. AQUÍ AÑADIMOS LA FECHA
                 Text(
                     text = event.fechaCreacion.formatToString(),
                     style = MaterialTheme.typography.bodySmall,
@@ -188,7 +185,6 @@ fun EventItem(
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Estado del evento (Pendiente o Aceptado)
             if (event.userAccept != null) {
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
@@ -197,7 +193,7 @@ fun EventItem(
                         color = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = if (event.userAccept != currentUserEmail) "Ti" else event.userAccept.substringBefore('@'),
+                        text = event.userAccept.substringBefore('@'),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
@@ -210,7 +206,6 @@ fun EventItem(
     }
 }
 
-// COMPOSABLE PARA LA "PASTILLA" DE ESTADO
 @Composable
 fun StatusChip() {
     Box(

@@ -129,7 +129,7 @@ fun IniciarApp(
         ){ innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = "register",
+                startDestination = "auth",
                 modifier = Modifier.padding(innerPadding
                 )){
                 composable("auth") { AuthScreen(navcontroller = navController) }
