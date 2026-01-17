@@ -7,11 +7,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -37,7 +35,7 @@ fun HomeScreen(
 
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
 
-    // Cargar usuario desde Firebase
+
     LaunchedEffect(Unit) {
         FirebaseAuth.getInstance().currentUser?.uid?.let {
             userViewModel.getUserByFirebaseUid(it)
@@ -71,26 +69,16 @@ fun HomeScreen(
             )
 
             if (eventState.events.isEmpty()) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "No hay eventos disponibles",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center
-                    )
-                }
             } else {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(eventState.events) { event ->
+                    items(
+                        items = eventState.events,
+                        key = { it.eventId!! }
+                    ) { event ->
                         EventItem(
                             event = event,
-                            currentUserEmail = userState.user?.email,
                             onClick = {
                                 selectedEvent = event
                             }
@@ -100,7 +88,6 @@ fun HomeScreen(
             }
         }
 
-        // Dialogo para aceptar evento
         selectedEvent?.let { event ->
             AlertDialog(
                 onDismissRequest = { selectedEvent = null },
@@ -126,19 +113,15 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventItem(
     event: Event,
-    currentUserEmail: String?,
     onClick: () -> Unit
 ) {
-    var isAccepted by rememberSaveable(event.eventId) { mutableStateOf(false) }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .clickable(enabled = event.userAccept == null) { onClick() },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -162,9 +145,10 @@ fun EventItem(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(8.dp))
-            if (isAccepted) {
+
+            if (event.userAccept != null) {
                 Text(
-                    text = "Aceptado por: ${currentUserEmail ?: "ti"}",
+                    text = "Aceptado por: ${event.userAccept}",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
