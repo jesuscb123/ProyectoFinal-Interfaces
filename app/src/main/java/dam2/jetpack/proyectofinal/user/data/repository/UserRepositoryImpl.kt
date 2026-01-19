@@ -20,4 +20,11 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun saveUser(user: User) {
         userDao.insertOrReplaceUser(user.toEntity())
     }
+
+    override suspend fun getUserByEmail(email: String): User {
+        val userEntity = userDao.getUserByEmail(email)
+            ?: error("User no encontrado")
+
+        return userEntity.toDomain()
+    }
 }

@@ -2,10 +2,12 @@ package dam2.jetpack.proyectofinal.auth.presentation.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -143,6 +145,9 @@ fun AuthScreen(
                     textAlign = TextAlign.Center
                 )
             }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            SingUp(navController = navcontroller)
         }
     }
 }
@@ -178,7 +183,6 @@ fun AuthTextField(
 
 @Composable
 fun LoginButton(text: String, onClick: () -> Unit) {
-    // El degradado usa los colores primario y secundario del tema
     val gradient = Brush.horizontalGradient(
         listOf(
             MaterialTheme.colorScheme.primary,
@@ -203,7 +207,6 @@ fun LoginButton(text: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = text,
-                // Usa el color de texto para encima del color primario
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
@@ -211,3 +214,11 @@ fun LoginButton(text: String, onClick: () -> Unit) {
         }
     }
 }
+
+@Composable
+fun SingUp(navController: NavController){
+    Text("Registrarse", modifier = Modifier.clickable(
+        onClick = {navController.navigate("register")}
+    ))
+}
+

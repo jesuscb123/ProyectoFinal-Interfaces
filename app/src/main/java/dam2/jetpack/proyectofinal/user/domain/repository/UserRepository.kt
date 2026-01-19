@@ -6,4 +6,7 @@ import dam2.jetpack.proyectofinal.user.domain.model.User
 interface UserRepository {
     suspend fun getUserByFirebaseUid(firebaseUid: String): User?
     suspend fun saveUser(user: User)
+
+    suspend fun  getUserByEmail(email: String): User?
+
 }

@@ -17,6 +17,9 @@ import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventByIdUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventsUserCreateUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventsUserUseCase
 import dam2.jetpack.proyectofinal.events.presentation.state.EventUiState
+import dam2.jetpack.proyectofinal.user.domain.usecase.GetUserByEmailUseCase
+import dam2.jetpack.proyectofinal.user.domain.usecase.SaveUserUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +27,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
 
@@ -35,7 +39,9 @@ class EventViewModel @Inject constructor(
     private val deleteEventUseCase: DeleteEventUseCase,
     private val acceptEventUseCase: AcceptEventUseCase,
     private val getEventsUserUseCase: GetEventsUserUseCase,
-    private val getEventsUserCreateEventUseCase: GetEventsUserCreateUseCase
+    private val getEventsUserCreateEventUseCase: GetEventsUserCreateUseCase,
+    private val getUserByEmailUseCase: GetUserByEmailUseCase,
+    private val saveUserUseCase: SaveUserUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EventUiState())
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
@@ -182,23 +188,48 @@ class EventViewModel @Inject constructor(
         }
     }
 
-    fun markEventAsResolved(event: Event) {
-        viewModelScope.launch {
-            val updatedEvent = event.copy(
-                resuelto = true
-            )
+    @OptIn(UnstableApi::class)
+    fun markEventAsResolved(event: Event, pointsToAdd: Int) {
+
+        if (event.resuelto) return
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val updatedEvent = event.copy(resuelto = true)
+
             acceptEventUseCase(updatedEvent)
 
-            _uiState.value = _uiState.value.copy(
-                events = _uiState.value.events.map {
-                    if (it.eventId == updatedEvent.eventId) {
-                        updatedEvent
-                    } else {
-                        it
+
+            val userEmailToReward = event.userAccept
+
+
+            if (userEmailToReward != null) {
+
+                val userResult = getUserByEmailUseCase(userEmailToReward)
+
+                userResult.onSuccess { user ->
+                    if (user != null) {
+                        val updatedUser = user.copy(puntos = user.puntos + pointsToAdd)
+                        saveUserUseCase(updatedUser)
                     }
+                }.onFailure { exception ->
+                    Log.e("EventViewModel", "Error al buscar o guardar usuario para recompensa: ${exception.message}")
                 }
-            )
+            }
+
+            withContext(Dispatchers.Main) {
+                _uiState.value = _uiState.value.copy(
+                    events = _uiState.value.events.map { eventInList ->
+                        if (eventInList.eventId == updatedEvent.eventId) {
+                            updatedEvent
+                        } else {
+                            eventInList
+                        }
+                    }
+                )
+            }
         }
     }
 }
+
 

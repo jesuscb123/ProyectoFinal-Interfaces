@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -46,6 +47,7 @@ import dam2.jetpack.proyectofinal.ui.theme.ProyectoFinalTheme
 import dam2.jetpack.proyectofinal.user.presentation.screen.EventsUserCreateScreen
 import dam2.jetpack.proyectofinal.user.presentation.screen.EventsUserScreen
 import dam2.jetpack.proyectofinal.user.presentation.screen.HomeScreen
+import dam2.jetpack.proyectofinal.user.presentation.screen.ViewPointsUserScreen
 import dam2.jetpack.proyectofinal.user.presentation.viewmodel.UserViewModel
 
 @AndroidEntryPoint
@@ -166,6 +168,14 @@ fun IniciarApp(
                                     modifier = Modifier.size(32.dp)
                                 )
                             }
+
+                            IconButton(onClick = { navController.navigate("pointsUser") }) {
+                                Icon(
+                                    imageVector = Icons.Default.WorkspacePremium,
+                                    contentDescription = "Mis Puntos",
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
                         }
                     })
             }
@@ -189,6 +199,7 @@ fun IniciarApp(
 
                 composable("myCreatedEvents") { EventsUserCreateScreen() }
 
+                composable("pointsUser") { ViewPointsUserScreen() }
 
             }
         }

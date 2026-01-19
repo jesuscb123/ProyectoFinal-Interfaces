@@ -11,5 +11,6 @@ data class UserEntity(
     @PrimaryKey
     val firebaseUid: String,
     val email: String,
-    val rol: Rol
+    val rol: Rol,
+    val puntos: Int = 0
 )

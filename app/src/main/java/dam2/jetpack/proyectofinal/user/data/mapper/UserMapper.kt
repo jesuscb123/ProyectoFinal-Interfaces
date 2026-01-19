@@ -7,11 +7,13 @@ import dam2.jetpack.proyectofinal.user.domain.model.User
 fun UserEntity.toDomain() = User(
     firebaseUid = firebaseUid,
     email = email,
-    rol = rol
+    rol = rol,
+    puntos = puntos
 )
 
 fun User.toEntity() = UserEntity(
     firebaseUid = firebaseUid,
     email = email,
-    rol = rol
+    rol = rol,
+    puntos = puntos
 )
