@@ -24,8 +24,10 @@ interface EventDao {
     @Query("SELECT * FROM events WHERE userAccept LIKE :userAccept ORDER BY fechaCreacion DESC")
     fun getEventsUser(userAccept: String): Flow<List<EventEntity>>
 
-
-
-
-
+    @Query("SELECT * FROM events WHERE userId LIKE :userId ORDER BY fechaCreacion DESC")
+    fun getEventsUserCreate(userId: String): Flow<List<EventEntity>>
 }
+
+
+
+

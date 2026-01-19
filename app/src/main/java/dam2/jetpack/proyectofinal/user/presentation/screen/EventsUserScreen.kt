@@ -65,7 +65,6 @@ fun EventsUserScreen(
                     EventItem(
                         event = event,
                         currentUserEmail = currentUserEmail,
-                        // NUEVO: Al hacer clic, guardamos el evento para mostrar el diálogo.
                         onClick = { selectedEvent = event }
                     )
                 }

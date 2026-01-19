@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Checklist
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -37,8 +40,10 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import dam2.jetpack.proyectofinal.auth.presentation.screen.AuthScreen
 import dam2.jetpack.proyectofinal.auth.presentation.screen.RegisterScreen
+import dam2.jetpack.proyectofinal.auth.presentation.viewmodel.AuthViewModel
 import dam2.jetpack.proyectofinal.events.presentation.screen.CreateEvent
 import dam2.jetpack.proyectofinal.ui.theme.ProyectoFinalTheme
+import dam2.jetpack.proyectofinal.user.presentation.screen.EventsUserCreateScreen
 import dam2.jetpack.proyectofinal.user.presentation.screen.EventsUserScreen
 import dam2.jetpack.proyectofinal.user.presentation.screen.HomeScreen
 import dam2.jetpack.proyectofinal.user.presentation.viewmodel.UserViewModel
@@ -57,7 +62,8 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IniciarApp(
-    userViewModel: UserViewModel = hiltViewModel()
+    userViewModel: UserViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel = hiltViewModel()
 ){
     val navController = rememberNavController()
     val emailId = FirebaseAuth.getInstance().currentUser?.email
@@ -65,10 +71,16 @@ fun IniciarApp(
     val currentRoute = navBackStackEntry?.destination?.route
     val userState by userViewModel.uiState.collectAsState()
     val canNavigateBack = navController.previousBackStackEntry != null
+    val authState by authViewModel.uiState.collectAsState()
+    val startDestination = if (FirebaseAuth.getInstance().currentUser != null) "home" else "auth"
 
-    LaunchedEffect(FirebaseAuth.getInstance().currentUser?.uid) {
-        FirebaseAuth.getInstance().currentUser?.uid?.let {
-            userViewModel.getUserByFirebaseUid(it)
+    LaunchedEffect(key1 = authState.isAuthenticated) {
+        if (!authState.isAuthenticated && FirebaseAuth.getInstance().currentUser == null) {
+            navController.navigate("auth") {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+            }
         }
     }
 
@@ -85,17 +97,26 @@ fun IniciarApp(
             },
             topBar = {
                 TopAppBar(title = {
-                    if (currentRoute != "auth"  && currentRoute != "register" ) {
-                        Column{
-                            Text(
-                                text = "Hola,",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = userState.user?.email ?: "Bienvenido",
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.titleLarge
-                            )
+                    when (currentRoute) {
+                        "home" -> {
+                          Column{
+                              Text(
+                                  text = "Hola,",
+                                  style = MaterialTheme.typography.titleMedium
+                              )
+                              Text(
+                                  text = userState.user?.email ?: "Bienvenido",
+                                  fontWeight = FontWeight.Bold,
+                                  style = MaterialTheme.typography.titleLarge
+                              )
+                          }
+                      }
+                        "myEventsAccepted" -> {
+                            Text("Eventos aceptados")
+                        }
+
+                        "myCreatedEvents" -> {
+                            Text("Mis eventos")
                         }
                     }
                 },
@@ -106,10 +127,23 @@ fun IniciarApp(
                     actionIconContentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     navigationIcon = {
-                        if (canNavigateBack){
+                        // Si estamos en la pantalla 'home', el icono es para hacer logout.
+                        if (currentRoute == "home") {
+                            IconButton(onClick = {
+                                authViewModel.logOut()
+                                navController.navigate("auth")
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Logout,
+                                    contentDescription = "Cerrar Sesión"
+                                )
+                            }
+                        }
+
+                        else if (canNavigateBack) {
                             IconButton(onClick = { navController.navigateUp() }) {
                                 Icon(
-                                    imageVector = Icons.Default.ArrowBack,
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                     contentDescription = "Volver"
                                 )
                             }
@@ -117,10 +151,18 @@ fun IniciarApp(
                     },
                     actions = {
                         if (currentRoute == "home") {
-                            IconButton(onClick = { navController.navigate("myEvents") }) {
+                            IconButton(onClick = { navController.navigate("myEventsAccepted") }) {
                                 Icon(
                                     imageVector = Icons.Default.AccountCircle,
                                     contentDescription = "Mis Eventos",
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
+
+                            IconButton(onClick = { navController.navigate("myCreatedEvents") }) {
+                                Icon(
+                                    imageVector = Icons.Default.Checklist,
+                                    contentDescription = "Mis Eventos Creados",
                                     modifier = Modifier.size(32.dp)
                                 )
                             }
@@ -130,7 +172,7 @@ fun IniciarApp(
         ){ innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = "auth",
+                startDestination = startDestination,
                 modifier = Modifier.padding(innerPadding
                 )){
                 composable("auth") { AuthScreen(navcontroller = navController) }
@@ -141,9 +183,12 @@ fun IniciarApp(
                 composable ("createEvent") {CreateEvent(
                     emailId, navController = navController)}
 
-                composable("myEvents") {
+                composable("myEventsAccepted") {
                     EventsUserScreen()
                 }
+
+                composable("myCreatedEvents") { EventsUserCreateScreen() }
+
 
             }
         }

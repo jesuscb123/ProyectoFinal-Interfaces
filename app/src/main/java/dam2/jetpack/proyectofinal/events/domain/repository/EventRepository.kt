@@ -12,5 +12,7 @@ interface EventRepository {
     suspend fun acceptEvent(event: Event)
 
     fun getEventsUser(userAccept: String): Flow<List<Event>>
+
+    fun getEventsUserCreate(userId: String): Flow<List<Event>>
 }
 

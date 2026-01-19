@@ -14,6 +14,7 @@ import dam2.jetpack.proyectofinal.events.domain.usecase.CreateEventUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.DeleteEventUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetAllEventsUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventByIdUseCase
+import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventsUserCreateUseCase
 import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventsUserUseCase
 import dam2.jetpack.proyectofinal.events.presentation.state.EventUiState
 import kotlinx.coroutines.Job
@@ -33,7 +34,8 @@ class EventViewModel @Inject constructor(
     private val createEventUseCase: CreateEventUseCase,
     private val deleteEventUseCase: DeleteEventUseCase,
     private val acceptEventUseCase: AcceptEventUseCase,
-    private val getEventsUserUseCase: GetEventsUserUseCase
+    private val getEventsUserUseCase: GetEventsUserUseCase,
+    private val getEventsUserCreateEventUseCase: GetEventsUserCreateUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EventUiState())
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
@@ -156,6 +158,20 @@ class EventViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             getEventsUserUseCase(userAccept).collect { events ->
+                _uiState.value = _uiState.value.copy(
+                    events = events,
+                    isEmpty = events.isEmpty(),
+                    isLoading = false,
+                    errorMessage = null
+                )
+            }
+        }
+    }
+
+    fun getEventsUserCreate(userId: String){
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            getEventsUserCreateEventUseCase(userId).collect { events ->
                 _uiState.value = _uiState.value.copy(
                     events = events,
                     isEmpty = events.isEmpty(),

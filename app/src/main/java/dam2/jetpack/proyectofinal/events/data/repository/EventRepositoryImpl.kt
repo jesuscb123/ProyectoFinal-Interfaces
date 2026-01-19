@@ -42,4 +42,11 @@ class EventRepositoryImpl @Inject constructor(
             list.map { it.toDomain() }
         }
     }
+
+    override fun getEventsUserCreate(userId: String): Flow<List<Event>> {
+        val eventList = eventDao.getEventsUserCreate(userId)
+        return eventList.map {list ->
+            list.map { it.toDomain() }
+        }
+    }
 }
