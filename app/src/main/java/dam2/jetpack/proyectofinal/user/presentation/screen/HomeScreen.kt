@@ -3,8 +3,9 @@ package dam2.jetpack.proyectofinal.user.presentation.screen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,19 +21,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.events.domain.model.Category
 import dam2.jetpack.proyectofinal.events.domain.model.Event
 import dam2.jetpack.proyectofinal.events.presentation.viewModel.EventViewModel
+import dam2.jetpack.proyectofinal.user.domain.model.Rol
 import dam2.jetpack.proyectofinal.user.presentation.viewmodel.UserViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onMyEventsClick: () -> Unit,
@@ -42,6 +45,8 @@ fun HomeScreen(
     val userState by userViewModel.uiState.collectAsState()
     val eventState by eventViewModel.uiState.collectAsState()
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
+
+    val isAdmin = userState.user?.rol == Rol.ADMIN
 
     LaunchedEffect(Unit) {
         FirebaseAuth.getInstance().currentUser?.uid?.let {
@@ -80,13 +85,20 @@ fun HomeScreen(
                                     slideInVertically(
                                         initialOffsetY = { it / 2 },
                                         animationSpec = tween(durationMillis = 500)
-                                    )
+                                    ),
+                            exit = fadeOut() + shrinkVertically()
                         ) {
-                            EventItem(
+                            SwipeableEventItem(
                                 event = event,
                                 currentUserEmail = userState.user?.email,
+                                isAdmin = isAdmin,
+                                onDelete = { eventToDelete ->
+                                    eventViewModel.deleteEvent(eventToDelete.eventId!!)
+                                },
                                 onClick = {
-                                    selectedEvent = event
+                                    if (event.userId != userState.user?.email) {
+                                        selectedEvent = event
+                                    }
                                 }
                             )
                         }
@@ -96,18 +108,138 @@ fun HomeScreen(
         }
 
         selectedEvent?.let { event ->
-
-            selectedEvent?.let { event ->
+            if (event.userId != userState.user?.email) {
                 EventActionDialog(
                     event = event,
                     currentUserEmail = userState.user?.email,
                     onDismiss = { selectedEvent = null },
-                    onAccept = { event, email ->
-                        eventViewModel.acceptEvent(event, email)
+                    onAccept = { evt, email ->
+                        eventViewModel.acceptEvent(evt, email)
                     },
                     onCancelAcceptance = { evt ->
                         eventViewModel.cancelAcceptance(evt)
                     }
+                )
+            } else {
+                LaunchedEffect(Unit) {
+                    selectedEvent = null
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SwipeableEventItem(
+    event: Event,
+    currentUserEmail: String?,
+    isAdmin: Boolean,
+    onDelete: (Event) -> Unit,
+    onClick: () -> Unit
+) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val dismissState = rememberSwipeToDismissBoxState(
+        confirmValueChange = { dismissValue ->
+            if (dismissValue == SwipeToDismissBoxValue.EndToStart && isAdmin) {
+                showDeleteDialog = true
+                false
+            } else {
+                false
+            }
+        },
+        positionalThreshold = { it * 0.25f }
+    )
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            icon = {
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = "Eliminar",
+                    tint = MaterialTheme.colorScheme.error
+                )
+            },
+            title = { Text("Eliminar Evento") },
+            text = {
+                Text("¿Estás seguro de que deseas eliminar el evento \"${event.tituloEvento}\"? Esta acción no se puede deshacer.")
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onDelete(event)
+                        showDeleteDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("Eliminar")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+
+    if (isAdmin) {
+        SwipeToDismissBox(
+            state = dismissState,
+            backgroundContent = {
+                DeleteBackground(dismissState)
+            },
+            content = {
+                EventItem(
+                    event = event,
+                    currentUserEmail = currentUserEmail,
+                    onClick = onClick
+                )
+            },
+            enableDismissFromStartToEnd = false,
+            enableDismissFromEndToStart = true
+        )
+    } else {
+        EventItem(
+            event = event,
+            currentUserEmail = currentUserEmail,
+            onClick = onClick
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DeleteBackground(dismissState: SwipeToDismissBoxState) {
+    val color = when (dismissState.targetValue) {
+        SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
+        else -> Color.Transparent
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color, RoundedCornerShape(16.dp))
+            .padding(horizontal = 20.dp),
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Eliminar",
+                    color = MaterialTheme.colorScheme.onError,
+                    fontWeight = FontWeight.Bold
+                )
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Eliminar",
+                    tint = MaterialTheme.colorScheme.onError
                 )
             }
         }
@@ -138,7 +270,6 @@ fun EventActionDialog(
                     if (isAcceptedByCurrentUser) {
                         onCancelAcceptance(event)
                     } else if (currentUserEmail != null) {
-
                         onAccept(event, currentUserEmail)
                     }
                     onDismiss()
@@ -197,12 +328,13 @@ fun EventItem(
     currentUserEmail: String?,
     onClick: () -> Unit
 ) {
+    val isCreator = event.userId == currentUserEmail
+    val isClickable = !isCreator && (event.userAccept == null || event.userAccept == currentUserEmail)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(
-                enabled = event.userAccept == null || event.userAccept == currentUserEmail
-            ) { onClick() },
+            .clickable(enabled = isClickable) { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -237,7 +369,6 @@ fun EventItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-
                 Text(
                     text = event.fechaCreacion.formatToString(),
                     style = MaterialTheme.typography.bodySmall,
@@ -247,24 +378,46 @@ fun EventItem(
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            if (event.userAccept != null) {
-                Column(horizontalAlignment = Alignment.End) {
-                    Text(
-                        text = "Aceptado por",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = event.userAccept.substringBefore('@'),
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+            when {
+                isCreator -> {
+                    CreatorChip()
                 }
-            } else {
-                StatusChip()
+                event.userAccept != null -> {
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            text = "Aceptado por",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = event.userAccept.substringBefore('@'),
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+                else -> {
+                    StatusChip()
+                }
             }
         }
+    }
+}
+
+@Composable
+fun CreatorChip() {
+    Box(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.tertiaryContainer, RoundedCornerShape(50))
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+    ) {
+        Text(
+            text = "TU EVENTO",
+            color = MaterialTheme.colorScheme.onTertiaryContainer,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 

@@ -107,7 +107,7 @@ fun IniciarApp(
                                   style = MaterialTheme.typography.titleMedium
                               )
                               Text(
-                                  text = userState.user?.email ?: "Bienvenido",
+                                  text = FirebaseAuth.getInstance().currentUser?.email ?: "Bienvenido",
                                   fontWeight = FontWeight.Bold,
                                   style = MaterialTheme.typography.titleLarge
                               )
@@ -129,7 +129,6 @@ fun IniciarApp(
                     actionIconContentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     navigationIcon = {
-                        // Si estamos en la pantalla 'home', el icono es para hacer logout.
                         if (currentRoute == "home") {
                             IconButton(onClick = {
                                 authViewModel.logOut()
