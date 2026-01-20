@@ -71,7 +71,6 @@ fun IniciarApp(
     val emailId = FirebaseAuth.getInstance().currentUser?.email
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val userState by userViewModel.uiState.collectAsState()
     val canNavigateBack = navController.previousBackStackEntry != null
     val authState by authViewModel.uiState.collectAsState()
     val startDestination = if (FirebaseAuth.getInstance().currentUser != null) "home" else "auth"
@@ -120,6 +119,9 @@ fun IniciarApp(
                         "myCreatedEvents" -> {
                             Text("Mis eventos")
                         }
+                        "createEvent" -> {
+                            Text("Crear evento")
+                        }
                     }
                 },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -154,7 +156,7 @@ fun IniciarApp(
                         if (currentRoute == "home") {
                             IconButton(onClick = { navController.navigate("myEventsAccepted") }) {
                                 Icon(
-                                    imageVector = Icons.Default.AccountCircle,
+                                    imageVector = Icons.Default.Checklist,
                                     contentDescription = "Mis Eventos",
                                     modifier = Modifier.size(32.dp)
                                 )
@@ -162,7 +164,7 @@ fun IniciarApp(
 
                             IconButton(onClick = { navController.navigate("myCreatedEvents") }) {
                                 Icon(
-                                    imageVector = Icons.Default.Checklist,
+                                    imageVector = Icons.Default.AccountCircle,
                                     contentDescription = "Mis Eventos Creados",
                                     modifier = Modifier.size(32.dp)
                                 )

@@ -47,13 +47,11 @@ fun ViewPointsUserScreen(
     userViewModel: UserViewModel = hiltViewModel(),
     eventViewModel: EventViewModel = hiltViewModel()
 ) {
-    // 1. Obtener el email del usuario logueado
     val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
 
     val userState by userViewModel.uiState.collectAsState()
     val eventState by eventViewModel.uiState.collectAsState()
 
-    // 3. Lanzar la carga de datos cuando la pantalla se compone
     LaunchedEffect(Unit) {
         if (currentUserEmail != null) {
             userViewModel.getUserByEmail(currentUserEmail)
@@ -83,7 +81,6 @@ fun ViewPointsUserScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Gestionar estados de carga y listas
         when {
             eventState.isLoading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -135,12 +132,12 @@ fun PointsHeader(points: Int) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Mis Puntos",
+                    text = "Monedero",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
-                    text = "$points",
+                    text = "$points €",
                     fontSize = 42.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -164,10 +161,10 @@ fun ResolvedEventItem(event: Event) {
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF00C853)), // Verde para eventos resueltos
+                    .background(Color(0xFF00C853)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "+10", fontWeight = FontWeight.Bold, color = Color.White) // Asumiendo 10 puntos por evento
+                Text(text = "+5", fontWeight = FontWeight.Bold, color = Color.White)
             }
             Spacer(modifier = Modifier.size(16.dp))
             Column {

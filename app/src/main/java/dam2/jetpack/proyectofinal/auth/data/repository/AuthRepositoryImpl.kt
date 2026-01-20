@@ -14,15 +14,26 @@ class AuthRepositoryImpl @Inject constructor(
         email: String,
         password: String
     ): AuthResult {
-        val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+        try {
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            val user = result.user ?: throw IllegalArgumentException("usuario no encontrado")
 
-        val user = result.user ?: error("User no encontrado")
+            return AuthResult(
+                uid = user.uid,
+                email = user.email
+            )
 
+        } catch (e: Exception) {
+            val mensaje = when {
+                e.message?.contains("password") == true -> "La contraseña es incorrecta"
+                e.message?.contains("no user record") == true -> "No existe una cuenta con ese correo"
+                e.message?.contains("badly formatted") == true -> "El correo no es válido"
+                e.message?.contains("network") == true -> "Error de conexión"
+                else -> "Error al iniciar sesión"
+            }
 
-        return AuthResult(
-            uid = user.uid,
-            email = user.email
-        )
+            throw IllegalArgumentException(mensaje)
+        }
     }
 
     override suspend fun register(
