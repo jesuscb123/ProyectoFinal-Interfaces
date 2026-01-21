@@ -68,7 +68,6 @@ fun ViewPointsUserScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // --- SECCIÓN DE PUNTOS ---
         PointsHeader(points = userState.user?.puntos ?: 0)
 
         Spacer(modifier = Modifier.height(24.dp))

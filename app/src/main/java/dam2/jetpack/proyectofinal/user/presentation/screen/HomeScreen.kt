@@ -22,10 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.events.domain.model.Category
 import dam2.jetpack.proyectofinal.events.domain.model.Event
@@ -47,6 +50,21 @@ fun HomeScreen(
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
 
     val isAdmin = userState.user?.rol == Rol.ADMIN
+
+    // ✅ CLAVE: cada vez que vuelves a la pantalla, incrementamos esto
+    // y así se recrean los SwipeState de los items (se “desbloquean”).
+    var swipeResetKey by remember { mutableIntStateOf(0) }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                swipeResetKey++
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     LaunchedEffect(Unit) {
         FirebaseAuth.getInstance().currentUser?.uid?.let {
@@ -99,7 +117,8 @@ fun HomeScreen(
                                     if (event.userId != userState.user?.email) {
                                         selectedEvent = event
                                     }
-                                }
+                                },
+                                resetKey = swipeResetKey // ✅ se lo pasamos al item
                             )
                         }
                     }
@@ -136,79 +155,99 @@ fun SwipeableEventItem(
     currentUserEmail: String?,
     isAdmin: Boolean,
     onDelete: (Event) -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    resetKey: Int // ✅ nuevo
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
-    val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = { dismissValue ->
-            if (dismissValue == SwipeToDismissBoxValue.EndToStart && isAdmin) {
-                showDeleteDialog = true
-                false
-            } else {
-                false
-            }
-        },
-        positionalThreshold = { it * 0.25f }
-    )
 
-    if (showDeleteDialog) {
-        AlertDialog(
-            onDismissRequest = { showDeleteDialog = false },
-            icon = {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = "Eliminar",
-                    tint = MaterialTheme.colorScheme.error
-                )
+    key(resetKey, event.eventId) {
+
+        var showDeleteDialog by remember { mutableStateOf(false) }
+        var resetSwipe by remember { mutableStateOf(false) }
+
+        val dismissState = rememberSwipeToDismissBoxState(
+            confirmValueChange = { dismissValue ->
+                if (dismissValue == SwipeToDismissBoxValue.EndToStart && isAdmin) {
+                    showDeleteDialog = true
+                    resetSwipe = true  // 👈 pedimos reset visual
+                    false
+                } else {
+                    false
+                }
             },
-            title = { Text("Eliminar Evento") },
-            text = {
-                Text("¿Estás seguro de que deseas eliminar el evento \"${event.tituloEvento}\"? Esta acción no se puede deshacer.")
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        onDelete(event)
-                        showDeleteDialog = false
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
+            positionalThreshold = { it * 0.25f }
+        )
+
+        LaunchedEffect(resetSwipe) {
+            if (resetSwipe) {
+                dismissState.snapTo(SwipeToDismissBoxValue.Settled)
+                resetSwipe = false
+            }
+        }
+
+        if (showDeleteDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showDeleteDialog = false
+                    resetSwipe = true
+                },
+                icon = {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Eliminar",
+                        tint = MaterialTheme.colorScheme.error
                     )
-                ) {
-                    Text("Eliminar")
+                },
+                title = { Text("Eliminar Evento") },
+                text = {
+                    Text("¿Estás seguro de que deseas eliminar el evento \"${event.tituloEvento}\"? Esta acción no se puede deshacer.")
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            onDelete(event)
+                            showDeleteDialog = false
+                            resetSwipe = true
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error
+                        )
+                    ) { Text("Eliminar") }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            showDeleteDialog = false
+                            resetSwipe = true
+                        }
+                    ) { Text("Cancelar") }
                 }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancelar")
-                }
-            }
-        )
+            )
+        }
+
+        if (isAdmin) {
+            SwipeToDismissBox(
+                state = dismissState,
+                backgroundContent = { DeleteBackground(dismissState) },
+                content = {
+                    EventItem(
+                        event = event,
+                        currentUserEmail = currentUserEmail,
+                        onClick = onClick
+                    )
+                },
+                enableDismissFromStartToEnd = false,
+                enableDismissFromEndToStart = true
+            )
+        } else {
+            EventItem(
+                event = event,
+                currentUserEmail = currentUserEmail,
+                onClick = onClick
+            )
+        }
     }
 
-    if (isAdmin) {
-        SwipeToDismissBox(
-            state = dismissState,
-            backgroundContent = {
-                DeleteBackground(dismissState)
-            },
-            content = {
-                EventItem(
-                    event = event,
-                    currentUserEmail = currentUserEmail,
-                    onClick = onClick
-                )
-            },
-            enableDismissFromStartToEnd = false,
-            enableDismissFromEndToStart = true
-        )
-    } else {
-        EventItem(
-            event = event,
-            currentUserEmail = currentUserEmail,
-            onClick = onClick
-        )
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -259,10 +298,10 @@ fun EventActionDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(if (isAcceptedByCurrentUser) "Cancelar Asistencia" else "Aceptar Evento")
+            Text(if (isAcceptedByCurrentUser) "Cancelar Asistencia" else event.tituloEvento)
         },
         text = {
-            Text("¿Qué deseas hacer con el evento \"${event.tituloEvento}\"?")
+            Text(event.descripcionEvento)
         },
         confirmButton = {
             TextButton(
@@ -275,7 +314,7 @@ fun EventActionDialog(
                     onDismiss()
                 }
             ) {
-                Text(if (isAcceptedByCurrentUser) "Confirmar Cancelación" else "Aceptar")
+                Text(if (isAcceptedByCurrentUser) "Confirmar Cancelación" else "Aceptar evento")
             }
         },
         dismissButton = {
@@ -379,9 +418,7 @@ fun EventItem(
             Spacer(modifier = Modifier.width(16.dp))
 
             when {
-                isCreator -> {
-                    CreatorChip()
-                }
+                isCreator -> CreatorChip()
                 event.userAccept != null -> {
                     Column(horizontalAlignment = Alignment.End) {
                         Text(
@@ -397,9 +434,7 @@ fun EventItem(
                         )
                     }
                 }
-                else -> {
-                    StatusChip()
-                }
+                else -> StatusChip()
             }
         }
     }
