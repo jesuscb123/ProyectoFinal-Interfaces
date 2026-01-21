@@ -252,16 +252,3 @@ fun IniciarApp(
         }
     }
 }
-
-@Composable
-fun AdminScreenPlaceholder() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp)
-    ) {
-        Text("Pantalla Admin (placeholder)", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Aquí va tu pantalla solo para ADMIN.")
-    }
-}
