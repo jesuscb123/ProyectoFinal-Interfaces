@@ -5,6 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import dam2.jetpack.proyectofinal.user.data.local.entity.UserEntity
+import dam2.jetpack.proyectofinal.user.domain.model.User
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -17,6 +19,10 @@ interface UserDao {
 
     @Query ("SELECT * FROM users WHERE email = :email LIMIT 1")
     suspend fun getUserByEmail(email: String): UserEntity?
+
+    @Query ("SELECT * FROM users")
+    fun getAllUsers (): Flow<List<UserEntity>>
+
 
 
 
