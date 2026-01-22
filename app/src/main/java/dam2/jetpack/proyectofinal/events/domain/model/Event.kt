@@ -12,5 +12,6 @@ data class Event(
     val categoria: Category,
     val fechaCreacion: Date,
     val resuelto: Boolean = false,
-    val userAccept: String?
+    val userAccept: String?,
+    val userAcceptUid: String?
 )

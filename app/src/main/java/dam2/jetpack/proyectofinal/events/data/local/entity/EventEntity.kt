@@ -17,4 +17,5 @@ data class EventEntity(
     val fechaCreacion: Date,
     val resuelto: Boolean,
     val userAccept: String?,
+    val userAcceptUid: String?
 )

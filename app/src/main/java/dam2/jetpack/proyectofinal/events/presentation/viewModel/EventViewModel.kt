@@ -101,21 +101,15 @@ class EventViewModel @Inject constructor(
                     fechaCreacion = Date(),
                     categoria = categoria,
                     resuelto = resuelto,
-                    userAccept = null
+                    userAccept = null,
+                    userAcceptUid = null
                 )
 
-                // --- ¡AQUÍ ESTÁ EL CAMBIO CLAVE! ---
-                // Primero, ejecutamos el UseCase para crear el evento.
-                // Asumimos que createEventUseCase es una función 'suspend'.
                 try {
-                    createEventUseCase(event) // Esperamos a que esta operación termine.
-
-                    // UNA VEZ que el guardado ha terminado con éxito...
-                    // ...AHORA sí recargamos la lista de eventos.
-                    loadEvents() // Reutilizamos tu función loadEvents() que ya hace esto perfectamente.
+                    createEventUseCase(event)
+                    loadEvents()
 
                 } catch (e: Exception) {
-                    // Si el guardado falla, lo notificamos.
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         errorMessage = "Error al guardar el evento: ${e.message}"
@@ -159,8 +153,11 @@ class EventViewModel @Inject constructor(
         userEmail: String
     ) {
         viewModelScope.launch {
+            val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: return@launch
+
             val updatedEvent = event.copy(
-                userAccept = userEmail
+                userAccept = userEmail,
+                userAcceptUid = currentUid
             )
             acceptEventUseCase(updatedEvent)
         }
@@ -169,11 +166,13 @@ class EventViewModel @Inject constructor(
     fun cancelAcceptance(event: Event) {
         viewModelScope.launch {
             val updatedEvent = event.copy(
-                userAccept = null
+                userAccept = null,
+                userAcceptUid = null
             )
             acceptEventUseCase(updatedEvent)
         }
     }
+
 
     @OptIn(UnstableApi::class)
     fun getEventsUser(userAccept: String) {

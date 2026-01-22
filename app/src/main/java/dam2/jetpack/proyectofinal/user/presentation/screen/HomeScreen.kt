@@ -376,15 +376,23 @@ fun ResolveEventDialog(
 fun EventItem(
     event: Event,
     currentUserEmail: String?,
-    navController: NavController, // Asegúrate de que recibe NavController
+    navController: NavController,
     onClick: () -> Unit
 ) {
     val currentUser = FirebaseAuth.getInstance().currentUser
-    val isCreator = event.userId == currentUserEmail // o event.creatorUid == currentUser.uid
+    val currentUserUid = currentUser?.uid
 
-    // ✅ CONDICIÓN CLAVE: El usuario actual ha aceptado el evento y NO es el creador.
-    val hasAcceptedEvent = event.userAccept == currentUserEmail && !isCreator
+    // Mejor comprobar creador por UID (más fiable que por email)
+    val isCreator = (event.creatorUid == currentUserUid)
 
+    // Evento aceptado por alguien
+    val isAcceptedBySomeone = event.userAcceptUid != null
+
+    // Puede chatear si: hay aceptador y soy creador o soy el aceptador
+    val canChat = isAcceptedBySomeone && currentUserUid != null &&
+            (isCreator || event.userAcceptUid == currentUserUid)
+
+    // Click del card: tu lógica original (solo no creador y si está libre o lo aceptó él)
     val isClickable = !isCreator && (event.userAccept == null || event.userAccept == currentUserEmail)
 
     val scheme = MaterialTheme.colorScheme
@@ -395,13 +403,13 @@ fun EventItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(enabled = isClickable, onClick = onClick), // Usamos tu lógica de click
+            .clickable(enabled = isClickable, onClick = onClick),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = container),
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Column {
-            // --- Cabecera (Se mantiene igual) ---
+            // --- Cabecera ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -445,14 +453,14 @@ fun EventItem(
                     }
 
                     when {
-                        isCreator -> CreatorChipV2() // Tu chip personalizado
-                        event.userAccept != null -> AcceptedChip(userAccept = event.userAccept) // Tu chip
-                        else -> PendingChipV2() // Tu chip
+                        isCreator -> CreatorChipV2()
+                        event.userAccept != null -> AcceptedChip(userAccept = event.userAccept)
+                        else -> PendingChipV2()
                     }
                 }
             }
 
-            // --- Cuerpo (Con el botón de chat añadido) ---
+            // --- Cuerpo ---
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -482,26 +490,36 @@ fun EventItem(
                     )
                 }
 
-                // --- ¡AQUÍ ESTÁ LA LÓGICA DEL BOTÓN DE CHAT! ---
-                // Se mostrará solo si el usuario ha aceptado y no es el creador.
-                // Importante: Necesitas el creatorUid en tu objeto Event.
-                if (hasAcceptedEvent && event.userId.isNotEmpty()) {
+                // --- Botón Chat (visible para creador y aceptador) ---
+                if (canChat) {
                     Spacer(Modifier.height(16.dp))
                     Box(modifier = Modifier.fillMaxWidth()) {
                         Button(
                             onClick = {
-                                val recipientUid = event.creatorUid   // UID del creador del evento
-                                val recipientEmail = event.userId     // Email del creador del evento
+                                val recipientUid: String
+                                val recipientEmail: String
+
+                                if (isCreator) {
+                                    // Soy el creador: chateo con el aceptador
+                                    recipientUid = event.userAcceptUid!!
+                                    recipientEmail = event.userAccept ?: "usuario"
+                                } else {
+                                    // Soy el aceptador: chateo con el creador
+                                    recipientUid = event.creatorUid
+                                    recipientEmail = event.userId
+                                }
 
                                 navController.navigate(
-                                    "chat?recipientUid=${Uri.encode(recipientUid)}&recipientEmail=${Uri.encode(recipientEmail)}"
+                                    "chat?eventId=${Uri.encode(event.eventId.toString())}" +
+                                            "&recipientUid=${Uri.encode(recipientUid)}" +
+                                            "&recipientEmail=${Uri.encode(recipientEmail)}"
                                 )
                             },
                             modifier = Modifier.align(Alignment.CenterEnd)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Chat,
-                                contentDescription = "Chat Icon",
+                                contentDescription = "Chat",
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))

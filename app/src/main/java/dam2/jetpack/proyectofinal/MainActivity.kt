@@ -280,17 +280,20 @@ fun IniciarApp(
                 }
 
                 composable(
-                    route = "chat?recipientUid={recipientUid}&recipientEmail={recipientEmail}",
+                    route = "chat?eventId={eventId}&recipientUid={recipientUid}&recipientEmail={recipientEmail}",
                     arguments = listOf(
+                        navArgument("eventId") { type = NavType.StringType },
                         navArgument("recipientUid") { type = NavType.StringType },
                         navArgument("recipientEmail") { type = NavType.StringType }
                     )
                 ) { backStackEntry ->
+                    val eventId = backStackEntry.arguments?.getString("eventId")
                     val recipientUid = backStackEntry.arguments?.getString("recipientUid")
                     val recipientEmail = backStackEntry.arguments?.getString("recipientEmail")
 
-                    if (recipientUid != null && recipientEmail != null) {
+                    if (eventId != null && recipientUid != null && recipientEmail != null) {
                         dam2.jetpack.proyectofinal.chat.presentation.screen.ChatScreen(
+                            eventId = eventId,
                             recipientUid = recipientUid,
                             recipientEmail = recipientEmail,
                             navController = navController

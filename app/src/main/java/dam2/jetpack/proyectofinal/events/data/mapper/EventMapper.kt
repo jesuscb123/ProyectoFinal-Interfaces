@@ -13,7 +13,8 @@ fun EventEntity.toDomain(): Event{
         categoria = categoria,
         fechaCreacion = fechaCreacion,
         resuelto = resuelto,
-        userAccept = userAccept
+        userAccept = userAccept,
+        userAcceptUid = userAcceptUid
     )
 }
 
@@ -27,6 +28,7 @@ fun Event.toEntity(): EventEntity{
         categoria = categoria,
         fechaCreacion = fechaCreacion,
         resuelto = resuelto,
-        userAccept = userAccept
+        userAccept = userAccept,
+        userAcceptUid = userAcceptUid
     )
 }

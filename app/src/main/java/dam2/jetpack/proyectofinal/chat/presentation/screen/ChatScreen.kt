@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class) // Necesario para TopAppBar
 @Composable
 fun ChatScreen(
+    eventId: String,
     recipientUid: String,
     recipientEmail: String, // <-- PARÁMETRO AÑADIDO
     navController: NavController, // <-- PARÁMETRO AÑADIDO
@@ -37,8 +38,9 @@ fun ChatScreen(
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(recipientUid) {
-        viewModel.loadMessages(recipientUid)
+    DisposableEffect(eventId, recipientUid) {
+        viewModel.loadMessages(eventId, recipientUid)
+        onDispose { viewModel.stopListening() }
     }
 
     LaunchedEffect(messages) {
@@ -74,7 +76,7 @@ fun ChatScreen(
                 onValueChange = { text = it },
                 onSendClick = {
                     if (text.isNotBlank()) {
-                        viewModel.sendMessage(text.trim(), recipientUid)
+                        viewModel.sendMessage(eventId, text.trim(), recipientUid)
                         text = ""
                     }
                 }
