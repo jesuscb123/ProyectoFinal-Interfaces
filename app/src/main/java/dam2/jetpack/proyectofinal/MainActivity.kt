@@ -211,7 +211,7 @@ fun IniciarApp(
                             "createEvent" -> Text("Crear evento")
                             "pointsUser" -> Text("Mis puntos")
                             "adminScreen" -> Text("Admin")
-                            "auth" -> Text("Acceso")
+                            "auth" -> Text("Iniciar sesión")
                             "register" -> Text("Registro")
                         }
                     },
@@ -223,7 +223,6 @@ fun IniciarApp(
                     ),
                     navigationIcon = {
                         if (currentRoute == "home") {
-                            // ✅ seguimos dejando Logout aquí (no rompe nada)
                             IconButton(onClick = {
                                 authViewModel.logOut()
                                 navController.navigate("auth")
