@@ -2,6 +2,7 @@ package dam2.jetpack.proyectofinal.chat.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dam2.jetpack.proyectofinal.chat.domain.model.ChatMessage
 import dam2.jetpack.proyectofinal.chat.domain.usecase.ListenMessagesUseCase
@@ -37,10 +38,25 @@ class ChatViewModel @Inject constructor(
     }
 
     fun sendMessage(eventId: String, text: String, otherUid: String) {
+        val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+
+        val optimistic = ChatMessage(
+            senderId = currentUid,
+            text = text,
+            timestamp = com.google.firebase.Timestamp.now() // solo para pintar ya
+        )
+
+        _messages.value = listOf(optimistic) + _messages.value
+
         viewModelScope.launch {
-            sendMessageUseCase(eventId, text, otherUid)
+            runCatching {
+                sendMessageUseCase(eventId, text, otherUid)
+            }.onFailure {
+                _messages.value = _messages.value.drop(1)
+            }
         }
     }
+
 
 
     fun stopListening() {

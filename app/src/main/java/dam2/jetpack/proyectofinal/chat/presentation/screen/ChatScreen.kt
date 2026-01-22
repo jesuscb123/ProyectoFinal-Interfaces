@@ -28,76 +28,65 @@ import kotlinx.coroutines.launch
 fun ChatScreen(
     eventId: String,
     recipientUid: String,
-    recipientEmail: String, // <-- PARÁMETRO AÑADIDO
-    navController: NavController, // <-- PARÁMETRO AÑADIDO
+    recipientEmail: String, // ya no se usa aquí, pero puedes mantenerlo si lo necesita MainActivity
+    navController: androidx.navigation.NavController, // ya no se usa aquí, pero puedes mantenerlo
     viewModel: ChatViewModel = hiltViewModel()
 ) {
     val messages by viewModel.messages.collectAsState()
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+
     var text by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
 
+    // Listener
     DisposableEffect(eventId, recipientUid) {
         viewModel.loadMessages(eventId, recipientUid)
         onDispose { viewModel.stopListening() }
     }
 
-    LaunchedEffect(messages) {
+    // Scroll al último (en reverseLayout, item 0)
+    LaunchedEffect(messages.size) {
         if (messages.isNotEmpty()) {
-            coroutineScope.launch {
-                listState.animateScrollToItem(0)
-            }
+            listState.animateScrollToItem(0)
         }
     }
 
-    Scaffold(
-        topBar = { // <-- BARRA SUPERIOR AÑADIDA
-            TopAppBar(
-                // Mostramos la parte del email antes de la @ como nombre
-                title = { Text(recipientEmail.substringBefore('@')) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) { // Acción para volver
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            )
-        },
-        bottomBar = {
-            MessageInput(
-                value = text,
-                onValueChange = { text = it },
-                onSendClick = {
-                    if (text.isNotBlank()) {
-                        viewModel.sendMessage(eventId, text.trim(), recipientUid)
-                        text = ""
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        // Lista de mensajes
         LazyColumn(
             state = listState,
             reverseLayout = true,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+                .weight(1f)
+                .fillMaxWidth()
                 .padding(horizontal = 8.dp)
         ) {
-            items(messages) { message ->
+            items(
+                items = messages,
+                key = { "${it.senderId}_${it.timestamp?.seconds ?: 0}_${it.timestamp?.nanoseconds ?: 0}_${it.text.hashCode()}" }
+            ) { message ->
                 MessageBubble(
                     message = message,
                     isFromCurrentUser = message.senderId == currentUserUid
                 )
             }
         }
+
+        // Input abajo fijo
+        MessageInput(
+            value = text,
+            onValueChange = { text = it },
+            onSendClick = {
+                val trimmed = text.trim()
+                if (trimmed.isNotBlank()) {
+                    viewModel.sendMessage(eventId, trimmed, recipientUid)
+                    text = ""
+                }
+            }
+        )
     }
 }
 

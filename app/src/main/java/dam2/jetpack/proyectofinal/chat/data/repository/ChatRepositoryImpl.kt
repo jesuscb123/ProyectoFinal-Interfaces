@@ -2,6 +2,7 @@ package dam2.jetpack.proyectofinal.chat.data
 
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
@@ -59,13 +60,15 @@ class ChatRepositoryImpl @Inject constructor(
             SetOptions.merge()
         ).await()
 
-        val msg = ChatMessage(
-            senderId = currentUid,
-            text = text,
-            timestamp = Timestamp.now()
+        val data = mapOf(
+            "senderId" to currentUid,
+            "text" to text,
+            "timestamp" to FieldValue.serverTimestamp()
         )
 
-        chatRef.collection("messages").add(msg).await()
+        chatRef.collection("messages")
+            .add(data)
+            .await()
     }
 
 

@@ -16,6 +16,8 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -123,6 +125,9 @@ fun IniciarApp(
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val isChat = currentRoute?.startsWith("chat") == true
+    val chatRecipientEmail = navBackStackEntry?.arguments?.getString("recipientEmail")
+
     val canNavigateBack = navController.previousBackStackEntry != null
 
     val authState by authViewModel.uiState.collectAsState()
@@ -192,29 +197,33 @@ fun IniciarApp(
             topBar = {
                 TopAppBar(
                     title = {
-                        when (currentRoute) {
-                            "home" -> {
+                        when {
+                            isChat -> {
+                                Text(chatRecipientEmail?.substringBefore('@') ?: "Chat")
+                            }
+
+                            currentRoute == "home" -> {
                                 Column {
                                     Text(
                                         text = "Hola,",
                                         style = MaterialTheme.typography.titleMedium
                                     )
                                     Text(
-                                        text = FirebaseAuth.getInstance().currentUser?.email
-                                            ?: "Bienvenido",
+                                        text = FirebaseAuth.getInstance().currentUser?.email ?: "Bienvenido",
                                         fontWeight = FontWeight.Bold,
                                         style = MaterialTheme.typography.titleLarge
                                     )
                                 }
                             }
 
-                            "myEventsAccepted" -> Text("Eventos aceptados")
-                            "myCreatedEvents" -> Text("Mis eventos")
-                            "createEvent" -> Text("Crear evento")
-                            "pointsUser" -> Text("Mis puntos")
-                            "adminScreen" -> Text("Admin")
-                            "auth" -> Text("Iniciar sesión")
-                            "register" -> Text("Registro")
+                            currentRoute == "myEventsAccepted" -> Text("Eventos aceptados")
+                            currentRoute == "myCreatedEvents" -> Text("Mis eventos")
+                            currentRoute == "createEvent" -> Text("Crear evento")
+                            currentRoute == "pointsUser" -> Text("Mis puntos")
+                            currentRoute == "adminScreen" -> Text("Admin")
+                            currentRoute == "auth" -> Text("Iniciar sesión")
+                            currentRoute == "register" -> Text("Registro")
+                            else -> Text("")
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -307,3 +316,37 @@ fun IniciarApp(
         }
     }
 }
+
+@Composable
+fun TopBarCardTitle(
+    title: String,
+    subtitle: String? = null
+) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        shape = MaterialTheme.shapes.large
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)
+        ) {
+            if (subtitle != null) {
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                maxLines = 1
+            )
+        }
+    }
+}
+
