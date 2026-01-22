@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -83,6 +84,10 @@ fun HomeScreen(
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp)
         ) {
 
+            val visibleEvents = remember(eventState.events) {
+                eventState.events.filter { !it.resuelto }
+            }
+
             if (eventState.events.isEmpty()) {
                 EmptyState()
             } else {
@@ -91,7 +96,7 @@ fun HomeScreen(
                     contentPadding = PaddingValues(bottom = 16.dp)
                 ) {
                     items(
-                        items = eventState.events,
+                        items = visibleEvents,
                         key = { it.eventId!! }
                     ) { event ->
                         var isVisible by remember { mutableStateOf(false) }
@@ -370,75 +375,110 @@ fun EventItem(
     val isCreator = event.userId == currentUserEmail
     val isClickable = !isCreator && (event.userAccept == null || event.userAccept == currentUserEmail)
 
+    val scheme = MaterialTheme.colorScheme
+    val container = scheme.surface
+    val headerBg = scheme.primaryContainer
+    val headerFg = scheme.onPrimaryContainer
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(enabled = isClickable) { onClick() },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = container),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = event.categoria.toIcon(),
-                contentDescription = "Categoría",
+        Column {
+
+            Box(
                 modifier = Modifier
-                    .size(40.dp)
-                    .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape)
-                    .padding(8.dp),
-                tint = MaterialTheme.colorScheme.onSecondaryContainer
-            )
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = event.tituloEvento,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Creado por: ${event.userId.substringBefore('@')}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = event.fechaCreacion.formatToString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            when {
-                isCreator -> CreatorChip()
-                event.userAccept != null -> {
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text(
-                            text = "Aceptado por",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = event.userAccept.substringBefore('@'),
-                            style = MaterialTheme.typography.labelLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                    .fillMaxWidth()
+                    .background(
+                        color = headerBg
+                    )
+                    .padding(horizontal = 16.dp, vertical = 14.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(46.dp)
+                            .background(scheme.secondaryContainer, CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = event.categoria.toIcon(),
+                            contentDescription = "Categoría",
+                            tint = scheme.onSecondaryContainer,
+                            modifier = Modifier.size(24.dp)
                         )
                     }
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = event.tituloEvento,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = headerFg,
+                            maxLines = 1
+                        )
+                        Spacer(Modifier.height(4.dp))
+
+                        Text(
+                            text = "por ${event.userId.substringBefore('@')}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = headerFg.copy(alpha = 0.85f),
+                            maxLines = 1
+                        )
+                    }
+
+                    when {
+                        isCreator -> CreatorChipV2()
+                        event.userAccept != null -> AcceptedChip(userAccept = event.userAccept)
+                        else -> PendingChipV2()
+                    }
                 }
-                else -> StatusChip()
+            }
+
+            // Cuerpo
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+
+                Text(
+                    text = event.descripcionEvento,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = scheme.onSurface,
+                    maxLines = 2
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    InfoPill(
+                        icon = Icons.Default.CalendarMonth,
+                        text = event.fechaCreacion.formatToString()
+                    )
+
+                    InfoPill(
+                        icon = Icons.Default.Category,
+                        text = event.categoria.name.lowercase().replaceFirstChar { it.uppercase() }
+                    )
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun CreatorChip() {
@@ -511,4 +551,105 @@ fun Category.toIcon() = when (this) {
 fun Date.formatToString(): String {
     val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
     return formatter.format(this)
+}
+
+@Composable
+fun InfoPill(
+    icon: ImageVector,
+    text: String
+) {
+    val scheme = MaterialTheme.colorScheme
+    Surface(
+        shape = RoundedCornerShape(50),
+        color = scheme.surfaceVariant,
+        tonalElevation = 0.dp
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = scheme.onSurfaceVariant
+            )
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelMedium,
+                color = scheme.onSurfaceVariant,
+                maxLines = 1
+            )
+        }
+    }
+}
+
+@Composable
+fun CreatorChipV2() {
+    val scheme = MaterialTheme.colorScheme
+    Surface(
+        color = scheme.tertiaryContainer,
+        contentColor = scheme.onTertiaryContainer,
+        shape = RoundedCornerShape(50)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Icon(Icons.Default.Star, contentDescription = null, modifier = Modifier.size(16.dp))
+            Text(
+                text = "TU EVENTO",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
+fun PendingChipV2() {
+    val scheme = MaterialTheme.colorScheme
+    Surface(
+        color = scheme.errorContainer,
+        contentColor = scheme.onErrorContainer,
+        shape = RoundedCornerShape(50)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Icon(Icons.Default.HourglassBottom, contentDescription = null, modifier = Modifier.size(16.dp))
+            Text(
+                text = "PENDIENTE",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
+fun AcceptedChip(userAccept: String) {
+    val scheme = MaterialTheme.colorScheme
+    Surface(
+        color = scheme.primaryContainer,
+        contentColor = scheme.onPrimaryContainer,
+        shape = RoundedCornerShape(50)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Icon(Icons.Default.TaskAlt, contentDescription = null, modifier = Modifier.size(16.dp))
+            Text(
+                text = userAccept.substringBefore('@'),
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
+            )
+        }
+    }
 }

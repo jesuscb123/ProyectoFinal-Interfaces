@@ -62,14 +62,31 @@ fun EventsUserScreen(
                     items = eventState.events,
                     key = { it.eventId!! }
                 ) { event ->
-                    EventItem(
-                        event = event,
-                        currentUserEmail = currentUserEmail,
-                        onClick = { selectedEvent = event }
-                    )
+                    var isVisible by remember { mutableStateOf(false) }
+                    LaunchedEffect(key1 = true) { isVisible = true }
+
+                    androidx.compose.animation.AnimatedVisibility(
+                        visible = isVisible,
+                        enter = androidx.compose.animation.fadeIn(
+                            animationSpec = androidx.compose.animation.core.tween(500)
+                        ) + androidx.compose.animation.slideInVertically(
+                            initialOffsetY = { it / 2 },
+                            animationSpec = androidx.compose.animation.core.tween(500)
+                        ),
+                        exit = androidx.compose.animation.fadeOut() +
+                                androidx.compose.animation.shrinkVertically()
+                    ) {
+                        // ✅ Reutiliza el mismo EventItem "vistoso" del HomeScreen
+                        EventItem(
+                            event = event,
+                            currentUserEmail = currentUserEmail,
+                            onClick = { selectedEvent = event }
+                        )
+                    }
                 }
             }
         }
+
         selectedEvent?.let { event ->
             EventActionDialog(
                 event = event,
