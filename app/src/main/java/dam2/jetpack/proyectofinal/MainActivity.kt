@@ -3,18 +3,16 @@ package dam2.jetpack.proyectofinal
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Checklist
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.WorkspacePremium
@@ -23,26 +21,23 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -52,6 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dam2.jetpack.proyectofinal.auth.presentation.screen.AuthScreen
 import dam2.jetpack.proyectofinal.auth.presentation.screen.RegisterScreen
 import dam2.jetpack.proyectofinal.auth.presentation.viewmodel.AuthViewModel
+import dam2.jetpack.proyectofinal.core.components.navigation.BottomNavItem
 import dam2.jetpack.proyectofinal.events.presentation.screen.CreateEvent
 import dam2.jetpack.proyectofinal.ui.theme.ProyectoFinalTheme
 import dam2.jetpack.proyectofinal.user.domain.model.Rol
@@ -69,6 +65,47 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             IniciarApp()
+        }
+    }
+}
+private fun bottomItems(isAdmin: Boolean): List<BottomNavItem> {
+    val base = listOf(
+        BottomNavItem("home", "Inicio", Icons.Default.Home),
+        BottomNavItem("myEventsAccepted", "Aceptados", Icons.Default.Checklist),
+        BottomNavItem("myCreatedEvents", "Mis eventos", Icons.Default.AccountCircle),
+        BottomNavItem("pointsUser", "Puntos", Icons.Default.WorkspacePremium),
+    )
+    return if (isAdmin) base + BottomNavItem("adminScreen", "Admin", Icons.Default.Settings) else base
+}
+@Composable
+private fun AppBottomBar(
+    currentRoute: String?,
+    isAdmin: Boolean,
+    onNavigate: (String) -> Unit
+) {
+    val items = remember(isAdmin) { bottomItems(isAdmin) }
+
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 8.dp
+    ) {
+        items.forEach { item ->
+            val selected = currentRoute == item.route
+
+            NavigationBarItem(
+                selected = selected,
+                onClick = { onNavigate(item.route) },
+                icon = { Icon(imageVector = item.icon, contentDescription = item.label) },
+                label = { Text(item.label) },
+                alwaysShowLabel = false,
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                    indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            )
         }
     }
 }
@@ -113,15 +150,43 @@ fun IniciarApp(
     ProyectoFinalTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
+
+            bottomBar = {
+                val showBottomBar = currentRoute in listOf(
+                    "home",
+                    "myEventsAccepted",
+                    "myCreatedEvents",
+                    "pointsUser",
+                    "adminScreen"
+                )
+
+                if (showBottomBar) {
+                    AppBottomBar(
+                        currentRoute = currentRoute,
+                        isAdmin = isAdmin,
+                        onNavigate = { route ->
+                            if (route != currentRoute) {
+                                navController.navigate(route) {
+                                    popUpTo("home") { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
+                        }
+                    )
+                }
+            },
+
             floatingActionButton = {
                 if (currentRoute == "home") {
-                    FloatingActionButton(onClick = {
-                        navController.navigate("createEvent")
-                    }) {
+                    FloatingActionButton(
+                        onClick = { navController.navigate("createEvent") }
+                    ) {
                         Text("add")
                     }
                 }
             },
+
             topBar = {
                 TopAppBar(
                     title = {
@@ -133,7 +198,8 @@ fun IniciarApp(
                                         style = MaterialTheme.typography.titleMedium
                                     )
                                     Text(
-                                        text = FirebaseAuth.getInstance().currentUser?.email ?: "Bienvenido",
+                                        text = FirebaseAuth.getInstance().currentUser?.email
+                                            ?: "Bienvenido",
                                         fontWeight = FontWeight.Bold,
                                         style = MaterialTheme.typography.titleLarge
                                     )
@@ -145,6 +211,8 @@ fun IniciarApp(
                             "createEvent" -> Text("Crear evento")
                             "pointsUser" -> Text("Mis puntos")
                             "adminScreen" -> Text("Admin")
+                            "auth" -> Text("Acceso")
+                            "register" -> Text("Registro")
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -155,6 +223,7 @@ fun IniciarApp(
                     ),
                     navigationIcon = {
                         if (currentRoute == "home") {
+                            // ✅ seguimos dejando Logout aquí (no rompe nada)
                             IconButton(onClick = {
                                 authViewModel.logOut()
                                 navController.navigate("auth")
@@ -173,43 +242,6 @@ fun IniciarApp(
                             }
                         }
                     },
-                    actions = {
-                        if (currentRoute == "home") {
-                            IconButton(onClick = { navController.navigate("myEventsAccepted") }) {
-                                Icon(
-                                    imageVector = Icons.Default.Checklist,
-                                    contentDescription = "Mis Eventos",
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            }
-
-                            IconButton(onClick = { navController.navigate("myCreatedEvents") }) {
-                                Icon(
-                                    imageVector = Icons.Default.AccountCircle,
-                                    contentDescription = "Mis Eventos Creados",
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            }
-
-                            IconButton(onClick = { navController.navigate("pointsUser") }) {
-                                Icon(
-                                    imageVector = Icons.Default.WorkspacePremium,
-                                    contentDescription = "Mis Puntos",
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            }
-
-                            if (isAdmin) {
-                                IconButton(onClick = { navController.navigate("adminScreen") }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Settings,
-                                        contentDescription = "Panel Admin",
-                                        modifier = Modifier.size(32.dp)
-                                    )
-                                }
-                            }
-                        }
-                    }
                 )
             }
         ) { innerPadding ->
@@ -223,7 +255,7 @@ fun IniciarApp(
 
                 composable("home") {
                     HomeScreen(onMyEventsClick = {
-                        navController.navigate("myEvents")
+                        navController.navigate("myEventsAccepted")
                     })
                 }
 
@@ -243,7 +275,6 @@ fun IniciarApp(
                             }
                         }
                     }
-
                     if (isAdmin) {
                         AdminScreen()
                     }
