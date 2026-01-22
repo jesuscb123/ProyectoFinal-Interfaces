@@ -6,6 +6,7 @@ import java.util.Date
 data class Event(
     val eventId: Long?= null,
     val userId: String,
+    val creatorUid: String,
     val tituloEvento: String,
     val descripcionEvento: String,
     val categoria: Category,

@@ -7,6 +7,7 @@ fun EventEntity.toDomain(): Event{
     return Event(
         eventId = eventId,
         userId = userId,
+        creatorUid = creatorUid,
         tituloEvento = tituloEvento,
         descripcionEvento = descripcionEvento,
         categoria = categoria,
@@ -20,6 +21,7 @@ fun Event.toEntity(): EventEntity{
     return EventEntity(
         eventId = eventId,
         userId = userId,
+        creatorUid = creatorUid,
         tituloEvento = tituloEvento,
         descripcionEvento = descripcionEvento,
         categoria = categoria,

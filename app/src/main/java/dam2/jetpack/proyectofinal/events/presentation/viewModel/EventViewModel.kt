@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dam2.jetpack.proyectofinal.events.domain.model.Category
 import dam2.jetpack.proyectofinal.events.domain.model.Event
@@ -81,7 +82,7 @@ class EventViewModel @Inject constructor(
     }
 
     fun createEvent(
-        userId: String?,
+        userId: String?, // Este es el email
         tituloEvento: String,
         descripcionEvento: String,
         categoria: Category,
@@ -89,10 +90,12 @@ class EventViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
+            val currentUser = FirebaseAuth.getInstance().currentUser
 
-            if (userId != null) {
+            if (userId != null && currentUser != null) {
                 val event = Event(
                     userId = userId,
+                    creatorUid = currentUser.uid,
                     tituloEvento = tituloEvento,
                     descripcionEvento = descripcionEvento,
                     fechaCreacion = Date(),
@@ -100,24 +103,37 @@ class EventViewModel @Inject constructor(
                     resuelto = resuelto,
                     userAccept = null
                 )
-                createEventUseCase(event)
 
-                getAllEventsUseCase().collect { events ->
+                // --- ¡AQUÍ ESTÁ EL CAMBIO CLAVE! ---
+                // Primero, ejecutamos el UseCase para crear el evento.
+                // Asumimos que createEventUseCase es una función 'suspend'.
+                try {
+                    createEventUseCase(event) // Esperamos a que esta operación termine.
+
+                    // UNA VEZ que el guardado ha terminado con éxito...
+                    // ...AHORA sí recargamos la lista de eventos.
+                    loadEvents() // Reutilizamos tu función loadEvents() que ya hace esto perfectamente.
+
+                } catch (e: Exception) {
+                    // Si el guardado falla, lo notificamos.
                     _uiState.value = _uiState.value.copy(
-                        events = events,
-                        isEmpty = events.isEmpty(),
                         isLoading = false,
-                        errorMessage = null
+                        errorMessage = "Error al guardar el evento: ${e.message}"
                     )
                 }
+
             } else {
-                // Si el userId es null, al menos para de cargar
-                _uiState.value = _uiState.value.copy(isLoading = false)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = "Error: Usuario no autenticado. No se puede crear el evento."
+                )
             }
         }
     }
 
-    fun deleteEvent(eventId: Long) {
+
+
+        fun deleteEvent(eventId: Long) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
 

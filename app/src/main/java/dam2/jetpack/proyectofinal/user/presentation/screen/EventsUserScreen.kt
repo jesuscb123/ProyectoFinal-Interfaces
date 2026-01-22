@@ -26,6 +26,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.core.text.color
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.events.domain.model.Event
 import dam2.jetpack.proyectofinal.events.presentation.viewModel.EventViewModel
@@ -34,7 +35,8 @@ import kotlin.text.format
 
 @Composable
 fun EventsUserScreen(
-    eventViewModel: EventViewModel = hiltViewModel()
+    eventViewModel: EventViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val eventState by eventViewModel.uiState.collectAsState()
     val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
@@ -80,6 +82,7 @@ fun EventsUserScreen(
                         EventItem(
                             event = event,
                             currentUserEmail = currentUserEmail,
+                            navController = navController,
                             onClick = { selectedEvent = event }
                         )
                     }

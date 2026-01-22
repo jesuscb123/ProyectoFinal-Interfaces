@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,35 +17,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.chat.domain.model.ChatMessage
 import dam2.jetpack.proyectofinal.chat.presentation.viewmodel.ChatViewModel
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class) // Necesario para TopAppBar
 @Composable
 fun ChatScreen(
     recipientUid: String,
+    recipientEmail: String, // <-- PARÁMETRO AÑADIDO
+    navController: NavController, // <-- PARÁMETRO AÑADIDO
     viewModel: ChatViewModel = hiltViewModel()
 ) {
-    // Observa los mensajes del ViewModel como un estado de Compose
     val messages by viewModel.messages.collectAsState()
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
-
-    // Estado para el texto que el usuario está escribiendo
     var text by remember { mutableStateOf("") }
-
-    // Estado para controlar el scroll de la lista de mensajes
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    // Este efecto se ejecuta una vez cuando la pantalla se carga, para obtener los mensajes
     LaunchedEffect(recipientUid) {
         viewModel.loadMessages(recipientUid)
     }
 
-    // Este efecto se ejecuta cada vez que la lista de mensajes cambia
     LaunchedEffect(messages) {
-        // Si hay mensajes, hace scroll automático hacia el más reciente (que está en el índice 0)
         if (messages.isNotEmpty()) {
             coroutineScope.launch {
                 listState.animateScrollToItem(0)
@@ -53,7 +50,24 @@ fun ChatScreen(
     }
 
     Scaffold(
-        // La barra inferior donde se escribe el mensaje
+        topBar = { // <-- BARRA SUPERIOR AÑADIDA
+            TopAppBar(
+                // Mostramos la parte del email antes de la @ como nombre
+                title = { Text(recipientEmail.substringBefore('@')) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) { // Acción para volver
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Volver"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        },
         bottomBar = {
             MessageInput(
                 value = text,
@@ -61,16 +75,15 @@ fun ChatScreen(
                 onSendClick = {
                     if (text.isNotBlank()) {
                         viewModel.sendMessage(text.trim(), recipientUid)
-                        text = "" // Limpia el campo de texto después de enviar
+                        text = ""
                     }
                 }
             )
         }
     ) { paddingValues ->
-        // La lista que muestra los mensajes
         LazyColumn(
             state = listState,
-            reverseLayout = true, // Esencial para un chat: empieza desde abajo
+            reverseLayout = true,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -86,9 +99,11 @@ fun ChatScreen(
     }
 }
 
+// El resto del archivo (MessageBubble y MessageInput) no cambia.
+// Puedes dejarlo como estaba.
+
 @Composable
 fun MessageBubble(message: ChatMessage, isFromCurrentUser: Boolean) {
-    // Determina la alineación y colores según si el mensaje es del usuario actual o del receptor
     val alignment = if (isFromCurrentUser) Alignment.CenterEnd else Alignment.CenterStart
     val backgroundColor = if (isFromCurrentUser) {
         MaterialTheme.colorScheme.primary
@@ -101,18 +116,16 @@ fun MessageBubble(message: ChatMessage, isFromCurrentUser: Boolean) {
         MaterialTheme.colorScheme.onSecondaryContainer
     }
 
-    // Un Box para alinear la burbuja a la derecha o izquierda
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
         contentAlignment = alignment
     ) {
-        // La "burbuja" del mensaje
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = backgroundColor,
-            modifier = Modifier.widthIn(max = 300.dp) // Limita el ancho máximo de la burbuja
+            modifier = Modifier.widthIn(max = 300.dp)
         ) {
             Text(
                 text = message.text,
@@ -137,7 +150,6 @@ fun MessageInput(
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Campo de texto para escribir el mensaje
             OutlinedTextField(
                 value = value,
                 onValueChange = onValueChange,
@@ -151,14 +163,12 @@ fun MessageInput(
             )
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Botón para enviar el mensaje
             IconButton(
                 onClick = onSendClick,
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
-                // El botón está deshabilitado si no hay texto
                 enabled = value.isNotBlank()
             ) {
                 Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Enviar mensaje")

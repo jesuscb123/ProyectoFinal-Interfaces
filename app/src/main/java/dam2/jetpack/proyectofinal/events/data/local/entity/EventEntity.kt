@@ -10,10 +10,11 @@ data class EventEntity(
     @PrimaryKey(autoGenerate = true)
     val eventId: Long? = null,
     val userId: String,
+    val creatorUid: String,
     val tituloEvento: String,
     val descripcionEvento: String,
     val categoria: Category,
     val fechaCreacion: Date,
     val resuelto: Boolean,
-    val userAccept: String?
+    val userAccept: String?,
 )

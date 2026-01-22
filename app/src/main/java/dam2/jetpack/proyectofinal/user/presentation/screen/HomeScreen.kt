@@ -1,5 +1,6 @@
 package dam2.jetpack.proyectofinal.user.presentation.screen
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.events.domain.model.Category
 import dam2.jetpack.proyectofinal.events.domain.model.Event
@@ -42,7 +44,7 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onMyEventsClick: () -> Unit,
+    navController: NavController,
     userViewModel: UserViewModel = hiltViewModel(),
     eventViewModel: EventViewModel = hiltViewModel()
 ) {
@@ -97,7 +99,7 @@ fun HomeScreen(
                 ) {
                     items(
                         items = visibleEvents,
-                        key = { it.eventId!! }
+                        key = { "${it.creatorUid}_${it.fechaCreacion.time}" }
                     ) { event ->
                         var isVisible by remember { mutableStateOf(false) }
                         LaunchedEffect(key1 = true) { isVisible = true }
@@ -115,6 +117,7 @@ fun HomeScreen(
                                 event = event,
                                 currentUserEmail = userState.user?.email,
                                 isAdmin = isAdmin,
+                                navController = navController,
                                 onDelete = { eventToDelete ->
                                     eventViewModel.deleteEvent(eventToDelete.eventId!!)
                                 },
@@ -123,7 +126,7 @@ fun HomeScreen(
                                         selectedEvent = event
                                     }
                                 },
-                                resetKey = swipeResetKey // ✅ se lo pasamos al item
+                                resetKey = swipeResetKey
                             )
                         }
                     }
@@ -159,6 +162,7 @@ fun SwipeableEventItem(
     event: Event,
     currentUserEmail: String?,
     isAdmin: Boolean,
+    navController: NavController,
     onDelete: (Event) -> Unit,
     onClick: () -> Unit,
     resetKey: Int // ✅ nuevo
@@ -238,6 +242,7 @@ fun SwipeableEventItem(
                     EventItem(
                         event = event,
                         currentUserEmail = currentUserEmail,
+                        navController = navController,
                         onClick = onClick
                     )
                 },
@@ -248,7 +253,8 @@ fun SwipeableEventItem(
             EventItem(
                 event = event,
                 currentUserEmail = currentUserEmail,
-                onClick = onClick
+                onClick = onClick,
+                navController = navController
             )
         }
     }
@@ -370,9 +376,15 @@ fun ResolveEventDialog(
 fun EventItem(
     event: Event,
     currentUserEmail: String?,
+    navController: NavController, // Asegúrate de que recibe NavController
     onClick: () -> Unit
 ) {
-    val isCreator = event.userId == currentUserEmail
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val isCreator = event.userId == currentUserEmail // o event.creatorUid == currentUser.uid
+
+    // ✅ CONDICIÓN CLAVE: El usuario actual ha aceptado el evento y NO es el creador.
+    val hasAcceptedEvent = event.userAccept == currentUserEmail && !isCreator
+
     val isClickable = !isCreator && (event.userAccept == null || event.userAccept == currentUserEmail)
 
     val scheme = MaterialTheme.colorScheme
@@ -383,19 +395,17 @@ fun EventItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(enabled = isClickable) { onClick() },
+            .clickable(enabled = isClickable, onClick = onClick), // Usamos tu lógica de click
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = container),
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Column {
-
+            // --- Cabecera (Se mantiene igual) ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        color = headerBg
-                    )
+                    .background(color = headerBg)
                     .padding(horizontal = 16.dp, vertical = 14.dp)
             ) {
                 Row(
@@ -426,7 +436,6 @@ fun EventItem(
                             maxLines = 1
                         )
                         Spacer(Modifier.height(4.dp))
-
                         Text(
                             text = "por ${event.userId.substringBefore('@')}",
                             style = MaterialTheme.typography.bodySmall,
@@ -436,20 +445,19 @@ fun EventItem(
                     }
 
                     when {
-                        isCreator -> CreatorChipV2()
-                        event.userAccept != null -> AcceptedChip(userAccept = event.userAccept)
-                        else -> PendingChipV2()
+                        isCreator -> CreatorChipV2() // Tu chip personalizado
+                        event.userAccept != null -> AcceptedChip(userAccept = event.userAccept) // Tu chip
+                        else -> PendingChipV2() // Tu chip
                     }
                 }
             }
 
-            // Cuerpo
+            // --- Cuerpo (Con el botón de chat añadido) ---
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-
                 Text(
                     text = event.descripcionEvento,
                     style = MaterialTheme.typography.bodyMedium,
@@ -468,16 +476,44 @@ fun EventItem(
                         icon = Icons.Default.CalendarMonth,
                         text = event.fechaCreacion.formatToString()
                     )
-
                     InfoPill(
                         icon = Icons.Default.Category,
                         text = event.categoria.name.lowercase().replaceFirstChar { it.uppercase() }
                     )
                 }
+
+                // --- ¡AQUÍ ESTÁ LA LÓGICA DEL BOTÓN DE CHAT! ---
+                // Se mostrará solo si el usuario ha aceptado y no es el creador.
+                // Importante: Necesitas el creatorUid en tu objeto Event.
+                if (hasAcceptedEvent && event.userId.isNotEmpty()) {
+                    Spacer(Modifier.height(16.dp))
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Button(
+                            onClick = {
+                                val recipientUid = event.creatorUid   // UID del creador del evento
+                                val recipientEmail = event.userId     // Email del creador del evento
+
+                                navController.navigate(
+                                    "chat?recipientUid=${Uri.encode(recipientUid)}&recipientEmail=${Uri.encode(recipientEmail)}"
+                                )
+                            },
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Chat,
+                                contentDescription = "Chat Icon",
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text("Chatear")
+                        }
+                    }
+                }
             }
         }
     }
 }
+
 
 
 @Composable

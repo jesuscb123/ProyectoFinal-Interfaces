@@ -38,10 +38,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import dam2.jetpack.proyectofinal.auth.presentation.screen.AuthScreen
@@ -253,16 +255,14 @@ fun IniciarApp(
                 composable("register") { RegisterScreen(navController = navController) }
 
                 composable("home") {
-                    HomeScreen(onMyEventsClick = {
-                        navController.navigate("myEventsAccepted")
-                    })
+                    HomeScreen(navController)
                 }
 
                 composable("createEvent") {
                     CreateEvent(emailId, navController = navController)
                 }
 
-                composable("myEventsAccepted") { EventsUserScreen() }
+                composable("myEventsAccepted") { EventsUserScreen(navController = navController) }
                 composable("myCreatedEvents") { EventsUserCreateScreen() }
                 composable("pointsUser") { ViewPointsUserScreen() }
 
@@ -278,6 +278,28 @@ fun IniciarApp(
                         AdminScreen()
                     }
                 }
+
+                composable(
+                    route = "chat?recipientUid={recipientUid}&recipientEmail={recipientEmail}",
+                    arguments = listOf(
+                        navArgument("recipientUid") { type = NavType.StringType },
+                        navArgument("recipientEmail") { type = NavType.StringType }
+                    )
+                ) { backStackEntry ->
+                    val recipientUid = backStackEntry.arguments?.getString("recipientUid")
+                    val recipientEmail = backStackEntry.arguments?.getString("recipientEmail")
+
+                    if (recipientUid != null && recipientEmail != null) {
+                        dam2.jetpack.proyectofinal.chat.presentation.screen.ChatScreen(
+                            recipientUid = recipientUid,
+                            recipientEmail = recipientEmail,
+                            navController = navController
+                        )
+                    } else {
+                        navController.navigateUp()
+                    }
+                }
+
             }
         }
     }
