@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
@@ -36,6 +38,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -240,64 +243,88 @@ fun IniciarApp(
             },
 
             topBar = {
-                TopAppBar(
-                    title = {
-                        when {
-                            isChat -> {
-                                Text(chatRecipientEmail?.substringBefore('@') ?: "Chat")
-                            }
-
-                            currentRoute == "home" -> {
-                                Column {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(0.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    TopAppBar(
+                        title = {
+                            when {
+                                isChat -> {
                                     Text(
-                                        text = "Hola,",
-                                        style = MaterialTheme.typography.titleMedium
+                                        text = chatRecipientEmail?.substringBefore('@') ?: "Chat",
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer
                                     )
+                                }
+
+                                currentRoute == "home" -> {
+                                    Column {
+                                        Text(
+                                            text = "Hola,",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            // <-- CAMBIO: Aseguramos el contraste del color del texto
+                                            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+                                        )
+                                        Text(
+                                            text = FirebaseAuth.getInstance().currentUser?.email?.substringBefore('@') ?: "Bienvenido",
+                                            fontWeight = FontWeight.Bold,
+                                            style = MaterialTheme.typography.titleLarge,
+                                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                                        )
+                                    }
+                                }
+
+                                else -> {
+                                    val titleText = when (currentRoute) {
+                                        "myEventsAccepted" -> "Eventos aceptados"
+                                        "myCreatedEvents" -> "Mis eventos"
+                                        "createEvent" -> "Crear evento"
+                                        "pointsUser" -> "Mis puntos"
+                                        "adminScreen" -> "Admin"
+                                        "auth" -> "Iniciar sesión"
+                                        "register" -> "Registro"
+                                        else -> ""
+                                    }
                                     Text(
-                                        text = FirebaseAuth.getInstance().currentUser?.email ?: "Bienvenido",
-                                        fontWeight = FontWeight.Bold,
-                                        style = MaterialTheme.typography.titleLarge
+                                        text = titleText,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer
                                     )
                                 }
                             }
+                        },
 
-                            currentRoute == "myEventsAccepted" -> Text("Eventos aceptados")
-                            currentRoute == "myCreatedEvents" -> Text("Mis eventos")
-                            currentRoute == "createEvent" -> Text("Crear evento")
-                            currentRoute == "pointsUser" -> Text("Mis puntos")
-                            currentRoute == "adminScreen" -> Text("Admin")
-                            currentRoute == "auth" -> Text("Iniciar sesión")
-                            currentRoute == "register" -> Text("Registro")
-                            else -> Text("")
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                        titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                        actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-                    ),
-                    navigationIcon = {
-                        if (currentRoute == "home") {
-                            IconButton(onClick = {
-                                authViewModel.logOut()
-                                navController.navigate("auth")
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Logout,
-                                    contentDescription = "Cerrar Sesión"
-                                )
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent,
+                            titleContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            navigationIconContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            actionIconContentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        ),
+                        navigationIcon = {
+                            if (currentRoute == "home") {
+                                IconButton(onClick = {
+                                    authViewModel.logOut()
+                                    navController.navigate("auth") {
+                                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                                    }
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Logout,
+                                        contentDescription = "Cerrar Sesión"
+                                    )
+                                }
+                            } else if (canNavigateBack) {
+                                IconButton(onClick = { navController.navigateUp() }) {
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = "Volver"
+                                    )
+                                }
                             }
-                        } else if (canNavigateBack) {
-                            IconButton(onClick = { navController.navigateUp() }) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Volver"
-                                )
-                            }
-                        }
-                    },
-                )
+                        },
+                    )
+                }
             }
         ) { innerPadding ->
             NavHost(

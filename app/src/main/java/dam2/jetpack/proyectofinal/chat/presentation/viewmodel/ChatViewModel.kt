@@ -43,7 +43,7 @@ class ChatViewModel @Inject constructor(
         val optimistic = ChatMessage(
             senderId = currentUid,
             text = text,
-            timestamp = com.google.firebase.Timestamp.now() // solo para pintar ya
+            timestamp = com.google.firebase.Timestamp.now()
         )
 
         _messages.value = listOf(optimistic) + _messages.value

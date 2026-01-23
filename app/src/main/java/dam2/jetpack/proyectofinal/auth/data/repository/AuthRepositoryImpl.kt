@@ -7,9 +7,34 @@ import dam2.jetpack.proyectofinal.auth.domain.repository.AuthRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+/**
+ * Implementación del repositorio de autenticación [AuthRepository] que utiliza Firebase Authentication
+ * como fuente de datos.
+ *
+ * Esta clase se encarga de toda la comunicación con Firebase para las operaciones de
+ * inicio de sesión, registro y cierre de sesión. Al estar anotada con `@Inject`, Hilt
+ * puede proveerla a otras clases (como los casos de uso).
+ *
+ * @property firebaseAuth Instancia de [FirebaseAuth] inyectada por Hilt, que permite interactuar
+ * con el servicio de autenticación de Firebase.
+ */
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
 ): AuthRepository {
+
+    /**
+     * Realiza el inicio de sesión de un usuario con su correo y contraseña en Firebase.
+     *
+     * Envuelve la llamada a la API de Firebase `signInWithEmailAndPassword` en un bloque try-catch
+     * para gestionar los posibles errores de autenticación y traducirlos a mensajes
+     * comprensibles para el usuario.
+     *
+     * @param email El correo electrónico del usuario.
+     * @param password La contraseña del usuario.
+     * @return Un objeto [AuthResult] con el UID y el email del usuario si el inicio de sesión es exitoso.
+     * @throws IllegalArgumentException si los datos son incorrectos, la conexión falla o el usuario no existe.
+     * El mensaje de la excepción está personalizado para ser mostrado en la UI.
+     */
     override suspend fun login(
         email: String,
         password: String
@@ -36,6 +61,15 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Registra un nuevo usuario en Firebase con su correo y contraseña.
+     *
+     * @param email El correo electrónico para la nueva cuenta.
+     * @param password La contraseña para la nueva cuenta.
+     * @return Un objeto [AuthResult] con el UID y el email del usuario recién creado.
+     * @throws Exception si el proceso de registro falla por algún motivo (ej. el correo ya existe).
+     * @throws IllegalStateException si Firebase no devuelve un objeto de usuario tras el registro.
+     */
     override suspend fun register(
         email: String,
         password: String
