@@ -62,6 +62,13 @@ import dam2.jetpack.proyectofinal.user.presentation.screen.HomeScreen
 import dam2.jetpack.proyectofinal.user.presentation.screen.ViewPointsUserScreen
 import dam2.jetpack.proyectofinal.user.presentation.viewmodel.UserViewModel
 
+/**
+ * Actividad principal y punto de entrada de la interfaz de usuario de la aplicación.
+ *
+ * Esta clase está anotada con `@AndroidEntryPoint`, lo que permite la inyección de dependencias
+ * a través de Hilt en toda la actividad y los Composables que contiene.
+ * Se encarga de configurar el tema de la aplicación y llamar al Composable principal, [IniciarApp].
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +79,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+/**
+ * Genera la lista de elementos de navegación para la barra inferior.
+ *
+ * La lista de elementos es dinámica: si el usuario es un administrador (`isAdmin` es true),
+ * se añade el ítem de "Admin" a la lista base.
+ *
+ * @param isAdmin Indica si el usuario actual tiene rol de administrador.
+ * @return Una lista de objetos [BottomNavItem] para construir la barra de navegación.
+ */
 private fun bottomItems(isAdmin: Boolean): List<BottomNavItem> {
     val base = listOf(
         BottomNavItem("home", "Inicio", Icons.Default.Home),
@@ -81,6 +98,18 @@ private fun bottomItems(isAdmin: Boolean): List<BottomNavItem> {
     )
     return if (isAdmin) base + BottomNavItem("adminScreen", "Admin", Icons.Default.Settings) else base
 }
+
+/**
+ * Renderiza la barra de navegación inferior de la aplicación.
+ *
+ * Muestra los ítems de navegación generados por [bottomItems] y gestiona la selección visual
+ * del ítem actual basándose en la ruta de navegación (`currentRoute`).
+ *
+ * @param currentRoute La ruta de navegación actual para resaltar el ítem correcto.
+ * @param isAdmin Indica si el usuario es administrador para mostrar el menú correspondiente.
+ * @param onNavigate Lambda que se invoca cuando el usuario pulsa sobre un ítem,
+ *                   pasando la nueva ruta de destino.
+ */
 @Composable
 private fun AppBottomBar(
     currentRoute: String?,
@@ -114,6 +143,22 @@ private fun AppBottomBar(
     }
 }
 
+/**
+ * Composable raíz que estructura toda la aplicación.
+ *
+ * Esta función es la responsable de:
+ * 1.  Inicializar el [rememberNavController] para gestionar la navegación.
+ * 2.  Observar el estado de autenticación ([AuthViewModel]) y del usuario ([UserViewModel]).
+ * 3.  Determinar el destino inicial: "auth" si no hay sesión, "home" si ya la hay.
+ * 4.  Definir la estructura principal de la UI con un [Scaffold], que incluye:
+ *     - Una barra de navegación inferior ([AppBottomBar]).
+ *     - Una barra de aplicación superior (`TopAppBar`) dinámica.
+ *     - Un botón de acción flotante (`FloatingActionButton`) en la pantalla de inicio.
+ * 5.  Alojar el [NavHost], que define el grafo de navegación y renderiza la pantalla actual.
+ *
+ * @param authViewModel ViewModel para gestionar la lógica de autenticación. Inyectado por Hilt.
+ * @param userViewModel ViewModel para obtener y gestionar los datos del usuario. Inyectado por Hilt.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IniciarApp(
@@ -317,36 +362,4 @@ fun IniciarApp(
     }
 }
 
-@Composable
-fun TopBarCardTitle(
-    title: String,
-    subtitle: String? = null
-) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = MaterialTheme.shapes.large
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)
-        ) {
-            if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-            Text(
-                text = title,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                maxLines = 1
-            )
-        }
-    }
-}
 
