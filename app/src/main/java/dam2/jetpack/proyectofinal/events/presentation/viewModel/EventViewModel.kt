@@ -3,7 +3,6 @@ package dam2.jetpack.proyectofinal.events.presentation.viewModel
 import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import com.google.firebase.auth.FirebaseAuth
@@ -18,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
@@ -39,6 +39,7 @@ import javax.inject.Inject
  * @param getEventsUserCreateEventUseCase Caso de uso para obtener los eventos creados por un usuario.
  * @param getUserByEmailUseCase Caso de uso para obtener los datos de un usuario por su email.
  * @param saveUserUseCase Caso de uso para guardar/actualizar los datos de un usuario.
+ * @param getEventStatsUseCase Caso de uso para obtener las estadísticas de los eventos.
  */
 @HiltViewModel
 class EventViewModel @Inject constructor(
@@ -50,7 +51,9 @@ class EventViewModel @Inject constructor(
     private val getEventsUserUseCase: GetEventsUserUseCase,
     private val getEventsUserCreateEventUseCase: GetEventsUserCreateUseCase,
     private val getUserByEmailUseCase: GetUserByEmailUseCase,
-    private val saveUserUseCase: SaveUserUseCase
+    private val saveUserUseCase: SaveUserUseCase,
+    // --- CAMBIO: Guardar el caso de uso como una propiedad de la clase ---
+    private val getEventStatsUseCase: GetEventStatsUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EventUiState())
     /**
@@ -59,18 +62,55 @@ class EventViewModel @Inject constructor(
      */
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
+    // --- CÓDIGO NUEVO ---
+    /**
+     * Carga las estadísticas de eventos (completados y aceptados) y actualiza el estado de la UI.
+     * Esta función es llamada desde la pantalla de administrador.
+     */
+    fun loadEventStats() {
+        viewModelScope.launch {
+            // Opcional: Indicar que se están cargando los datos
+            _uiState.update { it.copy(isLoading = true) }
+
+            // Llama al caso de uso para obtener los datos reales desde el repositorio
+            val result = getEventStatsUseCase()
+
+            result.onSuccess { (completed, accepted) ->
+                // Si la operación es exitosa, actualiza el estado con los contadores
+                _uiState.update {
+                    it.copy(
+                        completedEventsCount = completed,
+                        acceptedEventsCount = accepted,
+                        isLoading = false
+                    )
+                }
+            }.onFailure { exception ->
+                // Si ocurre un error, actualiza el estado para reflejarlo
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Error al cargar estadísticas: ${exception.message}"
+                    )
+                }
+            }
+        }
+    }
+    // --- FIN DEL CÓDIGO NUEVO ---
+
     /**
      * Carga todos los eventos desde el repositorio y actualiza el estado de la UI.
      */
     fun loadEvents() {
         viewModelScope.launch {
             getAllEventsUseCase().collect { events ->
-                _uiState.value = _uiState.value.copy(
-                    events = events,
-                    isEmpty = events.isEmpty(),
-                    isLoading = false,
-                    errorMessage = null
-                )
+                _uiState.update {
+                    it.copy(
+                        events = events,
+                        isEmpty = events.isEmpty(),
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
             }
         }
     }
@@ -81,20 +121,22 @@ class EventViewModel @Inject constructor(
      */
     fun getEventById(eventId: Long) {
         viewModelScope.launch {
-            _uiState.value = EventUiState(isLoading = true)
+            _uiState.update { it.copy(isLoading = true) }
 
             val result = getEventByIdUseCase(eventId)
 
-            _uiState.value = result.fold(
+            result.fold(
                 onSuccess = {
-                    _uiState.value.copy(errorMessage = null, isLoading = false)
+                    _uiState.update { it.copy(errorMessage = null, isLoading = false) }
                 },
                 onFailure = { e ->
-                    _uiState.value.copy(
-                        events = emptyList(),
-                        errorMessage = e.message,
-                        isLoading = false
-                    )
+                    _uiState.update {
+                        it.copy(
+                            events = emptyList(),
+                            errorMessage = e.message,
+                            isLoading = false
+                        )
+                    }
                 }
             )
         }
@@ -117,7 +159,7 @@ class EventViewModel @Inject constructor(
         resuelto: Boolean
     ) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            _uiState.update { it.copy(isLoading = true) }
             val currentUser = FirebaseAuth.getInstance().currentUser
 
             if (userId != null && currentUser != null) {
@@ -138,17 +180,21 @@ class EventViewModel @Inject constructor(
                     loadEvents()
 
                 } catch (e: Exception) {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        errorMessage = "Error al guardar el evento: ${e.message}"
-                    )
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = "Error al guardar el evento: ${e.message}"
+                        )
+                    }
                 }
 
             } else {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    errorMessage = "Error: Usuario no autenticado. No se puede crear el evento."
-                )
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Error: Usuario no autenticado. No se puede crear el evento."
+                    )
+                }
             }
         }
     }
@@ -159,19 +205,21 @@ class EventViewModel @Inject constructor(
      */
     fun deleteEvent(eventId: Long) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
             val result = deleteEventUseCase(eventId)
 
             result.fold(
                 onSuccess = {
-                    _uiState.value = _uiState.value.copy(isLoading = false)
+                    _uiState.update { it.copy(isLoading = false) }
                 },
                 onFailure = { exception ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        errorMessage = exception.message ?: "Error al eliminar el evento"
-                    )
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = exception.message ?: "Error al eliminar el evento"
+                        )
+                    }
                 }
             )
         }
@@ -220,14 +268,16 @@ class EventViewModel @Inject constructor(
     @OptIn(UnstableApi::class)
     fun getEventsUser(userAccept: String) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            _uiState.update { it.copy(isLoading = true) }
             getEventsUserUseCase(userAccept).collect { events ->
-                _uiState.value = _uiState.value.copy(
-                    events = events,
-                    isEmpty = events.isEmpty(),
-                    isLoading = false,
-                    errorMessage = null
-                )
+                _uiState.update {
+                    it.copy(
+                        events = events,
+                        isEmpty = events.isEmpty(),
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
             }
         }
     }
@@ -238,14 +288,16 @@ class EventViewModel @Inject constructor(
      */
     fun getEventsUserCreate(userId: String){
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            _uiState.update { it.copy(isLoading = true) }
             getEventsUserCreateEventUseCase(userId).collect { events ->
-                _uiState.value = _uiState.value.copy(
-                    events = events,
-                    isEmpty = events.isEmpty(),
-                    isLoading = false,
-                    errorMessage = null
-                )
+                _uiState.update {
+                    it.copy(
+                        events = events,
+                        isEmpty = events.isEmpty(),
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
             }
         }
     }
@@ -286,17 +338,18 @@ class EventViewModel @Inject constructor(
             }
 
             withContext(Dispatchers.Main) {
-                _uiState.value = _uiState.value.copy(
-                    events = _uiState.value.events.map { eventInList ->
-                        if (eventInList.eventId == updatedEvent.eventId) {
-                            updatedEvent
-                        } else {
-                            eventInList
+                _uiState.update { uiStateValue ->
+                    uiStateValue.copy(
+                        events = uiStateValue.events.map { eventInList ->
+                            if (eventInList.eventId == updatedEvent.eventId) {
+                                updatedEvent
+                            } else {
+                                eventInList
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }
 }
-

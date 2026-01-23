@@ -1,5 +1,7 @@
 package dam2.jetpack.proyectofinal.events.data.repository
 
+import androidx.media3.common.util.Log
+import com.google.firebase.firestore.AggregateSource
 import dam2.jetpack.proyectofinal.events.data.local.dao.EventDao
 import dam2.jetpack.proyectofinal.events.data.mapper.toDomain
 import dam2.jetpack.proyectofinal.events.data.mapper.toEntity
@@ -96,6 +98,21 @@ class EventRepositoryImpl @Inject constructor(
         val eventList = eventDao.getEventsUserCreate(userId)
         return eventList.map {list ->
             list.map { it.toDomain() }
+        }
+    }
+
+    override suspend fun getEventStats(): Result<Pair<Int, Int>> {
+        return try {
+            // Llama a las nuevas funciones del DAO
+            val completedCount = eventDao.countCompletedEvents()
+            val acceptedCount = eventDao.countAcceptedEvents()
+
+            Result.success(Pair(completedCount, acceptedCount))
+
+        } catch (e: Exception) {
+            // En caso de un error inesperado en la base de datos
+            android.util.Log.e("EventRepository", "Error al obtener estadísticas de eventos desde Room", e)
+            Result.failure(e)
         }
     }
 }

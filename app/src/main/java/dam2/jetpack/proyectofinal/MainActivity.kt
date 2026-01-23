@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
 
 /**
  * Genera la lista de elementos de navegación para la barra inferior.
- *
+ *l
  * La lista de elementos es dinámica: si el usuario es un administrador (`isAdmin` es true),
  * se añade el ítem de "Admin" a la lista base.
  *

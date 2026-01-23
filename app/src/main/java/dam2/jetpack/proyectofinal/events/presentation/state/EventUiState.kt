@@ -19,5 +19,7 @@ data class EventUiState(
     val events: List<Event> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val isEmpty: Boolean = false
+    val isEmpty: Boolean = false,
+    val completedEventsCount: Int = 0,
+    val acceptedEventsCount: Int = 0
 )

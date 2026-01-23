@@ -67,5 +67,19 @@ interface EventDao {
      */
     @Query("SELECT * FROM events WHERE userId LIKE :userId ORDER BY fechaCreacion DESC")
     fun getEventsUserCreate(userId: String): Flow<List<EventEntity>>
+
+    // ... (todas tus otras funciones: getAllEvents, getEventById, etc.) ...
+
+
+    @Query("SELECT COUNT(*) FROM events WHERE resuelto = 1")
+    suspend fun countCompletedEvents(): Int
+
+    /**
+     * Cuenta todos los eventos que han sido aceptados pero aún no están resueltos.
+     * Un evento se considera aceptado si 'userAccept' no es nulo y 'resuelto' es falso.
+     * @return El número de eventos aceptados y activos.
+     */
+    @Query("SELECT COUNT(*) FROM events WHERE userAccept IS NOT NULL AND resuelto = 0")
+    suspend fun countAcceptedEvents(): Int
 }
 

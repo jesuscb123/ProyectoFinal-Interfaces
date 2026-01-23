@@ -62,5 +62,15 @@ interface EventRepository {
      * @return Un [Flow] que emite la lista de eventos creados por ese usuario.
      */
     fun getEventsUserCreate(userId: String): Flow<List<Event>>
+
+    /**
+     * Obtiene las estadísticas de los eventos, contando cuántos están completados y cuántos aceptados.
+     *
+     * @return Un [Result] que contiene un Pair<Int, Int> donde:
+     *         - first es el número de eventos completados.
+     *         - second es el número de eventos aceptados.
+     *         O una excepción si la consulta falla.
+     */
+    suspend fun getEventStats(): Result<Pair<Int, Int>>
 }
 
