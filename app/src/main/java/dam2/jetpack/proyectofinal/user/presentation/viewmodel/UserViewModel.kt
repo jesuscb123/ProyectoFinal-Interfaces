@@ -16,6 +16,18 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel para gestionar el estado y la lógica de la UI relacionada con los usuarios.
+ *
+ * Esta clase se encarga de interactuar con los casos de uso del dominio para obtener y manipular
+ * datos de usuario, y expone el estado resultante a través de un [StateFlow] para que la UI
+ * pueda observarlo y reaccionar a los cambios.
+ *
+ * @param getUserByFirebaseUidUseCase Caso de uso para obtener un usuario por su UID de Firebase.
+ * @param getUserByEmailUseCase Caso de uso para obtener un usuario por su email.
+ * @param saveUserUseCase Caso de uso para guardar (crear o actualizar) un usuario.
+ * @param getAllUsersUseCase Caso de uso para obtener una lista de todos los usuarios.
+ */
 @HiltViewModel
 class UserViewModel @Inject constructor(
     val getUserByFirebaseUidUseCase: GetUserByFirebaseUidUseCase,
@@ -24,8 +36,17 @@ class UserViewModel @Inject constructor(
     val getAllUsersUseCase: GetAllUsersUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UserStateUi())
+    /**
+     * Flujo de estado que emite el estado actual de la UI de usuario.
+     * La UI observa este flujo para actualizarse en respuesta a los cambios.
+     */
     val uiState: StateFlow<UserStateUi> = _uiState.asStateFlow()
 
+    /**
+     * Obtiene un usuario por su UID de Firebase y actualiza el estado de la UI.
+     *
+     * @param firebaseUid El UID de Firebase del usuario a buscar.
+     */
     fun getUserByFirebaseUid(firebaseUid: String){
         viewModelScope.launch{
             _uiState.value = UserStateUi(isLoading = true)
@@ -43,6 +64,11 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Obtiene un usuario por su dirección de email y actualiza el estado de la UI.
+     *
+     * @param email El email del usuario a buscar.
+     */
     fun getUserByEmail(email: String){
         viewModelScope.launch {
             _uiState.value = UserStateUi(isLoading = true)
@@ -61,12 +87,21 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Guarda la información de un usuario utilizando el caso de uso correspondiente.
+     *
+     * @param user El objeto [User] a guardar.
+     */
     fun saveUser(user: User){
         viewModelScope.launch {
             saveUserUseCase(user)
         }
     }
 
+    /**
+     * Carga la lista completa de usuarios y la actualiza en el estado de la UI.
+     * Se utiliza principalmente en pantallas de administrador.
+     */
     fun loadUsers(){
         viewModelScope.launch {
             getAllUsersUseCase().collect { users ->

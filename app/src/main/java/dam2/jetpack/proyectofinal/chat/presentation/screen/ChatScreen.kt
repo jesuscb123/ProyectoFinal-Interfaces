@@ -1,7 +1,15 @@
 package dam2.jetpack.proyectofinal.chat.presentation.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -9,9 +17,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,13 +44,25 @@ import dam2.jetpack.proyectofinal.chat.domain.model.ChatMessage
 import dam2.jetpack.proyectofinal.chat.presentation.viewmodel.ChatViewModel
 import kotlinx.coroutines.launch
 
+/**
+ * Pantalla principal para una conversación de chat entre dos usuarios dentro de un evento.
+ *
+ * Muestra una lista de mensajes y un campo de entrada para enviar nuevos mensajes.
+ * La pantalla carga los mensajes existentes al entrar y escucha actualizaciones en tiempo real.
+ *
+ * @param eventId El ID del evento al que pertenece el chat.
+ * @param recipientUid El UID del usuario destinatario.
+ * @param recipientEmail El email del destinatario, que puede usarse para mostrar en la UI.
+ * @param navController El controlador de navegación para acciones como volver atrás.
+ * @param viewModel El [ChatViewModel] que gestiona la lógica y el estado del chat.
+ */
 @OptIn(ExperimentalMaterial3Api::class) // Necesario para TopAppBar
 @Composable
 fun ChatScreen(
     eventId: String,
     recipientUid: String,
-    recipientEmail: String, // ya no se usa aquí, pero puedes mantenerlo si lo necesita MainActivity
-    navController: androidx.navigation.NavController, // ya no se usa aquí, pero puedes mantenerlo
+    recipientEmail: String, 
+    navController: androidx.navigation.NavController, 
     viewModel: ChatViewModel = hiltViewModel()
 ) {
     val messages by viewModel.messages.collectAsState()
@@ -38,13 +71,13 @@ fun ChatScreen(
     var text by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
 
-    // Listener
+    // Listener para cargar mensajes
     DisposableEffect(eventId, recipientUid) {
         viewModel.loadMessages(eventId, recipientUid)
         onDispose { viewModel.stopListening() }
     }
 
-    // Scroll al último (en reverseLayout, item 0)
+    // Scroll al último mensaje (en reverseLayout, es el ítem 0)
     LaunchedEffect(messages.size) {
         if (messages.isNotEmpty()) {
             listState.animateScrollToItem(0)
@@ -90,9 +123,15 @@ fun ChatScreen(
     }
 }
 
-// El resto del archivo (MessageBubble y MessageInput) no cambia.
-// Puedes dejarlo como estaba.
-
+/**
+ * Composable que representa una burbuja de mensaje individual en el chat.
+ *
+ * Adapta su alineación y color de fondo dependiendo de si el mensaje es del
+ * usuario actual o del otro participante.
+ *
+ * @param message El objeto [ChatMessage] a mostrar.
+ * @param isFromCurrentUser `true` si el mensaje fue enviado por el usuario actual, `false` en caso contrario.
+ */
 @Composable
 fun MessageBubble(message: ChatMessage, isFromCurrentUser: Boolean) {
     val alignment = if (isFromCurrentUser) Alignment.CenterEnd else Alignment.CenterStart
@@ -127,6 +166,13 @@ fun MessageBubble(message: ChatMessage, isFromCurrentUser: Boolean) {
     }
 }
 
+/**
+ * Composable que representa el campo de entrada de texto y el botón de enviar.
+ *
+ * @param value El texto actual en el campo de entrada.
+ * @param onValueChange Callback que se invoca cuando el texto cambia.
+ * @param onSendClick Callback que se invoca cuando se presiona el botón de enviar.
+ */
 @Composable
 fun MessageInput(
     value: String,

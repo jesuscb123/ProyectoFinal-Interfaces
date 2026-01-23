@@ -33,6 +33,17 @@ import dam2.jetpack.proyectofinal.events.presentation.viewModel.EventViewModel
 import java.text.SimpleDateFormat
 import kotlin.text.format
 
+/**
+ * Pantalla que muestra los eventos en los que el usuario actual está participando (ha aceptado).
+ *
+ * Esta pantalla obtiene y muestra una lista de eventos que el usuario ha aceptado ayudar.
+ * Cada evento se muestra en una tarjeta con una animación de entrada. Al hacer clic en un evento,
+ * se abre un diálogo [EventActionDialog] que permite al usuario cancelar su participación.
+ * Si el usuario no participa en ningún evento, se muestra un estado vacío [EmptyState].
+ *
+ * @param eventViewModel El ViewModel que gestiona la lógica y el estado de los eventos.
+ * @param navController El controlador de navegación para gestionar las transiciones entre pantallas.
+ */
 @Composable
 fun EventsUserScreen(
     eventViewModel: EventViewModel = hiltViewModel(),
@@ -44,14 +55,17 @@ fun EventsUserScreen(
 
     LaunchedEffect(key1 = currentUserEmail) {
         currentUserEmail?.let {
-            Log.d("EventsUserScreen", "Filtrando eventos para el usuario: $currentUserEmail")
+            Log.d("EventsUserScreen", "Filtrando eventos para el usuario: ${"$"}currentUserEmail")
             eventViewModel.getEventsUser(it)
         }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (eventState.events.isEmpty()) {
-            EmptyState()
+            EmptyState(
+                title = "No participas en ningún evento",
+                message = "Cuando aceptes un evento, aparecerá aquí."
+            )
         } else {
             LazyColumn(
                 modifier = Modifier

@@ -47,6 +47,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.events.domain.model.Event
 
+/**
+ * Pantalla que muestra una lista de los eventos creados por el usuario actualmente autenticado.
+ *
+ * Esta pantalla gestiona varios estados:
+ * - Muestra un indicador de carga mientras se obtienen los eventos.
+ * - Muestra un mensaje si el usuario no ha creado ningún evento.
+ * - Muestra una lista de eventos [EventItemCreated] si existen.
+ * - Permite al usuario marcar un evento como "resuelto" a través de un diálogo de confirmación.
+ *
+ * @param eventViewModel El ViewModel que gestiona la lógica y el estado de los eventos.
+ */
 @Composable
 fun EventsUserCreateScreen(
     eventViewModel: EventViewModel = hiltViewModel(),
@@ -113,6 +124,18 @@ fun EventsUserCreateScreen(
     }
 }
 
+/**
+ * Composable que representa una tarjeta de evento en la lista de eventos creados por el usuario.
+ *
+ * Muestra los detalles del evento, como el título, la categoría, la fecha y la descripción.
+ * Además, gestiona la visualización del estado del evento:
+ * - "Resuelto": Muestra un chip indicando que el evento ha sido completado.
+ * - "Aceptado": Muestra un chip y un botón para que el creador marque el evento como solucionado.
+ * - "Pendiente": Indica que el evento aún no ha sido aceptado por otro usuario.
+ *
+ * @param event El objeto [Event] a mostrar.
+ * @param onResolveClick Lambda que se invoca cuando el usuario pulsa el botón "MARCAR COMO SOLUCIONADO".
+ */
 @Composable
 fun EventItemCreated(
     event: Event,
@@ -265,6 +288,11 @@ fun EventItemCreated(
     }
 }
 
+/**
+ * Chip visual que indica que un evento ha sido "RESUELTO".
+ *
+ * Muestra un icono de verificación y el texto "RESUELTO" con un estilo distintivo.
+ */
 @Composable
 private fun ResolvedChip() {
     val scheme = MaterialTheme.colorScheme
@@ -294,6 +322,11 @@ private fun ResolvedChip() {
     }
 }
 
+/**
+ * Chip visual que indica que un evento ha sido "ACEPTADO" por otro usuario.
+ *
+ * Muestra un icono de tarea y el texto "ACEPTADO", indicando que está en progreso.
+ */
 @Composable
 private fun InProgressChip() {
     val scheme = MaterialTheme.colorScheme

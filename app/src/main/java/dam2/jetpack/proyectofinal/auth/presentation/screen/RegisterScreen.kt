@@ -39,6 +39,18 @@ import dam2.jetpack.proyectofinal.R
 import dam2.jetpack.proyectofinal.auth.presentation.viewmodel.AuthViewModel
 import dam2.jetpack.proyectofinal.user.domain.model.Rol
 
+/**
+ * Pantalla de registro de nuevos usuarios.
+ *
+ * Esta pantalla permite a un nuevo usuario registrarse proporcionando un correo electrónico,
+ * una contraseña y seleccionando un rol (Usuario o Admin). La UI reacciona al estado
+ * proporcionado por el [AuthViewModel] para mostrar indicadores de carga y mensajes de error.
+ * Tras un registro exitoso, navega a la pantalla de inicio de sesión.
+ *
+ * @param authViewModel El ViewModel [AuthViewModel] que gestiona la lógica de registro y el estado de la UI.
+ * @param navController El [NavController] para la navegación, utilizado para volver a la pantalla de
+ *                      autenticación después de un registro exitoso.
+ */
 @Composable
 fun RegisterScreen(authViewModel: AuthViewModel = hiltViewModel(), navController: NavController) {
     // --- LÓGICA ORIGINAL (SIN CAMBIOS) ---
@@ -157,7 +169,12 @@ fun RegisterScreen(authViewModel: AuthViewModel = hiltViewModel(), navController
 }
 
 /**
- * Un RadioButton con texto, estilizado para que coincida con el tema.
+ * Un componente Composable privado que muestra un [RadioButton] junto a una etiqueta de texto.
+ * Está diseñado para la selección de roles en la pantalla de registro.
+ *
+ * @param text El texto que se muestra junto al RadioButton (ej. "Usuario", "Admin").
+ * @param selected `true` si el RadioButton está actualmente seleccionado, `false` en caso contrario.
+ * @param onClick La función lambda que se invoca cuando se hace clic en el componente.
  */
 @Composable
 private fun RoleRadioButton(text: String, selected: Boolean, onClick: () -> Unit) {

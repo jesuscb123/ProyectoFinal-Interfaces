@@ -10,28 +10,36 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dam2.jetpack.proyectofinal.events.domain.model.Category
 import dam2.jetpack.proyectofinal.events.domain.model.Event
-import dam2.jetpack.proyectofinal.events.domain.usecase.AcceptEventUseCase
-import dam2.jetpack.proyectofinal.events.domain.usecase.CreateEventUseCase
-import dam2.jetpack.proyectofinal.events.domain.usecase.DeleteEventUseCase
-import dam2.jetpack.proyectofinal.events.domain.usecase.GetAllEventsUseCase
-import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventByIdUseCase
-import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventsUserCreateUseCase
-import dam2.jetpack.proyectofinal.events.domain.usecase.GetEventsUserUseCase
+import dam2.jetpack.proyectofinal.events.domain.usecase.*
 import dam2.jetpack.proyectofinal.events.presentation.state.EventUiState
 import dam2.jetpack.proyectofinal.user.domain.usecase.GetUserByEmailUseCase
 import dam2.jetpack.proyectofinal.user.domain.usecase.SaveUserUseCase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
 
+/**
+ * ViewModel para la gestión de la lógica de negocio y el estado de la UI relacionados con los eventos.
+ *
+ * Esta clase se encarga de coordinar las interacciones del usuario con la capa de datos a través de
+ * los diferentes casos de uso inyectados. Expone el estado de la UI como un [StateFlow] para que
+ * los Composables puedan observarlo y reaccionar a los cambios.
+ *
+ * @param getAllEventsUseCase Caso de uso para obtener todos los eventos.
+ * @param getEventByIdUseCase Caso de uso para obtener un evento por su ID.
+ * @param createEventUseCase Caso de uso para crear un nuevo evento.
+ * @param deleteEventUseCase Caso de uso para eliminar un evento.
+ * @param acceptEventUseCase Caso de uso para aceptar o actualizar un evento.
+ * @param getEventsUserUseCase Caso de uso para obtener los eventos aceptados por un usuario.
+ * @param getEventsUserCreateEventUseCase Caso de uso para obtener los eventos creados por un usuario.
+ * @param getUserByEmailUseCase Caso de uso para obtener los datos de un usuario por su email.
+ * @param saveUserUseCase Caso de uso para guardar/actualizar los datos de un usuario.
+ */
 @HiltViewModel
 class EventViewModel @Inject constructor(
     private val getAllEventsUseCase: GetAllEventsUseCase,
@@ -45,8 +53,15 @@ class EventViewModel @Inject constructor(
     private val saveUserUseCase: SaveUserUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EventUiState())
+    /**
+     * Flujo de estado público que expone el estado actual de la UI de eventos.
+     * Los Composables pueden recolectar este flujo para redibujarse cuando el estado cambie.
+     */
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
+    /**
+     * Carga todos los eventos desde el repositorio y actualiza el estado de la UI.
+     */
     fun loadEvents() {
         viewModelScope.launch {
             getAllEventsUseCase().collect { events ->
@@ -60,6 +75,10 @@ class EventViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Obtiene un evento específico por su ID.
+     * @param eventId El ID del evento a buscar.
+     */
     fun getEventById(eventId: Long) {
         viewModelScope.launch {
             _uiState.value = EventUiState(isLoading = true)
@@ -81,6 +100,15 @@ class EventViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Crea un nuevo evento y lo guarda en el repositorio.
+     *
+     * @param userId El email del usuario que crea el evento.
+     * @param tituloEvento El título para el nuevo evento.
+     * @param descripcionEvento La descripción del nuevo evento.
+     * @param categoria La categoría del evento.
+     * @param resuelto El estado inicial de resolución del evento.
+     */
     fun createEvent(
         userId: String?, // Este es el email
         tituloEvento: String,
@@ -125,9 +153,11 @@ class EventViewModel @Inject constructor(
         }
     }
 
-
-
-        fun deleteEvent(eventId: Long) {
+    /**
+     * Elimina un evento por su ID.
+     * @param eventId El ID del evento a eliminar.
+     */
+    fun deleteEvent(eventId: Long) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
 
@@ -147,6 +177,12 @@ class EventViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Asigna el usuario actual a un evento, marcándolo como "aceptado".
+     *
+     * @param event El evento que se va a aceptar.
+     * @param userEmail El email del usuario que acepta el evento.
+     */
     @OptIn(UnstableApi::class)
     fun acceptEvent(
         event: Event,
@@ -163,6 +199,10 @@ class EventViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Desvincula al usuario de un evento, quitando la marca de "aceptado".
+     * @param event El evento del que se va a cancelar la aceptación.
+     */
     fun cancelAcceptance(event: Event) {
         viewModelScope.launch {
             val updatedEvent = event.copy(
@@ -173,7 +213,10 @@ class EventViewModel @Inject constructor(
         }
     }
 
-
+    /**
+     * Obtiene y muestra los eventos que un usuario específico ha aceptado.
+     * @param userAccept El email del usuario para filtrar los eventos.
+     */
     @OptIn(UnstableApi::class)
     fun getEventsUser(userAccept: String) {
         viewModelScope.launch {
@@ -189,6 +232,10 @@ class EventViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Obtiene y muestra los eventos que un usuario específico ha creado.
+     * @param userId El email del usuario para filtrar los eventos.
+     */
     fun getEventsUserCreate(userId: String){
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -203,6 +250,12 @@ class EventViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Marca un evento como resuelto y recompensa al usuario que lo aceptó con puntos.
+     *
+     * @param event El evento a marcar como resuelto.
+     * @param pointsToAdd La cantidad de puntos a sumar al usuario que resolvió el evento.
+     */
     @OptIn(UnstableApi::class)
     fun markEventAsResolved(event: Event, pointsToAdd: Int) {
 
@@ -246,5 +299,4 @@ class EventViewModel @Inject constructor(
         }
     }
 }
-
 

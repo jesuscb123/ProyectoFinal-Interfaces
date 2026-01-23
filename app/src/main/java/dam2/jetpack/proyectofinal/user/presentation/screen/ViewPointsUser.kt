@@ -42,6 +42,16 @@ import dam2.jetpack.proyectofinal.events.domain.model.Event
 import dam2.jetpack.proyectofinal.events.presentation.viewModel.EventViewModel
 import dam2.jetpack.proyectofinal.user.presentation.viewmodel.UserViewModel
 
+/**
+ * Pantalla que muestra los puntos acumulados por el usuario y los eventos que ha completado.
+ *
+ * Esta pantalla presenta una cabecera con el total de puntos del usuario y una lista de los
+ * eventos resueltos en los que ha sido aceptado. Utiliza [UserViewModel] para obtener los
+ * datos del usuario y [EventViewModel] para obtener la lista de eventos.
+ *
+ * @param userViewModel El ViewModel para obtener la información del usuario actual.
+ * @param eventViewModel El ViewModel para obtener la lista de eventos.
+ */
 @Composable
 fun ViewPointsUserScreen(
     userViewModel: UserViewModel = hiltViewModel(),
@@ -72,7 +82,6 @@ fun ViewPointsUserScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- SECCIÓN DE LISTA DE EVENTOS ---
         Text(
             text = "Eventos Completados",
             style = MaterialTheme.typography.titleLarge,
@@ -108,6 +117,11 @@ fun ViewPointsUserScreen(
     }
 }
 
+/**
+ * Un Composable que muestra una tarjeta con el total de puntos (monedero) del usuario.
+ *
+ * @param points El número de puntos a mostrar.
+ */
 @Composable
 fun PointsHeader(points: Int) {
     Card(
@@ -146,6 +160,13 @@ fun PointsHeader(points: Int) {
     }
 }
 
+/**
+ * Un Composable que muestra un ítem de la lista para un evento resuelto.
+ *
+ * Muestra el título y la categoría del evento, junto con un indicador visual de los puntos ganados.
+ *
+ * @param event El objeto [Event] resuelto que se va a mostrar.
+ */
 @Composable
 fun ResolvedEventItem(event: Event) {
     Card(

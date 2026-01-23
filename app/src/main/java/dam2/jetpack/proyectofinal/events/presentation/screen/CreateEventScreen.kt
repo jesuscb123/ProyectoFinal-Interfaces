@@ -17,6 +17,17 @@ import androidx.navigation.NavController
 import dam2.jetpack.proyectofinal.events.domain.model.Category
 import dam2.jetpack.proyectofinal.events.presentation.viewModel.EventViewModel
 
+/**
+ * Composable que representa la pantalla para crear un nuevo evento.
+ *
+ * Esta pantalla contiene los campos de formulario necesarios para que un usuario pueda
+ * introducir la información de un nuevo evento (título, descripción, categoría)
+ * y un botón para enviarlo y crearlo a través del [EventViewModel].
+ *
+ * @param userId El ID del usuario que está creando el evento. Puede ser nulo si no hay sesión.
+ * @param eventViewModel El ViewModel que maneja la lógica de negocio para los eventos, inyectado por Hilt.
+ * @param navController El controlador de navegación para moverse a otras pantallas, como volver al home tras la creación.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEvent(

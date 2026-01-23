@@ -22,6 +22,15 @@ import dam2.jetpack.proyectofinal.user.domain.model.Rol
 import dam2.jetpack.proyectofinal.user.domain.model.User
 import dam2.jetpack.proyectofinal.user.presentation.viewmodel.UserViewModel
 
+/**
+ * Pantalla que muestra una lista de todos los usuarios registrados en la aplicación.
+ *
+ * Esta pantalla está destinada a ser accesible solo por usuarios con rol de administrador.
+ * Obtiene la lista de usuarios del [UserViewModel] y la muestra en una [LazyColumn].
+ * Si no hay usuarios, muestra un estado vacío [EmptyState].
+ *
+ * @param userViewModel El ViewModel que gestiona el estado y la lógica de los usuarios.
+ */
 @Composable
 fun AdminScreen(
     userViewModel: UserViewModel = hiltViewModel()
@@ -70,6 +79,14 @@ fun AdminScreen(
     }
 }
 
+/**
+ * Composable que representa un único elemento en la lista de usuarios.
+ *
+ * Muestra la información de un usuario, incluyendo su email y un icono que diferencia
+ * a los administradores ([Rol.ADMIN]) de los usuarios normales.
+ *
+ * @param user El objeto [User] a mostrar.
+ */
 @Composable
 fun UserListItem(
     user: User,
@@ -128,7 +145,11 @@ fun UserListItem(
     }
 }
 
-// Chip para administradores, similar al "CreatorChip" de HomeScreen.
+/**
+ * Un pequeño chip visual para identificar rápidamente a los usuarios administradores.
+ *
+ * Muestra la palabra "Admin" con un estilo destacado.
+ */
 @Composable
 fun AdminChip() {
     Surface(
@@ -145,7 +166,16 @@ fun AdminChip() {
     }
 }
 
-// Puedes reutilizar o adaptar el EmptyState que ya tienes en HomeScreen.
+/**
+ * Composable que muestra un mensaje genérico para estados vacíos.
+ *
+ * Se utiliza cuando una lista o contenido no está disponible, mostrando un título y un mensaje
+ * descriptivo para el usuario.
+ *
+ * @param modifier Modificador para personalizar el layout del [Box] contenedor.
+ * @param title El título principal del mensaje.
+ * @param message El mensaje secundario o descriptivo.
+ */
 @Composable
 fun EmptyState(
     modifier: Modifier = Modifier,
