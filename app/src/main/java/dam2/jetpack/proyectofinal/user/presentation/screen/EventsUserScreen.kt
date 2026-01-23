@@ -28,6 +28,7 @@ import androidx.core.text.color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import dam2.jetpack.proyectofinal.core.components.navigation.EventItem
 import dam2.jetpack.proyectofinal.events.domain.model.Event
 import dam2.jetpack.proyectofinal.events.presentation.viewModel.EventViewModel
 import java.text.SimpleDateFormat
