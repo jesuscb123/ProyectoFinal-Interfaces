@@ -38,3 +38,5 @@ La app es creada para android nativo:
 - **Base de datos local**: Emplea Room para la persistencia de datos de los eventos.
 
 - **Servicios en la Nube (Backend)**: Se apoya en Firebase para dos tareas críticas:
+    - **Firebase Authentication**: Para un sistema de login seguro.
+    - **Cloud Firestore**: Para permitir un chat entre usuarios.
