@@ -1,5 +1,9 @@
 package dam2.jetpack.proyectofinal.chat.presentation.screen
 
+import android.content.Intent
+import android.speech.RecognizerIntent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -62,7 +67,7 @@ fun ChatScreen(
     eventId: String,
     recipientUid: String,
     recipientEmail: String, 
-    navController: androidx.navigation.NavController, 
+    navController: NavController,
     viewModel: ChatViewModel = hiltViewModel()
 ) {
     val messages by viewModel.messages.collectAsState()
@@ -70,6 +75,26 @@ fun ChatScreen(
 
     var text by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
+
+    val speechRecognizerLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+        // Cuando el reconocedor de voz termina, este bloque se ejecuta
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            // Actualiza el campo de texto con el resultado de la transcripción
+            text = results?.get(0) ?: ""
+        }
+    }
+
+    val onMicClick = {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Habla ahora...")
+        }
+        speechRecognizerLauncher.launch(intent)
+    }
 
     // Listener para cargar mensajes
     DisposableEffect(eventId, recipientUid) {
@@ -118,7 +143,8 @@ fun ChatScreen(
                     viewModel.sendMessage(eventId, trimmed, recipientUid)
                     text = ""
                 }
-            }
+            },
+            onMicClick = onMicClick
         )
     }
 }
@@ -177,7 +203,8 @@ fun MessageBubble(message: ChatMessage, isFromCurrentUser: Boolean) {
 fun MessageInput(
     value: String,
     onValueChange: (String) -> Unit,
-    onSendClick: () -> Unit
+    onSendClick: () -> Unit,
+    onMicClick: () -> Unit
 ) {
     Surface(shadowElevation = 8.dp) {
         Row(
@@ -196,7 +223,15 @@ fun MessageInput(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                )
+                ),
+                trailingIcon = {
+                    IconButton(onClick = onMicClick) {
+                        Icon(
+                            Icons.Default.Mic,
+                            contentDescription = "Transcribir voz a texto"
+                        )
+                    }
+                }
             )
             Spacer(modifier = Modifier.width(8.dp))
 
