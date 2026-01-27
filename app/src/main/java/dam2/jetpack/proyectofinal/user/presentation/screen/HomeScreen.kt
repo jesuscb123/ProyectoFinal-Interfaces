@@ -1,6 +1,5 @@
 package dam2.jetpack.proyectofinal.user.presentation.screen
 
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -8,11 +7,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -374,37 +371,7 @@ fun ResolveEventDialog(
 }
 
 
-@Composable
-fun CreatorChip() {
-    Box(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.tertiaryContainer, RoundedCornerShape(50))
-            .padding(horizontal = 12.dp, vertical = 6.dp)
-    ) {
-        Text(
-            text = "TU EVENTO",
-            color = MaterialTheme.colorScheme.onTertiaryContainer,
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
 
-@Composable
-fun StatusChip() {
-    Box(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.errorContainer, RoundedCornerShape(50))
-            .padding(horizontal = 12.dp, vertical = 6.dp)
-    ) {
-        Text(
-            text = "PENDIENTE",
-            color = MaterialTheme.colorScheme.onErrorContainer,
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
 
 @Composable
 fun EmptyState() {
@@ -479,7 +446,7 @@ fun InfoPill(
 }
 
 @Composable
-fun CreatorChipV2() {
+fun CreatorChip() {
     val scheme = MaterialTheme.colorScheme
     Surface(
         color = scheme.tertiaryContainer,
@@ -502,7 +469,7 @@ fun CreatorChipV2() {
 }
 
 @Composable
-fun PendingChipV2() {
+fun PendingChip() {
     val scheme = MaterialTheme.colorScheme
     Surface(
         color = scheme.errorContainer,

@@ -34,9 +34,9 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import dam2.jetpack.proyectofinal.events.domain.model.Event
 import dam2.jetpack.proyectofinal.user.presentation.screen.AcceptedChip
-import dam2.jetpack.proyectofinal.user.presentation.screen.CreatorChipV2
+import dam2.jetpack.proyectofinal.user.presentation.screen.CreatorChip
 import dam2.jetpack.proyectofinal.user.presentation.screen.InfoPill
-import dam2.jetpack.proyectofinal.user.presentation.screen.PendingChipV2
+import dam2.jetpack.proyectofinal.user.presentation.screen.PendingChip
 import dam2.jetpack.proyectofinal.user.presentation.screen.formatToString
 import dam2.jetpack.proyectofinal.user.presentation.screen.toIcon
 
@@ -121,9 +121,9 @@ fun EventItem(
                     }
 
                     when {
-                        isCreator -> CreatorChipV2()
+                        isCreator -> CreatorChip()
                         event.userAccept != null -> AcceptedChip(userAccept = event.userAccept)
-                        else -> PendingChipV2()
+                        else -> PendingChip()
                     }
                 }
             }

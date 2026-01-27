@@ -1,5 +1,4 @@
 package dam2.jetpack.proyectofinal.user.presentation.screen
-import androidx.compose.animation.core.copy
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -198,7 +196,7 @@ fun EventItemCreated(
                     when {
                         event.resuelto -> ResolvedChip()
                         event.userAccept != null -> InProgressChip() // aceptado, pendiente de resolver
-                        else -> PendingChipV2() // nadie lo aceptó aún
+                        else -> PendingChip() // nadie lo aceptó aún
                     }
                 }
             }
