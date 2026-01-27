@@ -490,9 +490,18 @@ La elección de estas herramientas está justificada por su uso profesional en p
 
 ### Dónde ocurre en el proyecto
 - Componentes visuales: paquete `core.components.navigation`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/BottomNavItem.kt#L5-L19
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L43-L201
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventsStatsChart.kt#L18-L77
 - Uso de Material 3: en todas las pantallas (`MaterialTheme`)
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L21-L30
 - Arquitectura y estado: `ViewModel`, `StateFlow`
-
+  - AuthViewModel
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/auth/presentation/viewmodel/AuthViewModel.kt#L17-L113
+    - EventViewModel
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/events/presentation/viewModel/EventViewModel.kt#L26-L355
+    - UserViewModel
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/viewmodel/UserViewModel.kt#L19-L117
 ---
 
 ## RA3.b — Componentes reutilizables
@@ -511,13 +520,13 @@ Estos componentes están diseñados para ser independientes, legibles y fácilme
 
 ### Dónde ocurre en el proyecto
 - Componentes reutilizables:  
-  - `core.components.navigation.EventItem`  
-  - `user.presentation.screen.InfoPill`  
+  - `core.components.navigation.EventItem`
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L43-L201
+  - `user.presentation.screen.InfoPill`
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L450-L479
   - `user.presentation.screen.*Chip`
-- Uso en múltiples pantallas:
-  - `HomeScreen`
-  - `EventsUserScreen`
-  - `EventsUserCreateScreen`
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L377-L407
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L481-L549
 
 ---
 
@@ -538,6 +547,8 @@ Este enfoque garantiza un uso consistente de los componentes y evita errores der
 
 ### Dónde ocurre en el proyecto
 - Definición de parámetros: archivos de componentes (`EventItem.kt`, `InfoPill.kt`)
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L43-L49
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L451-L454
 - Uso consistente en distintas pantallas
 
 ---
