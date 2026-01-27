@@ -52,8 +52,7 @@ fun HomeScreen(
 
     val isAdmin = userState.user?.rol == Rol.ADMIN
 
-    // ✅ CLAVE: cada vez que vuelves a la pantalla, incrementamos esto
-    // y así se recrean los SwipeState de los items (se “desbloquean”).
+
     var swipeResetKey by remember { mutableIntStateOf(0) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
