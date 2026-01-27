@@ -166,7 +166,7 @@ fun SwipeableEventItem(
     navController: NavController,
     onDelete: (Event) -> Unit,
     onClick: () -> Unit,
-    resetKey: Int // ✅ nuevo
+    resetKey: Int
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -179,7 +179,7 @@ fun SwipeableEventItem(
             confirmValueChange = { dismissValue ->
                 if (dismissValue == SwipeToDismissBoxValue.EndToStart && isAdmin) {
                     showDeleteDialog = true
-                    resetSwipe = true  // 👈 pedimos reset visual
+                    resetSwipe = true
                     false
                 } else {
                     false
