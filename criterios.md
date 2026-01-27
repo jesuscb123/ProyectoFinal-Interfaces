@@ -301,9 +301,14 @@ El resultado es una aplicación completa, coherente y funcional, sin secciones a
 
 ### Dónde ocurre en el código
 - Integración global: `MainActivity.kt`
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L68-L390
 - Control de rol admin: `bottomItems(isAdmin)` y `adminScreen`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L95-L103
+  
 - Flujo eventos-puntos: `markEventAsResolved` + `ViewPointsUserScreen.kt`
-
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/events/presentation/viewModel/EventViewModel.kt#L305-L355
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/ViewPointsUser.kt#L45-L204
+  
 ### Evidencias
 - Capturas de navegación completa
 - Captura de puntos actualizados
@@ -337,7 +342,11 @@ La selección y análisis de estas herramientas se ha realizado teniendo en cuen
 
 ### Dónde ocurre en el proyecto
 - Reconocimiento de voz: `ChatScreen.kt`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/chat/presentation/screen/ChatScreen.kt#L79-L97
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/chat/presentation/screen/ChatScreen.kt#L136-L150
 - Gestos táctiles: `HomeScreen.kt` (Swipe para eliminar eventos)
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L117-L136
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L160-L263
 - Análisis teórico: documentación del proyecto
 
 ---
@@ -361,8 +370,10 @@ El diseño conceptual se ha aplicado de forma transversal en distintas pantallas
 
 ### Dónde ocurre en el proyecto
 - Chat por voz: `ChatScreen.kt`
+   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/chat/presentation/screen/ChatScreen.kt#L79-L97
 - Gestos administrativos: `HomeScreen.kt`
-- Diseño conceptual descrito en el README
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L117-L136
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L160-L263
 
 ---
 
@@ -385,9 +396,11 @@ Esta implementación mejora la accesibilidad, reduce el tiempo de interacción y
 ### Dónde ocurre en el proyecto
 - `ChatScreen.kt`
   - Inicialización del reconocimiento de voz
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/chat/presentation/screen/ChatScreen.kt#L79-L97
   - Gestión de resultados
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/chat/presentation/screen/ChatScreen.kt#L85-L87
   - Inserción del texto en el campo de entrada
-
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/chat/presentation/screen/ChatScreen.kt#L137-L150
 ---
 
 ## RA2.d — Interacción por gesto
@@ -406,9 +419,13 @@ Para evitar errores, el gesto está acompañado de un **diálogo de confirmació
 ### Dónde ocurre en el proyecto
 - `HomeScreen.kt`
   - `SwipeableEventItem`
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L117-L132
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L160-L263
   - `SwipeToDismissBox`
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L238-L263
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L267-L298
   - Diálogo de confirmación
-
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L198-L236
 ---
 
 ## RA2.e — Detección facial / corporal
