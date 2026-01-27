@@ -173,7 +173,7 @@ Este enfoque permite cambiar la fuente de datos sin afectar al resto del sistema
 
 ### Dónde ocurre en el código
 - `presentation/*`
-- 
+  
   <img width="232" height="612" alt="image" src="https://github.com/user-attachments/assets/c4e6f215-f4a3-4952-a61d-12da9f31cb66" />
 
 - `domain/usecase/*`
@@ -182,10 +182,60 @@ Este enfoque permite cambiar la fuente de datos sin afectar al resto del sistema
     https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/98d5dd248751aba00763fff4fcbb3ce26ce93e90/app/src/main/java/dam2/jetpack/proyectofinal/user/domain/usecase/GetAllUsersUseCase.kt#L8-L32
     - GetUserEmailUseCase
       https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/98d5dd248751aba00763fff4fcbb3ce26ce93e90/app/src/main/java/dam2/jetpack/proyectofinal/user/domain/usecase/GetUserByEmailUseCase.kt#L7-L35
+    - GetUserByFirebaseUidUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/user/domain/usecase/GetUserByFirebaseUidUseCase.kt#L7-L35
+    - SaveUserUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/user/domain/usecase/SaveUserUseCase.kt#L7-L29
+  - Event
+    - AcceptEventUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/AcceptEventUseCase.kt#L8-L30
+    - CreateEventUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/CreateEventUseCase.kt#L7-L29
+    - DeleteEventUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/DeleteEventUseCase.kt#L6-L38
+    - GetAllEventsUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/GetAllEventsUseCase.kt#L8-L31
+    - GetEventByIdUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/GetEventByIdUseCase.kt#L7-L34
+    - GetEventStatsUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/GetEventStatsUseCase.kt#L5-L30
+    - GetEventsUserCreateUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/GetEventsUserCreateUseCase.kt#L8-L32
+    - GetEventsUserUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/GetEventsUserUseCase.kt#L8-L31
 
+  - Chat
+    - ListenMessageUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/chat/domain/usecase/ListenMessagesUseCase.kt#L8-L30
+    - SendMessageUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/chat/domain/usecase/SendMessageUseCase.kt#L6-L28
+
+  - Auth
+    - LogOutUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/auth/domain/useCase/LogOutUseCase.kt#L6-L37
+    - LoginUseCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/auth/domain/useCase/LoginUseCase.kt#L8-L51
+    - RegisterUseDCase
+      https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/auth/domain/useCase/RegisterUseCase.kt#L10-L53
 - `domain/repository/*`
+  - User:
+  - UserRepository (interfaz)
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/user/domain/repository/UserRepository.kt#L7-L45
+  - EventRepository (interfaz)
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/repository/EventRepository.kt#L6-L75
+  - ChatRepository (interfaz)
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/chat/domain/repository/ChatRepository.kt#L6-L30
+  - AuthRepository (interfaz)
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/auth/domain/repository/AuthRepository.kt#L6-L50
 - `data/repository/*`
-
+  - UserRepositoryImpl (implementación)
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/user/data/repository/UserRepositoryImpl.kt#L12-L73
+  - EventRepositoryImpl (implementación)
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/data/repository/EventRepositoryImpl.kt#L14-L118
+  - ChatRepositoryImpl (implementación)
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/chat/data/repository/ChatRepositoryImpl.kt#L15-L119
+  - AuthRepository (implementación)
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/auth/data/repository/AuthRepositoryImpl.kt#L10-L94
 ### Evidencias
 - Diagrama de arquitectura
 - Captura del árbol de paquetes
@@ -204,9 +254,13 @@ Todas las modificaciones están justificadas por necesidades funcionales reales 
 
 ### Dónde ocurre en el código
 - Voz: `ChatScreen.kt`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/chat/presentation/screen/ChatScreen.kt#L52-L250
 - Swipe admin: `HomeScreen.kt` → `SwipeableEventItem`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L117-L131
 - Estadísticas: `EventDao.kt`, `EventRepositoryImpl.kt`, `AdminScreen.kt`
-
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L74-L84
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/data/repository/EventRepositoryImpl.kt#L104-L118
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/AdminScreen.kt#L123-L181
 ### Evidencias
 - Capturas de las funcionalidades añadidas
 - Fragmentos de código modificados
@@ -223,9 +277,13 @@ Las acciones tienen consecuencias directas en los datos persistidos (estado del 
 
 ### Dónde ocurre en el código
 - `EventViewModel.kt` → `acceptEvent`, `cancelAcceptance`, `markEventAsResolved`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/presentation/viewModel/EventViewModel.kt#L228-L248
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/presentation/viewModel/EventViewModel.kt#L250-L262
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/presentation/viewModel/EventViewModel.kt#L305-L354
 - `ChatRepositoryImpl.kt` → generación de `chatId`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/chat/data/repository/ChatRepositoryImpl.kt#L27-L40
 - Navegación al chat desde `EventItem.kt`
-
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L161-L196
 ### Evidencias
 - Capturas de diálogos y chat asociado a eventos
 
