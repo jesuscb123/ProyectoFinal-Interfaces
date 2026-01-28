@@ -114,4 +114,9 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun clearUser() {
+        _uiState.value = _uiState.value.copy(user = null)
+    }
+
+
 }

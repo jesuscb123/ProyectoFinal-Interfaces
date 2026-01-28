@@ -180,15 +180,17 @@ fun IniciarApp(
 
     val authState by authViewModel.uiState.collectAsState()
     val userState by userViewModel.uiState.collectAsState()
+    val firebaseUid = FirebaseAuth.getInstance().currentUser?.uid
 
     val isAdmin = userState.user?.rol == Rol.ADMIN
-    Log.d("USERS ADMIN", isAdmin.toString())
 
     val startDestination = if (FirebaseAuth.getInstance().currentUser != null) "home" else "auth"
 
-    LaunchedEffect(Unit) {
-        FirebaseAuth.getInstance().currentUser?.uid?.let {
-            userViewModel.getUserByFirebaseUid(it)
+    LaunchedEffect(firebaseUid) {
+        if (firebaseUid != null) {
+            userViewModel.getUserByFirebaseUid(firebaseUid)
+        } else {
+            userViewModel.clearUser()
         }
     }
 
@@ -305,6 +307,7 @@ fun IniciarApp(
                             if (currentRoute == "home") {
                                 IconButton(onClick = {
                                     authViewModel.logOut()
+                                    userViewModel.clearUser()
                                     navController.navigate("auth") {
                                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
                                     }

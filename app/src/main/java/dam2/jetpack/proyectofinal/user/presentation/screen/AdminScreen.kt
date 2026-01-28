@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,6 +32,8 @@ import java.util.Date
 import java.util.Locale
 // NOTA: Asegúrate de que EventStatsChart está en el paquete correcto o impórtalo aquí
 import dam2.jetpack.proyectofinal.core.components.navigation.EventStatsChart
+import dam2.jetpack.proyectofinal.core.utils.PdfUtils
+import dam2.jetpack.proyectofinal.core.utils.ShareUtils
 
 /**
  * Pantalla de administración con dos secciones: Lista de usuarios y Estadísticas de eventos.
@@ -51,7 +54,6 @@ fun AdminScreen(
     val userState by userViewModel.uiState.collectAsState()
     val eventState by eventViewModel.uiState.collectAsState()
 
-    // --- CAMBIO 3: Cargar los datos de ambos ViewModels ---
     LaunchedEffect(Unit) {
         userViewModel.loadUsers()
         eventViewModel.loadEventStats() // Cargar estadísticas de eventos
@@ -59,6 +61,8 @@ fun AdminScreen(
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf("Usuarios", "Estadísticas")
+
+    val context = LocalContext.current
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -75,16 +79,19 @@ fun AdminScreen(
                 }
             }
 
-            // --- CAMBIO 4: Usar el estado correcto para cada vista ---
             when (selectedTabIndex) {
                 0 -> UserListContent(userState.users)
                 1 -> StatsContent(
                     // Pasamos el estado de eventos
                     uiState = eventState,
                     onGenerateReport = {
-                        // Usamos los datos del estado de eventos para el informe
-                        val report = generateReport(eventState.completedEventsCount, eventState.acceptedEventsCount)
-                        android.util.Log.i("AdminReport", report)
+                        val report = generateReport(
+                            eventState.completedEventsCount,
+                            eventState.acceptedEventsCount
+                        )
+
+                        val pdf = PdfUtils.createPdfReport(context, report)
+                        ShareUtils.sharePdf(context, pdf)
                     }
                 )
             }
@@ -128,7 +135,6 @@ private fun UserListContent(users: List<User>) {
  */
 @Composable
 private fun StatsContent(
-    // --- CAMBIO 5: La firma de la función ahora espera EventUiState ---
     uiState: EventUiState,
     onGenerateReport: () -> Unit
 ) {
@@ -160,7 +166,6 @@ private fun StatsContent(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // El gráfico ahora usa los datos de EventUiState
         EventStatsChart(
             completedCount = uiState.completedEventsCount,
             acceptedCount = uiState.acceptedEventsCount
@@ -210,9 +215,7 @@ private fun generateReport(completed: Int, accepted: Int): String {
 }
 
 
-// --- COMPOSABLES QUE YA TENÍAS (Sin cambios) ---
-// UserListItem, AdminChip y EmptyState se mantienen igual.
-// ... (El resto de tu código para UserListItem, AdminChip, EmptyState va aquí)
+
 @Composable
 fun UserListItem(
     user: User,
