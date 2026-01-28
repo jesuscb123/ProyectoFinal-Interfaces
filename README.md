@@ -40,3 +40,5 @@ La app es creada para android nativo:
 - **Servicios en la Nube (Backend)**: Se apoya en Firebase para dos tareas críticas:
     - **Firebase Authentication**: Para un sistema de login seguro.
     - **Cloud Firestore**: Para permitir un chat entre usuarios.
+#### Criterios
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/criterios.md

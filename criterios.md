@@ -572,8 +572,13 @@ La interacción es fluida, coherente y consistente en toda la aplicación.
 
 ### Dónde ocurre en el proyecto
 - Callbacks en `EventItem`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L48
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L71-L75
 - Eventos en `SwipeableEventItem`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L158-L166
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L113-L132
 - Diálogos de acción en `EventActionDialog`
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L140-L145
 
 ---
 
@@ -596,8 +601,6 @@ Esta documentación facilita la comprensión del proyecto, su mantenimiento y su
   - Casos de uso
   - ViewModels
   - Componentes reutilizables
-- README del proyecto
-
 ---
 
 ## RA3.h — Integración de componentes en la app
@@ -616,6 +619,7 @@ Este enfoque refuerza la identidad visual de la aplicación y reduce la duplicac
 ### Dónde ocurre en el proyecto
 - Integración en:
   - `HomeScreen`
+  PENDIENTE
   - `EventsUserScreen`
   - `AdminScreen`
   - `ViewPointsUserScreen`
@@ -659,8 +663,12 @@ Estas decisiones están justificadas por criterios de usabilidad, frecuencia de 
 
 ### Dónde ocurre en el proyecto
 - Barra inferior dinámica en `MainActivity.kt`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L86-L147
 - Pantalla de administración exclusiva para administradores
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L102
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/AdminScreen.kt#L35-L314
 - FAB solo visible en la pantalla principal
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L235-L244
 
 ---
 
@@ -677,7 +685,9 @@ Los menús se adaptan al estado de la aplicación (por ejemplo, ocultando la bar
 
 ### Dónde ocurre en el proyecto
 - `AppBottomBar` en `MainActivity.kt`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L86-L147
 - `NavHost` con rutas bien definidas
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L329-L390
 - Ocultación condicional del menú inferior en pantalla de chat
 
 ---
@@ -695,6 +705,7 @@ La distribución evita sobrecargar la interfaz y guía al usuario de forma natur
 
 ### Dónde ocurre en el proyecto
 - FAB en `HomeScreen`
+  
 - Botones de acción en `EventItem`, `AdminScreen`
 - Swipe para acciones administrativas
 
