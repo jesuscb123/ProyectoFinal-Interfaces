@@ -645,8 +645,12 @@ El uso de `MaterialTheme`, `Surface`, `Card`, `Button`, `NavigationBar` y `TopAp
 
 ### Dónde ocurre en el proyecto
 - Uso global de `MaterialTheme` en todas las pantallas
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/7770661ebb48559904219b4939d5320a7272a971/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L137-L143
 - Componentes Material en `HomeScreen`, `AdminScreen`, `ChatScreen`, etc.
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/7770661ebb48559904219b4939d5320a7272a971/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L201-L204
 - Tema definido en `ProyectoFinalTheme`
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/7770661ebb48559904219b4939d5320a7272a971/app/src/main/java/dam2/jetpack/proyectofinal/ui/theme/Theme.kt#L41-L62 
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/7770661ebb48559904219b4939d5320a7272a971/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L205
 
 ---
 
@@ -705,10 +709,12 @@ La distribución evita sobrecargar la interfaz y guía al usuario de forma natur
 
 ### Dónde ocurre en el proyecto
 - FAB en `HomeScreen`
-  
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L239-L244
 - Botones de acción en `EventItem`, `AdminScreen`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L165-L184
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/AdminScreen.kt#L84-L95
 - Swipe para acciones administrativas
-
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L158-L165
 ---
 
 ## RA4.e — Distribución de controles
@@ -724,7 +730,10 @@ Se aplica una jerarquía visual clara que permite escanear la pantalla rápidame
 
 ### Dónde ocurre en el proyecto
 - Uso de `Column`, `Row`, `Spacer` en todas las pantallas
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L76-L96
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L390-L396
 - Tarjetas (`Card`) como contenedores principales
+  
 - Componentes agrupados por función
 
 ---
