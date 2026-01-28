@@ -692,7 +692,6 @@ Los menús se adaptan al estado de la aplicación (por ejemplo, ocultando la bar
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L86-L147
 - `NavHost` con rutas bien definidas
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L329-L390
-- Ocultación condicional del menú inferior en pantalla de chat
 
 ---
 
@@ -732,10 +731,7 @@ Se aplica una jerarquía visual clara que permite escanear la pantalla rápidame
 - Uso de `Column`, `Row`, `Spacer` en todas las pantallas
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L76-L96
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L390-L396
-- Tarjetas (`Card`) como contenedores principales
   
-- Componentes agrupados por función
-
 ---
 
 ## RA4.f — Elección de controles
