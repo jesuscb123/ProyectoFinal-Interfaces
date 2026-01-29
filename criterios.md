@@ -767,6 +767,7 @@ La interfaz resulta moderna, legible y agradable para el usuario.
 
 ### Dónde ocurre en el proyecto
 - Animaciones en `HomeScreen` y `EventsUserScreen`
+  PANTALLAZO
 - Chips de estado con colores semánticos
 - Tema global definido en `ProyectoFinalTheme`
 
@@ -785,8 +786,9 @@ Esto reduce errores y mejora la experiencia general.
 
 ### Dónde ocurre en el proyecto
 - `EmptyState`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L375-L414
 - `AlertDialog` de confirmación
-- Textos dinámicos en eventos y chat
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L349-L370
 
 ---
 
@@ -805,7 +807,7 @@ Estas pruebas han permitido ajustar la distribución de acciones y mejorar la cl
 - Correcciones de navegación en `MainActivity`
 - Ajustes de visibilidad según rol
 - Mejora de estados vacíos y feedback visual
-
+PANTALLAZOS
 ---
 
 ## RA4.j — Evaluación en distintos dispositivos
@@ -840,13 +842,15 @@ Esta separación permite mantener el código limpio, escalable y fácilmente amp
 
 Ubicación en el código:
 - EventDao.kt
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L74-L84
 - EventRepository.kt / EventRepositoryImpl.kt
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/events/data/repository/EventRepositoryImpl.kt#L104-L118
 - GetEventStatsUseCase.kt
-- EventViewModel.kt
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/GetEventStatsUseCase.kt#L5-L30  
 - EventStatsChart.kt
-
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventsStatsChart.kt#L18-L77
 ---
-
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/AdminScreen.kt#L130-L187
 ### RA5.b – Genera informes a partir de fuentes de datos
 
 El informe se genera a partir de datos reales almacenados en la base de datos local (Room).  
@@ -858,8 +862,8 @@ Ubicación en el código:
 - EventDao.kt (consultas COUNT sobre la tabla events)
 - EventRepositoryImpl.kt (obtención de los datos)
 - GetEventStatsUseCase.kt (exposición de los datos al ViewModel)
-
 ---
+PANTALLAZO
 
 ### RA5.c – Establece filtros sobre los valores a presentar
 
@@ -873,7 +877,7 @@ Estos filtros se aplican directamente en la base de datos, asegurando eficiencia
 
 Ubicación en el código:
 - EventDao.kt (condiciones WHERE en las consultas SQL)
-
+PANTALLAZO
 ---
 
 ### RA5.d – Incluye valores calculados, recuentos o totales
@@ -885,6 +889,8 @@ Además de los recuentos obtenidos desde la base de datos, la interfaz calcula t
 Ubicación en el código:
 - EventRepositoryImpl.kt (recuento de eventos)
 - EventStatsChart.kt (cálculo de totales y porcentajes)
+
+  PANTALLAZO
 
 ---
 
@@ -898,7 +904,7 @@ El gráfico se actualiza automáticamente cuando cambian los datos, ofreciendo u
 Ubicación en el código:
 - EventStatsChart.kt (componente gráfico)
 - AdminScreen.kt (integración del gráfico en la interfaz)
-
+PANTALLAZO
 
 ## RA6 – Sistemas de ayuda y documentación
 
@@ -916,8 +922,6 @@ Ubicación en el código:
 - Composables `EmptyState` utilizados en varias pantallas.
 - Uso de `AlertDialog` para confirmar acciones críticas.
 - Comentarios KDoc en entidades, repositorios, casos de uso y ViewModels.
-
----
 
 ### RA6.b – Genera ayudas en formatos habituales
 
