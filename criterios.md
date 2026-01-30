@@ -877,6 +877,7 @@ Estos filtros se aplican directamente en la base de datos, asegurando eficiencia
 
 Ubicación en el código:
 - EventDao.kt (condiciones WHERE en las consultas SQL)
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/a55207aeebf1001ff3f106586f761fb6dd878358/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L74-L83
 PANTALLAZO
 ---
 
