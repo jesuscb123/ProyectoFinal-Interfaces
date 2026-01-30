@@ -767,7 +767,10 @@ La interfaz resulta moderna, legible y agradable para el usuario.
 
 ### Dónde ocurre en el proyecto
 - Animaciones en `HomeScreen` y `EventsUserScreen`
-  PANTALLAZO
+  
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/555d954f-308f-47b1-a3e6-a09f4bfc8301" />
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/244cb6b2-9fb9-4630-9e83-f033023397eb" />
+
 - Chips de estado con colores semánticos
 - Tema global definido en `ProyectoFinalTheme`
 
@@ -787,8 +790,16 @@ Esto reduce errores y mejora la experiencia general.
 ### Dónde ocurre en el proyecto
 - `EmptyState`
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L375-L414
+  
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/237878e6-753e-4f70-af11-0caf9469d4df" />
+
 - `AlertDialog` de confirmación
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L349-L370
+  
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/a7140c63-a007-44fe-aab9-bea4c273074c" />
+
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/2dcd1ef8-ebd2-48f4-aa26-105db9341316" />
+
 
 ---
 
@@ -807,7 +818,6 @@ Estas pruebas han permitido ajustar la distribución de acciones y mejorar la cl
 - Correcciones de navegación en `MainActivity`
 - Ajustes de visibilidad según rol
 - Mejora de estados vacíos y feedback visual
-PANTALLAZOS
 ---
 
 ## RA4.j — Evaluación en distintos dispositivos
@@ -863,7 +873,7 @@ Ubicación en el código:
 - EventRepositoryImpl.kt (obtención de los datos)
 - GetEventStatsUseCase.kt (exposición de los datos al ViewModel)
 ---
-PANTALLAZO
+
 
 ### RA5.c – Establece filtros sobre los valores a presentar
 
@@ -872,13 +882,15 @@ El informe aplica filtros claros sobre los datos presentados, diferenciando los 
 Los filtros utilizados son:
 - Eventos completados.
 - Eventos aceptados pero no resueltos.
-
+- Eventos creados por el usuario.
 Estos filtros se aplican directamente en la base de datos, asegurando eficiencia y coherencia en la información mostrada.
 
 Ubicación en el código:
 - EventDao.kt (condiciones WHERE en las consultas SQL)
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/a55207aeebf1001ff3f106586f761fb6dd878358/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L74-L83
-PANTALLAZO
+  
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/aa5d6523-cd7e-4850-8cc4-fff832045076" />
+
 ---
 
 ### RA5.d – Incluye valores calculados, recuentos o totales
