@@ -645,8 +645,12 @@ El uso de `MaterialTheme`, `Surface`, `Card`, `Button`, `NavigationBar` y `TopAp
 
 ### Dónde ocurre en el proyecto
 - Uso global de `MaterialTheme` en todas las pantallas
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/7770661ebb48559904219b4939d5320a7272a971/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L137-L143
 - Componentes Material en `HomeScreen`, `AdminScreen`, `ChatScreen`, etc.
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/7770661ebb48559904219b4939d5320a7272a971/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L201-L204
 - Tema definido en `ProyectoFinalTheme`
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/7770661ebb48559904219b4939d5320a7272a971/app/src/main/java/dam2/jetpack/proyectofinal/ui/theme/Theme.kt#L41-L62 
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/7770661ebb48559904219b4939d5320a7272a971/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L205
 
 ---
 
@@ -688,7 +692,6 @@ Los menús se adaptan al estado de la aplicación (por ejemplo, ocultando la bar
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L86-L147
 - `NavHost` con rutas bien definidas
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d03ee736cd3e920fe80694b2b7944e9b6ebcb2eb/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L329-L390
-- Ocultación condicional del menú inferior en pantalla de chat
 
 ---
 
@@ -705,10 +708,12 @@ La distribución evita sobrecargar la interfaz y guía al usuario de forma natur
 
 ### Dónde ocurre en el proyecto
 - FAB en `HomeScreen`
-  
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L239-L244
 - Botones de acción en `EventItem`, `AdminScreen`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L165-L184
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/AdminScreen.kt#L84-L95
 - Swipe para acciones administrativas
-
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L158-L165
 ---
 
 ## RA4.e — Distribución de controles
@@ -724,9 +729,9 @@ Se aplica una jerarquía visual clara que permite escanear la pantalla rápidame
 
 ### Dónde ocurre en el proyecto
 - Uso de `Column`, `Row`, `Spacer` en todas las pantallas
-- Tarjetas (`Card`) como contenedores principales
-- Componentes agrupados por función
-
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L76-L96
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fd6eb8662e40c99b7f5147011b90163e46bca5b2/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L390-L396
+  
 ---
 
 ## RA4.f — Elección de controles
@@ -762,6 +767,10 @@ La interfaz resulta moderna, legible y agradable para el usuario.
 
 ### Dónde ocurre en el proyecto
 - Animaciones en `HomeScreen` y `EventsUserScreen`
+  
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/555d954f-308f-47b1-a3e6-a09f4bfc8301" />
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/244cb6b2-9fb9-4630-9e83-f033023397eb" />
+
 - Chips de estado con colores semánticos
 - Tema global definido en `ProyectoFinalTheme`
 
@@ -780,8 +789,17 @@ Esto reduce errores y mejora la experiencia general.
 
 ### Dónde ocurre en el proyecto
 - `EmptyState`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L375-L414
+  
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/237878e6-753e-4f70-af11-0caf9469d4df" />
+
 - `AlertDialog` de confirmación
-- Textos dinámicos en eventos y chat
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L349-L370
+  
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/a7140c63-a007-44fe-aab9-bea4c273074c" />
+
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/2dcd1ef8-ebd2-48f4-aa26-105db9341316" />
+
 
 ---
 
@@ -800,7 +818,6 @@ Estas pruebas han permitido ajustar la distribución de acciones y mejorar la cl
 - Correcciones de navegación en `MainActivity`
 - Ajustes de visibilidad según rol
 - Mejora de estados vacíos y feedback visual
-
 ---
 
 ## RA4.j — Evaluación en distintos dispositivos
@@ -835,13 +852,15 @@ Esta separación permite mantener el código limpio, escalable y fácilmente amp
 
 Ubicación en el código:
 - EventDao.kt
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L74-L84
 - EventRepository.kt / EventRepositoryImpl.kt
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/events/data/repository/EventRepositoryImpl.kt#L104-L118
 - GetEventStatsUseCase.kt
-- EventViewModel.kt
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/GetEventStatsUseCase.kt#L5-L30  
 - EventStatsChart.kt
-
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventsStatsChart.kt#L18-L77
 ---
-
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/b559dbd366ca6b76bbc1391f17179560288c6656/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/AdminScreen.kt#L130-L187
 ### RA5.b – Genera informes a partir de fuentes de datos
 
 El informe se genera a partir de datos reales almacenados en la base de datos local (Room).  
@@ -853,8 +872,8 @@ Ubicación en el código:
 - EventDao.kt (consultas COUNT sobre la tabla events)
 - EventRepositoryImpl.kt (obtención de los datos)
 - GetEventStatsUseCase.kt (exposición de los datos al ViewModel)
-
 ---
+
 
 ### RA5.c – Establece filtros sobre los valores a presentar
 
@@ -863,11 +882,14 @@ El informe aplica filtros claros sobre los datos presentados, diferenciando los 
 Los filtros utilizados son:
 - Eventos completados.
 - Eventos aceptados pero no resueltos.
-
+- Eventos creados por el usuario.
 Estos filtros se aplican directamente en la base de datos, asegurando eficiencia y coherencia en la información mostrada.
 
 Ubicación en el código:
 - EventDao.kt (condiciones WHERE en las consultas SQL)
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/a55207aeebf1001ff3f106586f761fb6dd878358/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L74-L83
+  
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/aa5d6523-cd7e-4850-8cc4-fff832045076" />
 
 ---
 
@@ -881,6 +903,8 @@ Ubicación en el código:
 - EventRepositoryImpl.kt (recuento de eventos)
 - EventStatsChart.kt (cálculo de totales y porcentajes)
 
+  PANTALLAZO
+
 ---
 
 ### RA5.e – Incluye gráficos generados a partir de los datos
@@ -893,7 +917,7 @@ El gráfico se actualiza automáticamente cuando cambian los datos, ofreciendo u
 Ubicación en el código:
 - EventStatsChart.kt (componente gráfico)
 - AdminScreen.kt (integración del gráfico en la interfaz)
-
+PANTALLAZO
 
 ## RA6 – Sistemas de ayuda y documentación
 
@@ -911,8 +935,6 @@ Ubicación en el código:
 - Composables `EmptyState` utilizados en varias pantallas.
 - Uso de `AlertDialog` para confirmar acciones críticas.
 - Comentarios KDoc en entidades, repositorios, casos de uso y ViewModels.
-
----
 
 ### RA6.b – Genera ayudas en formatos habituales
 
