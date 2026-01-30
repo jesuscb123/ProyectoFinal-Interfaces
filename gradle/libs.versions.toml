@@ -11,6 +11,10 @@ composeBom = "2024.09.00"
 playServicesAuth = "21.4.0"
 services = "4.4.4"
 okhttp = "4.12.0"
+coroutines-test = "1.8.1"
+mockk = "1.13.12"
+turbine = "1.1.0"
+truth = "1.4.2"
 
 # --- Versiones añadidas ---
 # Versión para Firebase BoM
@@ -93,6 +97,12 @@ androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+
+#TEST
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines-test" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
