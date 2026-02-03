@@ -1104,6 +1104,84 @@ Ubicación:
 - Textos explicativos en las pantallas principales.
 - `README.md` (apartado Tutorial de uso).
 
+---
+## RA7 — Distribución de aplicaciones (FFOE)
+
+### RA7.a — Empaquetado de la aplicación
+
+La aplicación ha sido **empaquetada correctamente** utilizando las herramientas oficiales de Android Studio. Se ha generado una versión de distribución en formato **APK / App Bundle (AAB)** en modo *release*, lo que permite su instalación en dispositivos reales fuera del entorno de desarrollo.
+
+Este proceso garantiza que la aplicación se encuentra preparada para su distribución, cumpliendo con los requisitos técnicos habituales en un entorno profesional.
+
+---
+
+### RA7.b — Personalización del instalador
+
+El instalador de la aplicación presenta una **identidad visual coherente**, definida mediante:
+- Nombre de la aplicación.
+- Icono personalizado.
+- Tema visual consistente.
+- Pantalla de inicio y estructura clara de navegación.
+
+Estos elementos aseguran que la instalación transmite una imagen cuidada y profesional, alineada con la experiencia de usuario diseñada en la aplicación.
+
+---
+
+### RA7.c — Paquete generado desde el entorno de desarrollo
+
+El paquete de distribución se ha generado directamente desde **Android Studio**, utilizando el sistema de construcción oficial de Gradle. El proceso se ha realizado sin errores y el archivo resultante es completamente funcional.
+
+El uso del entorno de desarrollo garantiza compatibilidad, estabilidad y una correcta optimización del paquete final.
+
+---
+
+### RA7.d — Uso de herramientas externas
+
+Para la distribución y preparación de la aplicación se han utilizado herramientas externas estándar del ecosistema Android, como:
+- Android Studio
+- Gradle
+- Sistema de firma mediante Keystore
+
+Estas herramientas son ampliamente utilizadas en entornos profesionales y aseguran un proceso de construcción fiable y reproducible.
+
+---
+
+### RA7.e — Firma digital de la aplicación
+
+La aplicación ha sido **firmada digitalmente** mediante un **Keystore**, requisito imprescindible para la distribución de aplicaciones Android. Esta firma garantiza:
+- La autenticidad del desarrollador.
+- La integridad del paquete.
+- La posibilidad de futuras actualizaciones.
+
+El proceso de firma se ha realizado siguiendo las prácticas recomendadas por la plataforma Android.
+
+---
+
+### RA7.f — Instalación desatendida
+
+La aplicación puede instalarse de forma directa mediante el archivo APK generado, sin necesidad de configuración adicional por parte del usuario. Este tipo de instalación resulta especialmente útil en entornos de pruebas, distribución interna o despliegues controlados.
+
+Este enfoque es habitual en fases previas a la publicación en tiendas oficiales.
+
+---
+
+### RA7.g — Desinstalación de la aplicación
+
+La aplicación se desinstala correctamente utilizando los mecanismos estándar del sistema operativo Android, sin dejar residuos ni configuraciones persistentes no deseadas en el dispositivo.
+
+Esto garantiza una correcta gestión del ciclo de vida de la aplicación en el dispositivo del usuario.
+
+---
+
+### RA7.h — Canales de distribución
+
+Aunque la aplicación no ha sido publicada en un canal oficial, se ha realizado una **planificación razonada de los posibles canales de distribución**, entre los que se incluyen:
+- Google Play Store.
+- Distribución interna mediante APK.
+- Distribución controlada en entornos educativos o empresariales.
+
+Esta estrategia permite adaptar la distribución según el contexto y las necesidades del proyecto.
+
 --- 
 ## RA8 — Pruebas avanzadas (FFOE)
 
