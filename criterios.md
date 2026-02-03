@@ -1066,7 +1066,7 @@ En este manual se explica:
 El manual está orientado a usuarios finales y utiliza un lenguaje claro y accesible.
 
 Ubicación:
-- PONER ENLACE MANUAL USUARIO
+[Manual de usuario] (https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/ManualUsuario)
 
 ---
 
