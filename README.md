@@ -43,3 +43,5 @@ La app es creada para android nativo:
 --- 
 [Ver criterios de evaluación](https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/criterios.md)
 
+--- 
+[Manual de usuario] (https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/ManualUsuario)
