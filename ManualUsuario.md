@@ -1,8 +1,8 @@
-# 📘 Manual de Usuario — Proyecto Final
+# 📘 Manual de Usuario — ManoVecina
 
 ## 1. Introducción
 
-Proyecto Final es una aplicación Android orientada a la **gestión de eventos colaborativos**, donde los usuarios pueden crear eventos, aceptar tareas, resolverlas y obtener puntos como recompensa. La aplicación ha sido diseñada siguiendo criterios de usabilidad, claridad y estabilidad, con una interfaz moderna basada en Material Design 3.
+ManoVecina es una aplicación Android orientada a la **gestión de eventos colaborativos**, donde los usuarios pueden crear eventos, aceptar tareas, resolverlas y obtener puntos como recompensa. La aplicación ha sido diseñada siguiendo criterios de usabilidad, claridad y estabilidad, con una interfaz moderna basada en Material Design 3.
 
 Este manual describe cómo **instalar, utilizar y comprender** el funcionamiento general de la aplicación.
 
