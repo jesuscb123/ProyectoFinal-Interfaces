@@ -1083,7 +1083,6 @@ Esta documentación permite reproducir el entorno de trabajo y facilita la conti
 
 Ubicación:
 - poner enlace manual USUARIO
-
 ---
 
 ### RA6.g – Confecciona tutoriales
@@ -1104,6 +1103,71 @@ Ubicación:
 - Flujo de navegación definido en `MainActivity.kt`.
 - Textos explicativos en las pantallas principales.
 - `README.md` (apartado Tutorial de uso).
+
+--- 
+## RA8 — Pruebas avanzadas (FFOE)
+
+### RA8.c — Pruebas de regresión
+
+El proyecto incorpora **pruebas unitarias reales** sobre los **ViewModels y los casos de uso**, que actúan como **pruebas de regresión funcionales**. Estas pruebas se ejecutan cada vez que se modifica la lógica de negocio, permitiendo verificar que los cambios no rompen funcionalidades previamente implementadas.
+
+Las pruebas validan distintos escenarios:
+- Estados iniciales de la UI.
+- Estados de carga (`isLoading`).
+- Casos de éxito con datos válidos.
+- Gestión correcta de errores.
+
+Gracias a este enfoque, cualquier regresión en la lógica de la aplicación se detecta de forma temprana durante el desarrollo, asegurando la estabilidad del sistema a lo largo del tiempo.
+- `ChatViewModelTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/chat/ChatViewModelTest.kt#L17-L39
+- `DeleteEventUseCase`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/events/DeleteEventUseCaseTest.kt#L11-L25
+- `EventViewModelTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/events/EventViewModelTest.kt#L16-L85
+- `GetEventsStatsUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/events/GetEventsStatsUseCaseTest.kt#L12-L27
+- `GetAllUsersUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/GetAllUsersUseCaseTest.kt#L15-L34
+- `GetUserByEmailUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/GetUserByEmailUseCaseTest.kt#L14-L46
+- `GetUserByFirebaseUidUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/GetUserByFirebaseUidUseCaseTest.kt#L14C7-L46
+- `SaveUserUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/SaveUserUseCaseTest.kt#L13C7-L27
+- `UserViewModelTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/UserViewModelTest.kt#L17-L45  
+
+---
+
+### RA8.d — Pruebas de volumen / estrés
+
+Aunque no se han implementado pruebas de estrés a gran escala, se ha realizado una **evaluación técnica razonada** basada en las pruebas unitarias existentes. Estas pruebas trabajan con **flujos reactivos (`Flow` y `StateFlow`)** y simulan múltiples emisiones de datos, lo que permite validar el comportamiento de la aplicación ante escenarios con cambios frecuentes de estado.
+
+Este planteamiento sirve como base para futuras pruebas de volumen, garantizando previamente que la lógica interna es estable, escalable y preparada para manejar un mayor número de datos sin errores funcionales.
+
+---
+
+### RA8.e — Pruebas de seguridad
+
+Las pruebas unitarias también contribuyen a la **seguridad lógica de la aplicación**, validando que los ViewModels gestionan correctamente los estados y las acciones permitidas en función de los datos disponibles.
+
+Se comprueba, por ejemplo, que:
+- No se ejecutan acciones sin un usuario válido.
+- Los errores se capturan y comunican de forma controlada.
+- La UI no recibe estados inconsistentes.
+
+Este enfoque reduce el riesgo de comportamientos inesperados y refuerza la robustez del sistema desde un punto de vista funcional y de seguridad.
+
+---
+
+### RA8.f — Uso de recursos
+
+El uso de **corrutinas controladas en las pruebas unitarias**, mediante librerías específicas de test, permite analizar y optimizar el uso de recursos del sistema. Al validar la correcta cancelación y ejecución de corrutinas en los ViewModels, se evita el consumo innecesario de hilos y se mejora la eficiencia de la aplicación.
+
+Además, la verificación de flujos de estado garantiza que la UI solo se actualiza cuando es necesario, contribuyendo a un uso eficiente de memoria y procesamiento.
+
+
+La estrategia de pruebas adoptada combina **pruebas unitarias reales** con una **reflexión técnica razonada**, alineándose con un entorno profesional de desarrollo. Este enfoque garantiza la calidad, estabilidad y mantenibilidad del proyecto, y deja preparada la base para la incorporación de pruebas más avanzadas en futuras versiones.
 
 
 
