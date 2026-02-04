@@ -1066,7 +1066,7 @@ En este manual se explica:
 El manual está orientado a usuarios finales y utiliza un lenguaje claro y accesible.
 
 Ubicación:
-[Manual de usuario] (https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/ManualUsuario)
+[Manual de usuario](https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/ManualUsuario)
 
 ---
 
@@ -1082,7 +1082,7 @@ Este manual describe:
 Esta documentación permite reproducir el entorno de trabajo y facilita la continuidad del proyecto.
 
 Ubicación:
-- poner enlace manual USUARIO
+- [Manual de usuario](https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/ManualUsuario)
 ---
 
 ### RA6.g – Confecciona tutoriales
