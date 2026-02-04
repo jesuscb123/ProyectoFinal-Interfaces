@@ -1082,7 +1082,7 @@ Este manual describe:
 Esta documentación permite reproducir el entorno de trabajo y facilita la continuidad del proyecto.
 
 Ubicación:
-- [Manual de usuario](https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/ManualUsuario)
+- [Manual de usuario](https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/ManualUsuario.md)
 ---
 
 ### RA6.g – Confecciona tutoriales
