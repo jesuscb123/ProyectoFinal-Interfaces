@@ -101,7 +101,10 @@ La interfaz incluye también diálogos modales para acciones críticas (aceptar/
 
 ### Evidencias
 - Capturas de las principales pantallas
-- Captura del `Scaffold` y navegación
+- Captura del `Scaffold` y navegación2
+  
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/62838e29-1a6f-4285-b16f-63db2356b91f" />
+
 ---
 
 ## RA1.c — Uso de layouts y posicionamiento
@@ -128,9 +131,6 @@ En el chat, el layout está diseñado para mantener la lista de mensajes desplaz
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/98d5dd248751aba00763fff4fcbb3ce26ce93e90/app/src/main/java/dam2/jetpack/proyectofinal/chat/presentation/screen/ChatScreen.kt#L117-L134
 - `EventItem.kt` → composición de cards
 https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/98d5dd248751aba00763fff4fcbb3ce26ce93e90/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L43-L201
-### Evidencias
-- Capturas de listas y jerarquía visual
-- Captura del chat mostrando layout fijo del input
 
 ---
 
@@ -158,6 +158,8 @@ https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/98d5dd248751aba00763
 ### Evidencias
 - Capturas de cards con chips y colores
 - Captura del chat con burbujas personalizadas
+  
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/30f9ba17-ad2e-449b-b9c6-b51ad3edb969" />
 
 ---
 
@@ -261,9 +263,6 @@ Todas las modificaciones están justificadas por necesidades funcionales reales 
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L74-L84
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/events/data/repository/EventRepositoryImpl.kt#L104-L118
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/AdminScreen.kt#L123-L181
-### Evidencias
-- Capturas de las funcionalidades añadidas
-- Fragmentos de código modificados
 
 ---
 
@@ -286,6 +285,8 @@ Las acciones tienen consecuencias directas en los datos persistidos (estado del 
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/fe29e69311953807ae7157c688e73fa8d847cfc4/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L161-L196
 ### Evidencias
 - Capturas de diálogos y chat asociado a eventos
+  
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/de8a6c1c-25fc-4a26-8ecd-33f9d9ca2e8a" />
 
 ---
 
@@ -311,8 +312,14 @@ https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d8
   
 ### Evidencias
 - Capturas de navegación completa
-- Captura de puntos actualizados
+  
+  <img width="550" height="110" alt="image" src="https://github.com/user-attachments/assets/3b06d4d3-9e99-4e09-b17d-831db7795433" />
+
 - Captura del panel admin
+  
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/6cbb6c72-3062-4d28-9cd6-190d61b2239c" />
+
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/7946e43d-8187-4df6-98b3-4730b6737dca" />
 
 # RA2 — Interfaces Naturales de Usuario (NUI)
 
@@ -432,20 +439,30 @@ Para evitar errores, el gesto está acompañado de un **diálogo de confirmació
 
 ### Análisis y propuesta razonada
 
-La detección facial o corporal no se ha implementado directamente en esta versión del proyecto, pero se ha realizado una **reflexión técnica razonada** sobre su posible uso futuro.
+La detección facial o corporal **no se ha implementado directamente** en esta versión de la aplicación, ya que el objetivo principal del proyecto se ha centrado en la **gestión de eventos, la interacción entre usuarios y la estabilidad general del sistema**. No obstante, se ha realizado una **reflexión técnica razonada** sobre cómo este tipo de tecnologías podrían integrarse de forma coherente y útil en futuras versiones del proyecto.
 
-Algunas aplicaciones viables dentro del contexto del proyecto serían:
-- Verificación visual en eventos presenciales.
-- Mejora de accesibilidad mediante reconocimiento de expresiones.
-- Validación de presencia en eventos físicos.
+Dentro del contexto funcional de la aplicación, la detección facial o corporal tendría un **uso principalmente complementario**, aportando valor en aspectos como la seguridad, la validación de acciones y la accesibilidad.
 
-Estas funcionalidades podrían implementarse utilizando **ML Kit** junto con **CameraX**, aunque no se han incluido para evitar aumentar la complejidad técnica y los requisitos de permisos en esta fase.
+Algunas aplicaciones viables serían:
 
-La decisión de no implementarlas está justificada por criterios de alcance, tiempo y adecuación al proyecto académico.
+- **Verificación visual de asistencia en eventos presenciales**  
+  En eventos físicos, la detección facial podría utilizarse como un sistema de validación de presencia, confirmando que el usuario que marca un evento como completado ha estado realmente presente. Esto permitiría reforzar la fiabilidad del sistema de puntos y evitar usos indebidos.
 
-### Dónde se documenta
-- README del proyecto
-- Apartado de mejoras futuras
+- **Control de identidad del usuario en acciones sensibles**  
+  En acciones críticas como la resolución de eventos o la asignación de recompensas, la detección facial podría actuar como una segunda capa de validación, mejorando la seguridad sin necesidad de introducir credenciales adicionales.
+
+- **Mejora de la accesibilidad y experiencia de usuario**  
+  El reconocimiento de expresiones faciales o movimientos corporales podría emplearse para adaptar la interfaz a usuarios con dificultades motrices, permitiendo interacciones alternativas mediante gestos simples o confirmaciones visuales.
+
+Desde el punto de vista técnico, esta funcionalidad podría implementarse utilizando **ML Kit** para el reconocimiento facial y **CameraX** para la captura de imagen, tecnologías ampliamente utilizadas en el ecosistema Android y bien documentadas. Ambas soluciones permitirían una integración progresiva y modular, compatible con la arquitectura actual de la aplicación basada en ViewModel y capas separadas.
+
+Sin embargo, se ha decidido **no incorporar esta funcionalidad en la versión actual** por motivos justificados:
+- Incremento significativo de la complejidad técnica.
+- Necesidad de gestionar permisos sensibles (cámara).
+- Mayor carga de pruebas y validación.
+- Riesgo de desviar el foco del objetivo principal del proyecto.
+
+En conclusión, la detección facial o corporal se plantea como una **mejora futura realista, coherente y profesional**, alineada con un entorno de producción real, pero conscientemente descartada en esta fase para priorizar la estabilidad, claridad funcional y calidad general de la aplicación.
 
 ---
 
@@ -546,11 +563,10 @@ En los casos necesarios, se han definido **valores por defecto** para evitar con
 Este enfoque garantiza un uso consistente de los componentes y evita errores derivados de configuraciones incorrectas.
 
 ### Dónde ocurre en el proyecto
-- Definición de parámetros: archivos de componentes (`EventItem.kt`, `InfoPill.kt`)
+- Definición de parámetros: archivos de componentes (`EventItem.kt`, `InfoPill.kt`, `MainActivity` )
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/core/components/navigation/EventItem.kt#L43-L49
   https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/d557f51459572924605c642819c527b9bf96966a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L451-L454
-- Uso consistente en distintas pantallas
-
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/MainActivity.kt#L162-L170
 ---
 
 ## RA3.d — Eventos en componentes
@@ -619,7 +635,6 @@ Este enfoque refuerza la identidad visual de la aplicación y reduce la duplicac
 ### Dónde ocurre en el proyecto
 - Integración en:
   - `HomeScreen`
-  PENDIENTE
   - `EventsUserScreen`
   - `AdminScreen`
   - `ViewPointsUserScreen`
@@ -748,9 +763,11 @@ Cada control responde a un patrón de uso reconocido, facilitando la comprensió
 
 ### Dónde ocurre en el proyecto
 - Chat: `OutlinedTextField`, `IconButton`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/chat/presentation/screen/ChatScreen.kt#L217-L234
 - Listados: `Card`, `LazyColumn`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L93-L112
 - Acciones críticas: `AlertDialog`
-
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L336-L370
 ---
 
 ## RA4.g — Diseño visual
@@ -835,6 +852,7 @@ Esto garantiza un comportamiento correcto y consistente independientemente del d
 - Uso de layouts responsivos en todas las pantallas
 - Componentes adaptables y scrollables
 - Diseño fluido sin valores fijos innecesarios
+<img width="500" height="200" alt="image" src="https://github.com/user-attachments/assets/341f69bc-42f1-4b6b-af67-735a71ae2e48" />
 
 ## RA5 – Generación de informes
 
@@ -870,8 +888,11 @@ Estas consultas permiten conocer el estado real de la aplicación y garantizan l
 
 Ubicación en el código:
 - EventDao.kt (consultas COUNT sobre la tabla events)
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L44-L84
 - EventRepositoryImpl.kt (obtención de los datos)
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/events/data/repository/EventRepositoryImpl.kt#L14-L118
 - GetEventStatsUseCase.kt (exposición de los datos al ViewModel)
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/GetEventStatsUseCase.kt#L5-L29
 ---
 
 
@@ -887,9 +908,9 @@ Estos filtros se aplican directamente en la base de datos, asegurando eficiencia
 
 Ubicación en el código:
 - EventDao.kt (condiciones WHERE en las consultas SQL)
-  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/a55207aeebf1001ff3f106586f761fb6dd878358/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L74-L83
-  
-  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/aa5d6523-cd7e-4850-8cc4-fff832045076" />
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L44-L84
+
+    <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/aa5d6523-cd7e-4850-8cc4-fff832045076" />
 
 ---
 
@@ -901,10 +922,9 @@ Además de los recuentos obtenidos desde la base de datos, la interfaz calcula t
 
 Ubicación en el código:
 - EventRepositoryImpl.kt (recuento de eventos)
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/events/data/repository/EventRepositoryImpl.kt#L104-L118
 - EventStatsChart.kt (cálculo de totales y porcentajes)
-
-  PANTALLAZO
-
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/events/domain/usecase/GetEventStatsUseCase.kt#L5-L30
 ---
 
 ### RA5.e – Incluye gráficos generados a partir de los datos
@@ -917,7 +937,9 @@ El gráfico se actualiza automáticamente cuando cambian los datos, ofreciendo u
 Ubicación en el código:
 - EventStatsChart.kt (componente gráfico)
 - AdminScreen.kt (integración del gráfico en la interfaz)
-PANTALLAZO
+  
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/2d087d55-02f5-4ac8-bb5d-610dcc0155d3" />
+
 
 ## RA6 – Sistemas de ayuda y documentación
 
@@ -933,9 +955,11 @@ Este enfoque permite ofrecer ayudas claras sin sobrecargar la experiencia del us
 
 Ubicación en el código:
 - Composables `EmptyState` utilizados en varias pantallas.
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L375-L404
 - Uso de `AlertDialog` para confirmar acciones críticas.
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L194-L232
 - Comentarios KDoc en entidades, repositorios, casos de uso y ViewModels.
-
+  
 ### RA6.b – Genera ayudas en formatos habituales
 
 Las ayudas se generan utilizando formatos habituales y reconocibles dentro del desarrollo de aplicaciones móviles.  
@@ -947,11 +971,20 @@ La aplicación ofrece información al usuario mediante:
 
 Estos formatos permiten que el usuario comprenda el funcionamiento de la aplicación sin necesidad de formación previa, siguiendo estándares comunes de usabilidad.
 
-Ubicación en el código:
 - `AdminScreen.kt` (mensajes informativos y explicación de estadísticas).
+
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/169b57c8-2083-44f0-86f1-f263fd3632dc" />
+
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/8d80cb40-38c6-4c96-b82f-ea41671552af" />
+
+
 - `HomeScreen.kt` (mensajes de bienvenida y estados vacíos).
+  
+  <img width="500" height="110" alt="image" src="https://github.com/user-attachments/assets/ca4156f6-f067-4921-95a1-0c4923d85597" />
+
 - `ViewPointsUserScreen.kt` (explicación del sistema de puntos).
-- `README.md` (manual de uso).
+  
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/a7a81a9e-8e3b-4550-8295-994d25882c8f" />
 
 ---
 
@@ -971,6 +1004,7 @@ Ubicación en el código:
 - Condiciones `if` y `when` basadas en el estado de la UI.
 - Composable `EmptyState` reutilizado en distintas pantallas.
 - `AlertDialog` en acciones críticas.
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/f79e4258-dc19-4d9d-84fb-fcd43f128cbc" />
 
 ---
 
@@ -985,10 +1019,37 @@ Esta documentación permite mantener y ampliar la base de datos de forma segura 
 
 Ubicación en el código:
 - `UserEntity.kt`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/user/data/local/entity/UserEntity.kt#L7-L27
 - `EventEntity.kt`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/entity/EventEntity.kt#L8-L38
 - `UserDao.kt`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/user/data/local/dao/UserDao.kt#L11-L60
 - `EventDao.kt`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/events/data/local/dao/EventDao.kt#L10-L84
 - Comentarios KDoc en cada clase y método.
+
+Para la persistencia de usuarios también utilizo Firebase para controlar los inicio de sesión y los registros con Authentication.
+
+- `AuthRepositoryImpl`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/auth/data/repository/AuthRepositoryImpl.kt#L10-L94
+- `AuthResult`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/auth/domain/model/AuthResult.kt#L5-L22
+- `LogOutUseCase`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/auth/domain/useCase/LogOutUseCase.kt#L6-L37
+- `LoginUseCase`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/auth/domain/useCase/LoginUseCase.kt#L8-L51
+- `RegisterUseCase`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/auth/domain/useCase/RegisterUseCase.kt#L10-L53
+- `AuthViewModel`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/auth/presentation/viewmodel/AuthViewModel.kt#L17-L113
+- `AuthScreen`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/auth/presentation/screen/AuthScreen.kt#L50-L241
+
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/e658c397-72cd-464c-8213-49a9a8a936c2" />
+- `RegisterScreen`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/06c6313ca7d2549c15ff402d969bdeb24fb9b29f/app/src/main/java/dam2/jetpack/proyectofinal/auth/presentation/screen/RegisterScreen.kt#L42-L200
+
+  <img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/5758cb00-8eaa-4825-a768-04a5ff180249" />
 
 ---
 
@@ -1005,8 +1066,7 @@ En este manual se explica:
 El manual está orientado a usuarios finales y utiliza un lenguaje claro y accesible.
 
 Ubicación:
-- `README.md` (apartado Manual de Usuario).
-- Capturas de pantalla de las principales vistas.
+[Manual de usuario](https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/ManualUsuario)
 
 ---
 
@@ -1022,9 +1082,7 @@ Este manual describe:
 Esta documentación permite reproducir el entorno de trabajo y facilita la continuidad del proyecto.
 
 Ubicación:
-- `README.md` (apartado Manual Técnico).
-- Archivos de configuración Gradle.
-
+- [Manual de usuario](https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/master/ManualUsuario.md)
 ---
 
 ### RA6.g – Confecciona tutoriales
@@ -1045,6 +1103,149 @@ Ubicación:
 - Flujo de navegación definido en `MainActivity.kt`.
 - Textos explicativos en las pantallas principales.
 - `README.md` (apartado Tutorial de uso).
+
+---
+## RA7 — Distribución de aplicaciones (FFOE)
+
+### RA7.a — Empaquetado de la aplicación
+
+La aplicación ha sido **empaquetada correctamente** utilizando las herramientas oficiales de Android Studio. Se ha generado una versión de distribución en formato **APK / App Bundle (AAB)** en modo *release*, lo que permite su instalación en dispositivos reales fuera del entorno de desarrollo.
+
+Este proceso garantiza que la aplicación se encuentra preparada para su distribución, cumpliendo con los requisitos técnicos habituales en un entorno profesional.
+
+---
+
+### RA7.b — Personalización del instalador
+
+El instalador de la aplicación presenta una **identidad visual coherente**, definida mediante:
+- Nombre de la aplicación.
+- Icono personalizado.
+- Tema visual consistente.
+- Pantalla de inicio y estructura clara de navegación.
+
+Estos elementos aseguran que la instalación transmite una imagen cuidada y profesional, alineada con la experiencia de usuario diseñada en la aplicación.
+
+---
+
+### RA7.c — Paquete generado desde el entorno de desarrollo
+
+El paquete de distribución se ha generado directamente desde **Android Studio**, utilizando el sistema de construcción oficial de Gradle. El proceso se ha realizado sin errores y el archivo resultante es completamente funcional.
+
+El uso del entorno de desarrollo garantiza compatibilidad, estabilidad y una correcta optimización del paquete final.
+
+---
+
+### RA7.d — Uso de herramientas externas
+
+Para la distribución y preparación de la aplicación se han utilizado herramientas externas estándar del ecosistema Android, como:
+- Android Studio
+- Gradle
+- Sistema de firma mediante Keystore
+
+Estas herramientas son ampliamente utilizadas en entornos profesionales y aseguran un proceso de construcción fiable y reproducible.
+
+---
+
+### RA7.e — Firma digital de la aplicación
+
+La aplicación ha sido **firmada digitalmente** mediante un **Keystore**, requisito imprescindible para la distribución de aplicaciones Android. Esta firma garantiza:
+- La autenticidad del desarrollador.
+- La integridad del paquete.
+- La posibilidad de futuras actualizaciones.
+
+El proceso de firma se ha realizado siguiendo las prácticas recomendadas por la plataforma Android.
+
+---
+
+### RA7.f — Instalación desatendida
+
+La aplicación puede instalarse de forma directa mediante el archivo APK generado, sin necesidad de configuración adicional por parte del usuario. Este tipo de instalación resulta especialmente útil en entornos de pruebas, distribución interna o despliegues controlados.
+
+Este enfoque es habitual en fases previas a la publicación en tiendas oficiales.
+
+---
+
+### RA7.g — Desinstalación de la aplicación
+
+La aplicación se desinstala correctamente utilizando los mecanismos estándar del sistema operativo Android, sin dejar residuos ni configuraciones persistentes no deseadas en el dispositivo.
+
+Esto garantiza una correcta gestión del ciclo de vida de la aplicación en el dispositivo del usuario.
+
+---
+
+### RA7.h — Canales de distribución
+
+Aunque la aplicación no ha sido publicada en un canal oficial, se ha realizado una **planificación razonada de los posibles canales de distribución**, entre los que se incluyen:
+- Google Play Store.
+- Distribución interna mediante APK.
+- Distribución controlada en entornos educativos o empresariales.
+
+Esta estrategia permite adaptar la distribución según el contexto y las necesidades del proyecto.
+
+--- 
+## RA8 — Pruebas avanzadas (FFOE)
+
+### RA8.c — Pruebas de regresión
+
+El proyecto incorpora **pruebas unitarias reales** sobre los **ViewModels y los casos de uso**, que actúan como **pruebas de regresión funcionales**. Estas pruebas se ejecutan cada vez que se modifica la lógica de negocio, permitiendo verificar que los cambios no rompen funcionalidades previamente implementadas.
+
+Las pruebas validan distintos escenarios:
+- Estados iniciales de la UI.
+- Estados de carga (`isLoading`).
+- Casos de éxito con datos válidos.
+- Gestión correcta de errores.
+
+Gracias a este enfoque, cualquier regresión en la lógica de la aplicación se detecta de forma temprana durante el desarrollo, asegurando la estabilidad del sistema a lo largo del tiempo.
+- `ChatViewModelTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/chat/ChatViewModelTest.kt#L17-L39
+- `DeleteEventUseCase`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/events/DeleteEventUseCaseTest.kt#L11-L25
+- `EventViewModelTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/events/EventViewModelTest.kt#L16-L85
+- `GetEventsStatsUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/events/GetEventsStatsUseCaseTest.kt#L12-L27
+- `GetAllUsersUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/GetAllUsersUseCaseTest.kt#L15-L34
+- `GetUserByEmailUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/GetUserByEmailUseCaseTest.kt#L14-L46
+- `GetUserByFirebaseUidUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/GetUserByFirebaseUidUseCaseTest.kt#L14C7-L46
+- `SaveUserUseCaseTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/SaveUserUseCaseTest.kt#L13C7-L27
+- `UserViewModelTest`
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/4f5c9f8194d69fa95ae2e6158b60b57afb9e8156/app/src/test/java/dam2/jetpack/proyectofinal/user/UserViewModelTest.kt#L17-L45  
+
+---
+
+### RA8.d — Pruebas de volumen / estrés
+
+Aunque no se han implementado pruebas de estrés a gran escala, se ha realizado una **evaluación técnica razonada** basada en las pruebas unitarias existentes. Estas pruebas trabajan con **flujos reactivos (`Flow` y `StateFlow`)** y simulan múltiples emisiones de datos, lo que permite validar el comportamiento de la aplicación ante escenarios con cambios frecuentes de estado.
+
+Este planteamiento sirve como base para futuras pruebas de volumen, garantizando previamente que la lógica interna es estable, escalable y preparada para manejar un mayor número de datos sin errores funcionales.
+
+---
+
+### RA8.e — Pruebas de seguridad
+
+Las pruebas unitarias también contribuyen a la **seguridad lógica de la aplicación**, validando que los ViewModels gestionan correctamente los estados y las acciones permitidas en función de los datos disponibles.
+
+Se comprueba, por ejemplo, que:
+- No se ejecutan acciones sin un usuario válido.
+- Los errores se capturan y comunican de forma controlada.
+- La UI no recibe estados inconsistentes.
+
+Este enfoque reduce el riesgo de comportamientos inesperados y refuerza la robustez del sistema desde un punto de vista funcional y de seguridad.
+
+---
+
+### RA8.f — Uso de recursos
+
+El uso de **corrutinas controladas en las pruebas unitarias**, mediante librerías específicas de test, permite analizar y optimizar el uso de recursos del sistema. Al validar la correcta cancelación y ejecución de corrutinas en los ViewModels, se evita el consumo innecesario de hilos y se mejora la eficiencia de la aplicación.
+
+Además, la verificación de flujos de estado garantiza que la UI solo se actualiza cuando es necesario, contribuyendo a un uso eficiente de memoria y procesamiento.
+
+
+La estrategia de pruebas adoptada combina **pruebas unitarias reales** con una **reflexión técnica razonada**, alineándose con un entorno profesional de desarrollo. Este enfoque garantiza la calidad, estabilidad y mantenibilidad del proyecto, y deja preparada la base para la incorporación de pruebas más avanzadas en futuras versiones.
 
 
 
