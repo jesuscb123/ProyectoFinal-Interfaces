@@ -164,7 +164,6 @@ fun SwipeableEventItem(
     onClick: () -> Unit,
     resetKey: Int
 ) {
-    var showDeleteDialog by remember { mutableStateOf(false) }
 
     key(resetKey, event.eventId) {
 
