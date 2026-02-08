@@ -1208,7 +1208,6 @@ La estrategia de testing se basa en tres niveles principales:
 
 3. **Pruebas manuales funcionales**
    - Verificación manual de flujos completos de la aplicación (login, creación de eventos, aceptación, resolución, etc.).
-
 Esta estrategia asegura que la lógica crítica de la aplicación permanezca estable durante el desarrollo evolutivo del proyecto.
 ---
 ## RA8.b — Pruebas de integración
