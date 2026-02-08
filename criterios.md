@@ -427,7 +427,7 @@ Para evitar errores, el gesto está acompañado de un **diálogo de confirmació
 - `HomeScreen.kt`
   - `SwipeableEventItem`
     https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L117-L132
-    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L160-L263
+    https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/3b5943229a4b9a86a47ce5e231b8d245461a6c3f/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L156-L258
   - `SwipeToDismissBox`
     https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L238-L263
     https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/beec41f0f1ad826334d815d18635dde1d0b0554a/app/src/main/java/dam2/jetpack/proyectofinal/user/presentation/screen/HomeScreen.kt#L267-L298
