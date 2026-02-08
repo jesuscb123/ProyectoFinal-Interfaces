@@ -1334,7 +1334,7 @@ Además, en los tests principales se incluyen comentarios explicativos donde se 
 
 Ejemplo de test documentado: 
 https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/00cf04dd5e10465c1bba166f805456cc96ace050/app/src/test/java/dam2/jetpack/proyectofinal/events/DeleteEventUseCaseTest.kt#L11-L61
-Gracias a esta organización, el sistema de pruebas no solo valida el correcto funcionamiento del software, sino que también actúa como **documentación técnica viva**, facilitando futuras ampliaciones, refactorizaciones del código y el trabajo colaborativo dentro del proyecto.
+Gracias a esta organización, el sistema de pruebas no solo valida el correcto funcionamiento del software, sino que también actúa como **documentación técnica**, facilitando futuras ampliaciones, refactorizaciones del código y el trabajo colaborativo dentro del proyecto.
 
 
 
