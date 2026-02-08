@@ -1185,6 +1185,60 @@ Esta estrategia permite adaptar la distribución según el contexto y las necesi
 --- 
 ## RA8 — Pruebas avanzadas (FFOE)
 
+## RA8.a — Estrategia de pruebas
+
+### Estrategia definida
+
+El proyecto incorpora una estrategia de pruebas orientada a asegurar la estabilidad de la lógica de negocio y la correcta gestión del estado de la aplicación.
+
+La estrategia de testing se basa en tres niveles principales:
+
+1. **Pruebas unitarias**
+   - Validan la lógica de negocio contenida en los **UseCases**.
+   - Verifican el comportamiento de los **ViewModels**, comprobando que el estado de la UI se actualiza correctamente.
+   - Se utilizan librerías como:
+     - JUnit
+     - MockK
+     - Turbine (para Flow / StateFlow)
+     - Coroutines Test
+
+2. **Pruebas de regresión**
+   - Las pruebas unitarias permiten detectar errores tras modificaciones del código.
+   - Cada nueva funcionalidad mantiene compatibilidad con el comportamiento anterior mediante tests existentes.
+
+3. **Pruebas manuales funcionales**
+   - Verificación manual de flujos completos de la aplicación (login, creación de eventos, aceptación, resolución, etc.).
+
+Esta estrategia asegura que la lógica crítica de la aplicación permanezca estable durante el desarrollo evolutivo del proyecto.
+---
+## RA8.b — Pruebas de integración
+
+### Pruebas de integración implementadas
+
+Además de las pruebas unitarias individuales, el proyecto incorpora pruebas de integración orientadas a validar la correcta comunicación entre las distintas capas de la arquitectura Clean Architecture utilizada en la aplicación.
+
+Estas pruebas verifican principalmente la interacción entre:
+
+- **Capa de presentación (ViewModel)**
+- **Capa de dominio (UseCases)**  
+- **Capa de datos (Repositories)**  
+
+Para realizar estas pruebas se emplea el uso de **mocks de repositorios** que permiten simular el comportamiento real de las fuentes de datos, asegurando que el flujo completo de ejecución funcione correctamente sin depender de servicios externos como Firebase o la base de datos local.
+- `Mock de UserRepository`:
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/00cf04dd5e10465c1bba166f805456cc96ace050/app/src/test/java/dam2/jetpack/proyectofinal/user/GetAllUsersUseCaseTest.kt#L24-L29
+- `Mock de EventRepository`:
+  https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/00cf04dd5e10465c1bba166f805456cc96ace050/app/src/test/java/dam2/jetpack/proyectofinal/events/DeleteEventUseCaseTest.kt#L20-L25
+
+Los escenarios de integración comprobados incluyen:
+
+- Recuperación de datos desde el repositorio y actualización automática del **StateFlow** en los ViewModels.
+- Creación, modificación y eliminación de eventos verificando que los **UseCases** invocan correctamente los métodos del repositorio.
+- Actualización del estado de la interfaz cuando finalizan operaciones asíncronas (éxito o error).
+- Validación del flujo completo de autenticación y obtención de datos del usuario en la capa de presentación.
+
+Estas pruebas permiten asegurar que la arquitectura modular del proyecto funciona de forma coordinada, garantizando que los cambios realizados en una capa no rompan la comunicación con el resto del sistema.  
+Además, facilitan la detección temprana de errores de integración durante el proceso de desarrollo, reduciendo significativamente el riesgo de fallos en producción.
+---
 ### RA8.c — Pruebas de regresión
 
 El proyecto incorpora **pruebas unitarias reales** sobre los **ViewModels y los casos de uso**, que actúan como **pruebas de regresión funcionales**. Estas pruebas se ejecutan cada vez que se modifica la lógica de negocio, permitiendo verificar que los cambios no rompen funcionalidades previamente implementadas.
@@ -1246,6 +1300,43 @@ Además, la verificación de flujos de estado garantiza que la UI solo se actual
 
 
 La estrategia de pruebas adoptada combina **pruebas unitarias reales** con una **reflexión técnica razonada**, alineándose con un entorno profesional de desarrollo. Este enfoque garantiza la calidad, estabilidad y mantenibilidad del proyecto, y deja preparada la base para la incorporación de pruebas más avanzadas en futuras versiones.
+
+--- 
+
+## RA8.g — Documentación de las pruebas
+
+### Documentación del sistema de testing
+
+El proyecto incluye una documentación estructurada del sistema de pruebas con el objetivo de facilitar el mantenimiento del código, mejorar la comprensión del comportamiento del sistema y permitir que cualquier desarrollador pueda identificar rápidamente qué funcionalidades están cubiertas por tests.
+
+siguiendo la misma estructura de paquetes que la aplicación principal. Esta organización permite localizar fácilmente los tests correspondientes a cada módulo funcional, como autenticación, usuarios, eventos y lógica de negocio.
+
+La documentación de las pruebas se apoya en varios elementos fundamentales:
+
+- **Nombres descriptivos de los tests**, redactados en formato de comportamiento esperado, lo que permite comprender rápidamente qué funcionalidad se está validando.  
+  Ejemplo:  
+- `getUserByEmail - success coloca user en uiState` (ViewModel)
+- `cuando el repositorio devuelve usuario, retorna Result success` (UseCase)
+- `cuando el repositorio lanza excepcion, retorna Result failure` (UseCase)
+  
+- **Uso de mocks mediante la librería MockK**, permitiendo aislar dependencias externas como repositorios, bases de datos o servicios remotos. Esto facilita que los tests sean deterministas y repetibles.
+
+- **Validación de flujos reactivos (Flow y StateFlow)** utilizando la librería Turbine, lo que permite comprobar correctamente las emisiones de estado generadas por los ViewModels y verificar la evolución del estado de la interfaz.
+
+- **Control del entorno de ejecución de corrutinas** mediante reglas de testing específicas (por ejemplo `MainDispatcherRule`), garantizando que las operaciones asíncronas se ejecuten de forma controlada durante las pruebas.
+
+- **Uso de assertions claras y legibles** mediante librerías como JUnit y Truth, permitiendo expresar de forma precisa los resultados esperados de cada escenario probado.
+
+Además, en los tests principales se incluyen comentarios explicativos donde se describen:
+
+- El escenario de prueba.
+- Las condiciones iniciales configuradas mediante mocks.
+- La acción ejecutada.
+- El resultado esperado en el estado final.
+
+Ejemplo de test documentado: 
+https://github.com/jesuscb123/ProyectoFinal-Interfaces/blob/00cf04dd5e10465c1bba166f805456cc96ace050/app/src/test/java/dam2/jetpack/proyectofinal/events/DeleteEventUseCaseTest.kt#L11-L61
+Gracias a esta organización, el sistema de pruebas no solo valida el correcto funcionamiento del software, sino que también actúa como **documentación técnica viva**, facilitando futuras ampliaciones, refactorizaciones del código y el trabajo colaborativo dentro del proyecto.
 
 
 
