@@ -1235,7 +1235,6 @@ Los escenarios de integración comprobados incluyen:
 - Creación, modificación y eliminación de eventos verificando que los **UseCases** invocan correctamente los métodos del repositorio.
 - Actualización del estado de la interfaz cuando finalizan operaciones asíncronas (éxito o error).
 - Validación del flujo completo de autenticación y obtención de datos del usuario en la capa de presentación.
-
 Estas pruebas permiten asegurar que la arquitectura modular del proyecto funciona de forma coordinada, garantizando que los cambios realizados en una capa no rompan la comunicación con el resto del sistema.  
 Además, facilitan la detección temprana de errores de integración durante el proceso de desarrollo, reduciendo significativamente el riesgo de fallos en producción.
 ---
